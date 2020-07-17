@@ -1,0 +1,40 @@
+{
+  "name": "readingly-api",
+  "version": "0.1.0",
+  "description": "The API for Readingly, a reading tracker to help you read better",
+  "main": "index.js",
+  "engines": {
+    "node": "12.18.2"
+  },
+  "scripts": {
+    "test": "jest --watch",
+    "start": "node .",
+    "build": "babel --delete-dir-on-start --out-dir dist --copy-files --ignore \"**/__tests__/**,**/__mocks__/**\" --no-copy-ignored src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdgkirkley/readingly.git"
+  },
+  "author": "Gabe Kirkley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gdgkirkley/readingly/issues"
+  },
+  "homepage": "https://github.com/gdgkirkley/readingly#readme",
+  "dependencies": {
+    "apollo-server": "^2.16.0",
+    "apollo-server-express": "^2.16.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "loglevel": "^1.6.8"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/register": "^7.10.5",
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.4"
+  }
+}
