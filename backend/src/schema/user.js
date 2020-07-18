@@ -1,6 +1,6 @@
 import {gql} from 'apollo-server-express'
 
-export default gql`
+const schema = gql`
   extend type Query {
     users: [User!]
     user(id: ID!): User
@@ -22,3 +22,5 @@ export default gql`
     email: String!
   }
 `
+
+export default schema

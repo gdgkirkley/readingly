@@ -48,6 +48,11 @@ const user = (sequelize, DataTypes) => {
       salt: {
         type: DataTypes.TEXT,
       },
+      role: {
+        type: DataTypes.ENUM('ADMIN', 'USER'),
+        defaultValue: 'USER',
+        allowNull: false,
+      },
     },
     {
       sequelize,

@@ -5,6 +5,7 @@ const createUsers = async () => {
     username: 'gkirkley',
     email: 'gkirkley@readingly.com',
     password: 'gkirkley',
+    role: 'ADMIN',
   })
 
   await models.User.create({
