@@ -5,7 +5,7 @@ import errorMiddleware from './middleware/Error'
 import schema from './schema'
 import resolvers from './resolvers'
 import models, {sequelize} from './models'
-import createUsers from './seeds/user'
+import {createUsers} from './seeds'
 
 async function startServer({port = process.env.PORT} = {}) {
   const app = express()
@@ -17,6 +17,7 @@ async function startServer({port = process.env.PORT} = {}) {
     resolvers,
     context: async () => ({
       models,
+      me: await models.User.findByLogin('gkirkley'),
     }),
   })
 
