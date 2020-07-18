@@ -6,7 +6,7 @@ function getPermissions(user) {
 }
 
 const isAuthenticated = rule()((parent, args, {me}) => {
-  return me !== undefined
+  return me !== undefined && me !== null
 })
 
 const canReadAnyUser = rule()((parent, args, {me}) => {
@@ -26,4 +26,10 @@ const permissions = shield({
   },
 })
 
-export {permissions}
+export {
+  permissions,
+  isAuthenticated,
+  canReadAnyUser,
+  isReadingOwnUser,
+  getPermissions,
+}

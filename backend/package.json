@@ -45,6 +45,7 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.5",
     "jest": "^26.1.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "object-hash": "^2.0.3"
   }
 }
