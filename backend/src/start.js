@@ -6,18 +6,20 @@ import schema from './schema'
 import resolvers from './resolvers'
 import models, {sequelize} from './models'
 import {createUsers} from './seeds'
+import {authMiddleware} from './utils/auth'
 
 async function startServer({port = process.env.PORT} = {}) {
   const app = express()
 
   app.use(errorMiddleware)
+  app.use(authMiddleware)
 
   const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-    context: async () => ({
+    context: ({req}) => ({
       models,
-      me: await models.User.findByLogin('gkirkley'),
+      me: req.user,
     }),
   })
 

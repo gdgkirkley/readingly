@@ -1,10 +1,13 @@
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
+import expressJWT from 'express-jwt'
 
 const iterations = process.env.NODE_ENV === 'production' ? 1000 : 1
 
 // seconds/minute * minutes/hour * hours/day * 60 days
 const SIXTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 60
+
+const secret = process.env.APP_SECRET
 
 function getSaltAndHash(password) {
   const salt = crypto.randomBytes(16).toString('hex')
@@ -31,8 +34,14 @@ async function getUserToken({id, username}) {
       iat: issuedAt,
       exp: issuedAt + SIXTY_DAYS_IN_SECONDS,
     },
-    process.env.APP_SECRET,
+    secret,
   )
 }
 
-export {getSaltAndHash, isPasswordValid, getUserToken}
+const authMiddleware = expressJWT({
+  secret,
+  algorithms: ['HS256'],
+  credentialsRequired: false,
+})
+
+export {getSaltAndHash, isPasswordValid, getUserToken, authMiddleware}
