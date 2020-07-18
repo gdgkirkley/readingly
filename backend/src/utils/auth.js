@@ -26,13 +26,14 @@ function isPasswordValid(password, salt, hash) {
   )
 }
 
-async function getUserToken({id, username}) {
+async function getUserToken({id, username, role}) {
   const issuedAt = Math.floor(Date.now() / 1000)
 
   return jwt.sign(
     {
       id,
       username,
+      role,
       iat: issuedAt,
       exp: issuedAt + SIXTY_DAYS_IN_SECONDS,
     },
