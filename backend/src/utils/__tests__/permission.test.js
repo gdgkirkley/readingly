@@ -1,7 +1,12 @@
 import * as hashFunction from 'object-hash'
-import {isAuthenticated, canReadAnyUser} from '../permission'
+import {
+  isAuthenticated,
+  canReadAnyUser,
+  isReadingOwnUser,
+  getPermissions,
+} from '../permission'
 
-async function applyResolver(resolver, resolverArgs) {
+async function applyResolver(resolver, resolverCtx, resolverArgs = {}) {
   const shieldContext = {
     _shield: {
       cache: {},
@@ -12,16 +17,16 @@ async function applyResolver(resolver, resolverArgs) {
   const Options = jest.fn()
 
   const context = {
-    ...resolverArgs,
+    ...resolverCtx,
     ...shieldContext,
   }
 
-  const args = {}
+  const args = resolverArgs
 
   return resolver.resolve({}, args, context, {}, new Options())
 }
 
-test('isAuthenticated returns correct value', async () => {
+test('isAuthenticated returns correct boolean', async () => {
   const me = {id: 1, username: 'test'}
 
   expect(await applyResolver(isAuthenticated, {})).toBeFalsy()
@@ -31,10 +36,25 @@ test('isAuthenticated returns correct value', async () => {
   expect(await applyResolver(isAuthenticated, {me})).toBeTruthy()
 })
 
-test('canReadAnyUser returns correct value', async () => {
+test('canReadAnyUser returns correct boolean', async () => {
   const user1 = {id: 1, username: 'test', role: 'ADMIN'}
   const user2 = {id: 2, username: 'test', role: 'USER'}
 
   expect(await applyResolver(canReadAnyUser, {me: user1})).toBeTruthy()
   expect(await applyResolver(canReadAnyUser, {me: user2})).toBeFalsy()
+})
+
+test('isReadingOwnUser returns correct boolean', async () => {
+  const user = {id: 1, username: 'test', role: 'USER'}
+
+  expect(
+    await applyResolver(isReadingOwnUser, {me: user}, {id: 1}),
+  ).toBeTruthy()
+  expect(await applyResolver(isReadingOwnUser, {me: user}, {id: 2})).toBeFalsy()
+})
+
+test("getPermissions returns user's role", () => {
+  const user = {id: 1, username: 'test', role: 'USER'}
+
+  expect(getPermissions(user)).toBe('USER')
 })
