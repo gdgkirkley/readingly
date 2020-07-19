@@ -3,6 +3,7 @@ import logger from 'loglevel'
 import user from './user'
 import book from './book'
 import bookshelf from './bookshelf'
+import author from './author'
 
 const sequelize = new Sequelize(
   process.env.DATABASE,
@@ -19,6 +20,7 @@ const models = {
   User: user(sequelize, DataTypes),
   Book: book(sequelize, DataTypes),
   BookShelf: bookshelf(sequelize),
+  Author: author(sequelize),
 }
 
 Object.keys(models).forEach(key => {

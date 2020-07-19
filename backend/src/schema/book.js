@@ -18,5 +18,7 @@ export default gql`
     thumbnail: String
     pageCount: Int!
     publishDate: String
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 `

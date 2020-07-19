@@ -45,6 +45,7 @@ const book = (sequelize, DataTypes) => {
   )
 
   Book.associate = models => {
+    Book.belongsToMany(models.Author, {through: 'bookauthor'})
     Book.belongsToMany(models.BookShelf, {through: 'bookshelfbook'})
   }
 
