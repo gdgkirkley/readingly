@@ -1,8 +1,5 @@
 import {Op} from 'sequelize'
-import logger from 'loglevel'
-import axios, {AxiosError} from 'axios'
-
-const googleBooksEndpoint = 'https://www.googleapis.com/books/v1/volumes'
+import {getGoogleBooks} from '../utils/googleBooks'
 
 export default {
   Query: {
@@ -51,16 +48,14 @@ export default {
         const bookResults = await Promise.all(
           results.items.map(async result => {
             const info = result.volumeInfo
-            const [book] = await models.Book.findOrCreate({
-              where: {
-                title: info.title,
-                description: info.description,
-                publishDate: info.publishedDate,
-                googleBooksId: result.id,
-                thumbnail: info.imageLinks.thumbnail,
-                pageCount: info.pageCount,
-              },
-            })
+            const book = {
+              title: info.title,
+              description: info.description,
+              publishDate: info.publishedDate,
+              googleBooksId: result.id,
+              thumbnail: info.imageLinks.thumbnail,
+              pageCount: info.pageCount,
+            }
             return book
           }),
         )
@@ -73,16 +68,4 @@ export default {
       return Array.from(books)
     },
   },
-}
-
-async function getGoogleBooks(search) {
-  try {
-    const response = await axios.get(`${googleBooksEndpoint}?q=${search}`)
-
-    return response.data
-  } catch (error) {
-    const data = error.response
-    logger.error(data)
-    throw new AxiosError('Unable to get books')
-  }
 }

@@ -1,3 +1,6 @@
+import logger from 'loglevel'
+import {getGoogleBook} from '../utils/googleBooks'
+
 export default {
   Query: {
     bookshelves: async (parent, args, {models}) => {
@@ -33,13 +36,29 @@ export default {
     createBookshelf: async (parent, {title}, {me, models}) => {
       return await models.BookShelf.create({title, userId: me.id})
     },
-    addBook: async (parent, {bookId, bookshelfId}, {models}) => {
+    addBook: async (parent, {googleBookId, bookshelfId}, {models}) => {
       const bookshelf = await models.BookShelf.findByPk(bookshelfId)
-      const book = await models.Book.findByPk(bookId)
 
-      if (!bookshelf || !book) {
+      if (!bookshelf) {
         return null
       }
+
+      const googleBook = await getGoogleBook(googleBookId)
+
+      const info = googleBook.volumeInfo
+
+      const [book] = await models.Book.findOrCreate({
+        where: {
+          title: info.title,
+          description: info.description,
+          publishDate: info.publishedDate,
+          googleBooksId: googleBook.id,
+          thumbnail: info.imageLinks.thumbnail,
+          pageCount: info.pageCount,
+        },
+      })
+
+      logger.info(book)
 
       await bookshelf.addBook(book)
       return bookshelf
