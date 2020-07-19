@@ -20,6 +20,7 @@ const schema = gql`
     id: ID!
     username: String!
     email: String!
+    bookshelves: [BookShelf!]
   }
 `
 

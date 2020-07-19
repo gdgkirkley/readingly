@@ -1,23 +1,22 @@
 import {Model} from 'sequelize'
 import {getSaltAndHash} from '../utils/auth'
 
-const user = (sequelize, DataTypes) => {
-  class User extends Model {
-    static async findByLogin(login) {
-      let user = await User.findOne({
-        where: {username: login},
+class User extends Model {
+  static async findByLogin(login) {
+    let user = await User.findOne({
+      where: {username: login},
+    })
+
+    if (!user) {
+      user = await User.findOne({
+        where: {email: login},
       })
-
-      if (!user) {
-        user = await User.findOne({
-          where: {email: login},
-        })
-      }
-
-      return user
     }
-  }
 
+    return user
+  }
+}
+const user = (sequelize, DataTypes) => {
   User.init(
     {
       username: {
@@ -70,3 +69,5 @@ const user = (sequelize, DataTypes) => {
 }
 
 export default user
+
+export {User}

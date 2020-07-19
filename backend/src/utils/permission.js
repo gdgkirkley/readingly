@@ -24,6 +24,9 @@ const permissions = shield({
     users: canReadAnyUser,
     me: isAuthenticated,
   },
+  Mutation: {
+    searchBook: isAuthenticated,
+  },
 })
 
 export {

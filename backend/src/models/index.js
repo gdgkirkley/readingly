@@ -1,6 +1,8 @@
 import Sequelize, {DataTypes} from 'sequelize'
 import logger from 'loglevel'
 import user from './user'
+import book from './book'
+import bookshelf from './bookshelf'
 
 const sequelize = new Sequelize(
   process.env.DATABASE,
@@ -15,6 +17,8 @@ const sequelize = new Sequelize(
 
 const models = {
   User: user(sequelize, DataTypes),
+  Book: book(sequelize, DataTypes),
+  BookShelf: bookshelf(sequelize),
 }
 
 Object.keys(models).forEach(key => {

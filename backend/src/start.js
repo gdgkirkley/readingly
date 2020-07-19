@@ -7,7 +7,7 @@ import errorMiddleware from './middleware/Error'
 import typeDefs from './schema'
 import resolvers from './resolvers'
 import models, {sequelize} from './models'
-import {createUsers} from './seeds'
+import {createUsers, createBooks, createBookshelves} from './seeds'
 import {authMiddleware} from './utils/auth'
 import {permissions} from './utils/permission'
 
@@ -36,7 +36,9 @@ async function startServer({port = process.env.PORT} = {}) {
 
   if (process.env.SEED_DATABASE) {
     logger.info('Seeding database')
-    createUsers()
+    await createUsers()
+    await createBooks()
+    await createBookshelves()
   }
 
   app.listen({port: port}, () => {

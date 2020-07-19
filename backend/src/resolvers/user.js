@@ -18,6 +18,16 @@ export default {
     },
   },
 
+  User: {
+    bookshelves: async (user, args, {models}) => {
+      return await models.BookShelf.findAll({
+        where: {
+          userId: user.id,
+        },
+      })
+    },
+  },
+
   Mutation: {
     signUp: async (parent, {username, email, password}, {models}) => {
       const user = await models.User.create({username, email, password})
