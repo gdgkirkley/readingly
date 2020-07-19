@@ -14,7 +14,7 @@ export default gql`
 
   type BookShelf {
     title: String!
-    createdAt: String!
+    createdAt: DateTime!
     user: User!
     books: [Book!]
     bookCount: Int!

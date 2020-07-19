@@ -5,6 +5,9 @@ import bookSchema from './book'
 import bookshelfSchema from './bookshelf'
 
 const linkSchema = gql`
+  scalar Date
+  scalar DateTime
+
   type Query {
     _: Boolean
   }

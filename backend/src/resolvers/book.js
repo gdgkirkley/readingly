@@ -39,10 +39,7 @@ export default {
         books.add(book)
       })
 
-      logger.info(books.size)
-
       if (books.size < 10) {
-        logger.info('Running google search')
         const searchTerm = encodeURI(search)
 
         const results = await getGoogleBooks(searchTerm)
