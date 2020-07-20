@@ -18,6 +18,13 @@ const isReadingOwnUser = rule()((parent, {id}, {me}) => {
   return me && me.id.toString() === id.toString()
 })
 
+const isReadingOwnBookshelf = rule()(
+  async (parent, {bookshelfId}, {me, models}) => {
+    const bs = await models.BookShelf.findByPk(bookshelfId)
+    return me && me.id.toString() === bs.userId.toString()
+  },
+)
+
 const permissions = shield({
   Query: {
     user: or(isReadingOwnUser, canReadAllData),
@@ -25,9 +32,12 @@ const permissions = shield({
     me: isAuthenticated,
 
     bookshelves: canReadAllData,
+    bookshelf: or(isReadingOwnBookshelf, canReadAllData),
+    mybookshelves: isAuthenticated,
   },
   Mutation: {
     searchBook: isAuthenticated,
+    createAuthor: canReadAllData,
   },
 })
 
@@ -37,4 +47,5 @@ export {
   canReadAllData,
   isReadingOwnUser,
   getPermissions,
+  isReadingOwnBookshelf,
 }

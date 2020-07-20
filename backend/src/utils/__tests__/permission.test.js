@@ -3,6 +3,7 @@ import {
   isAuthenticated,
   canReadAllData,
   isReadingOwnUser,
+  isReadingOwnBookshelf,
   getPermissions,
 } from '../permission'
 
@@ -51,6 +52,15 @@ test('isReadingOwnUser returns correct boolean', async () => {
     await applyResolver(isReadingOwnUser, {me: user}, {id: 1}),
   ).toBeTruthy()
   expect(await applyResolver(isReadingOwnUser, {me: user}, {id: 2})).toBeFalsy()
+})
+
+test('isReadingOwnBookshelf returns correct boolean', async () => {
+  const bookshelfId = 1
+  const user = {id: 1, username: 'test', role: 'USER'}
+
+  expect(
+    await applyResolver(isReadingOwnBookshelf, {me: user}, {id: bookshelfId}),
+  ).toBeTruthy()
 })
 
 test("getPermissions returns user's role", () => {
