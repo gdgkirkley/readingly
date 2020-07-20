@@ -1,7 +1,7 @@
 import * as hashFunction from 'object-hash'
 import {
   isAuthenticated,
-  canReadAnyUser,
+  canReadAllData,
   isReadingOwnUser,
   getPermissions,
 } from '../permission'
@@ -36,12 +36,12 @@ test('isAuthenticated returns correct boolean', async () => {
   expect(await applyResolver(isAuthenticated, {me})).toBeTruthy()
 })
 
-test('canReadAnyUser returns correct boolean', async () => {
+test('canReadAllData returns correct boolean', async () => {
   const user1 = {id: 1, username: 'test', role: 'ADMIN'}
   const user2 = {id: 2, username: 'test', role: 'USER'}
 
-  expect(await applyResolver(canReadAnyUser, {me: user1})).toBeTruthy()
-  expect(await applyResolver(canReadAnyUser, {me: user2})).toBeFalsy()
+  expect(await applyResolver(canReadAllData, {me: user1})).toBeTruthy()
+  expect(await applyResolver(canReadAllData, {me: user2})).toBeFalsy()
 })
 
 test('isReadingOwnUser returns correct boolean', async () => {

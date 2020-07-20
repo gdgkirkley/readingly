@@ -7,7 +7,7 @@
     "node": "12.18.2"
   },
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest --watch --runInBand",
     "start": "node .",
     "build": "babel --delete-dir-on-start --out-dir dist --copy-files --ignore \"**/__tests__/**,**/__mocks__/**\" --no-copy-ignored src"
   },

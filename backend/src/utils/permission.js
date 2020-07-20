@@ -9,7 +9,7 @@ const isAuthenticated = rule()((parent, args, {me}) => {
   return me !== undefined && me !== null
 })
 
-const canReadAnyUser = rule()((parent, args, {me}) => {
+const canReadAllData = rule()((parent, args, {me}) => {
   const role = getPermissions(me)
   return role === 'ADMIN'
 })
@@ -20,9 +20,11 @@ const isReadingOwnUser = rule()((parent, {id}, {me}) => {
 
 const permissions = shield({
   Query: {
-    user: or(isReadingOwnUser, canReadAnyUser),
-    users: canReadAnyUser,
+    user: or(isReadingOwnUser, canReadAllData),
+    users: canReadAllData,
     me: isAuthenticated,
+
+    bookshelves: canReadAllData,
   },
   Mutation: {
     searchBook: isAuthenticated,
@@ -32,7 +34,7 @@ const permissions = shield({
 export {
   permissions,
   isAuthenticated,
-  canReadAnyUser,
+  canReadAllData,
   isReadingOwnUser,
   getPermissions,
 }

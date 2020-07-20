@@ -32,9 +32,13 @@ async function startServer({port = process.env.PORT} = {}) {
 
   server.applyMiddleware({app, path: '/graphql'})
 
-  await sequelize.sync({force: process.env.SEED_DATABASE})
+  const seed = process.env.SEED_DATABASE || process.env.NODE_ENV === 'test'
 
-  if (process.env.SEED_DATABASE) {
+  await sequelize.sync({
+    force: seed,
+  })
+
+  if (seed) {
     logger.info('Seeding database')
     await createUsers()
     await createBooks()
