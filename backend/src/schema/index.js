@@ -3,6 +3,7 @@ import {gql} from 'apollo-server-express'
 import userSchema from './user'
 import bookSchema from './book'
 import bookshelfSchema from './bookshelf'
+import authorSchema from './author'
 
 const linkSchema = gql`
   scalar Date
@@ -21,4 +22,10 @@ const linkSchema = gql`
   }
 `
 
-export default [linkSchema, userSchema, bookSchema, bookshelfSchema]
+export default [
+  linkSchema,
+  userSchema,
+  bookSchema,
+  bookshelfSchema,
+  authorSchema,
+]

@@ -15,6 +15,7 @@ export default gql`
     googleBooksId: String!
     title: String!
     description: String
+    authors: [Author!]
     thumbnail: String
     pageCount: Int!
     publishDate: String

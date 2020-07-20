@@ -68,4 +68,11 @@ export default {
       return Array.from(books)
     },
   },
+
+  Book: {
+    authors: async (book, args, {models}) => {
+      const b = await models.Book.findByPk(book.id)
+      return await b.getAuthors()
+    },
+  },
 }

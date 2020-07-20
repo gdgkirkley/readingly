@@ -47,20 +47,43 @@ export default {
 
       const info = googleBook.volumeInfo
 
-      const [book] = await models.Book.findOrCreate({
+      let book
+
+      book = await models.Book.findOne({
         where: {
+          googleBooksId: googleBook.id,
+        },
+      })
+
+      if (!book) {
+        book = await models.Book.create({
           title: info.title,
           description: info.description,
           publishDate: info.publishedDate,
           googleBooksId: googleBook.id,
           thumbnail: info.imageLinks.thumbnail,
           pageCount: info.pageCount,
-        },
-      })
+        })
 
-      logger.info(book)
+        try {
+          await info.authors.forEach(async name => {
+            const [author] = await models.Author.findOrCreate({
+              where: {
+                name,
+              },
+            })
 
-      await bookshelf.addBook(book)
+            await author.addBook(book)
+          })
+        } catch (error) {
+          logger.error(error)
+        }
+      }
+
+      if (!(await bookshelf.hasBook(book))) {
+        await bookshelf.addBook(book)
+      }
+
       return bookshelf
     },
   },
