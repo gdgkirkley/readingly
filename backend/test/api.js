@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const getData = res => res.data
+const resolve = e => e
 
 const api = axios.create({
   headers: {
@@ -22,6 +23,54 @@ api.interceptors.response.use(
   },
 )
 
+async function loginUser(email, password) {
+  const {data} = await api.post(process.env.API_URL, {
+    query: `
+              mutation ($login: String!, $password: String!){
+                  signIn(login: $login, password: $password) {
+                      token
+                  }
+              }
+          `,
+    variables: {login: email, password: password},
+  })
+  return data
+}
+
+async function authRequest(query, variables, token) {
+  const {data} = await api.post(
+    process.env.API_URL,
+    {
+      query,
+      variables,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  )
+
+  return data
+}
+
+async function expectedErrorRequest(query, variables, headers) {
+  const result = await api
+    .post(
+      process.env.API_URL,
+      {
+        query,
+        variables,
+      },
+      {
+        headers,
+      },
+    )
+    .catch(resolve)
+
+  return result
+}
+
 export default api
 
-export {getData}
+export {getData, resolve, loginUser, expectedErrorRequest, authRequest}

@@ -1,4 +1,4 @@
-import api from '../../../test/api'
+import {loginUser, expectedErrorRequest, authRequest} from '../../../test/api'
 
 test('user resource returns a user when authenticated', async () => {
   const expectedResult = {
@@ -7,21 +7,49 @@ test('user resource returns a user when authenticated', async () => {
     email: 'gkirkley@readingly.com',
   }
 
-  const {data} = await api.post(process.env.API_URL, {
-    query: `
-            mutation ($login: String!, $password: String!){
-                signIn(login: $login, password: $password) {
-                    token
-                }
-            }
-        `,
-    variables: {login: 'gkirkley@readingly.com', password: 'gkirkley'},
-  })
+  const error = await expectedErrorRequest(
+    ` query ($id: ID!){
+          user(id: $id) {
+              id
+              username
+              email
+          }
+      }`,
+    {id: 1},
+  )
 
-  const {data: uData} = await api.post(
-    process.env.API_URL,
-    {
-      query: `
+  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+
+  const data = await loginUser('gkirkley@readingly.com', 'gkirkley')
+
+  const {user} = await authRequest(
+    `
+      query ($id: ID!){
+          user(id: $id) {
+              id
+              username
+              email
+          }
+      }
+        `,
+    {id: 1},
+    data.signIn.token,
+  )
+
+  expect(user).toStrictEqual(expectedResult)
+})
+
+test('user resource does not allow USER role to fetch users except themselves', async () => {
+  const expectedResult = {
+    id: '2',
+    username: 'pfraser',
+    email: 'pfraser@readingly.com',
+  }
+
+  const data = await loginUser('pfraser@readingly.com', 'pfraser')
+
+  const {user} = await authRequest(
+    `
             query ($id: ID!){
                 user(id: $id) {
                     id
@@ -30,14 +58,85 @@ test('user resource returns a user when authenticated', async () => {
                 }
             }
         `,
-      variables: {id: 1},
-    },
+    {id: 2},
+    data.signIn.token,
+  )
+  expect(user).toStrictEqual(expectedResult)
+
+  const error = await expectedErrorRequest(
+    `
+            query ($id: ID!){
+                user(id: $id) {
+                    id
+                    username
+                    email
+                }
+            }
+        `,
+    {id: 1},
     {
-      headers: {
-        Authorization: `Bearer ${data.signIn.token}`,
-      },
+      Authorization: `Bearer ${data.signIn.token}`,
     },
   )
 
-  expect(uData.user).toStrictEqual(expectedResult)
+  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
+
+test('user resource allows ADMIN role to fetch any user', async () => {
+  const expectedResult = {
+    id: '2',
+    username: 'pfraser',
+    email: 'pfraser@readingly.com',
+  }
+
+  const data = await loginUser('gkirkley@readingly.com', 'gkirkley')
+
+  const {user} = await authRequest(
+    `
+            query ($id: ID!){
+                user(id: $id) {
+                    id
+                    username
+                    email
+                }
+            }
+        `,
+    {id: 2},
+    data.signIn.token,
+  )
+
+  expect(user).toStrictEqual(expectedResult)
+})
+
+test('users returns all users if ADMIN', async () => {
+  const expectedResult = [
+    {
+      id: '1',
+      username: 'gkirkley',
+      email: 'gkirkley@readingly.com',
+    },
+    {
+      id: '2',
+      username: 'pfraser',
+      email: 'pfraser@readingly.com',
+    },
+  ]
+
+  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+
+  const {users} = await authRequest(
+    `
+            query {
+                users {
+                    id
+                    username
+                    email
+                }
+            }
+        `,
+    {},
+    login.signIn.token,
+  )
+
+  expect(users).toStrictEqual(expectedResult)
 })
