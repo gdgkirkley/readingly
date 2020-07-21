@@ -1,4 +1,5 @@
 import * as hashFunction from 'object-hash'
+import models from '../../models'
 import {
   isAuthenticated,
   canReadAllData,
@@ -53,16 +54,6 @@ test('isReadingOwnUser returns correct boolean', async () => {
   ).toBeTruthy()
   expect(await applyResolver(isReadingOwnUser, {me: user}, {id: 2})).toBeFalsy()
 })
-
-test('isReadingOwnBookshelf returns correct boolean', async () => {
-  const bookshelfId = 1
-  const user = {id: 1, username: 'test', role: 'USER'}
-
-  expect(
-    await applyResolver(isReadingOwnBookshelf, {me: user}, {id: bookshelfId}),
-  ).toBeTruthy()
-})
-
 test("getPermissions returns user's role", () => {
   const user = {id: 1, username: 'test', role: 'USER'}
 

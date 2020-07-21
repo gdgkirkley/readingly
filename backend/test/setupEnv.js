@@ -1,4 +1,4 @@
 require('dotenv').config()
-const {startServer} = require('../src/start')
+const models = require('../src/models')
 
-startServer()
+afterAll(() => models.sequelize.close())
