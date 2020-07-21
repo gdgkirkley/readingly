@@ -140,3 +140,68 @@ test('users returns all users if ADMIN', async () => {
 
   expect(users).toStrictEqual(expectedResult)
 })
+
+test('users rejects if not ADMIN', async () => {
+  const login = await loginUser('pfraser@readingly.com', 'pfraser')
+
+  const error = await expectedErrorRequest(
+    `
+    query {
+      users {
+        id
+        username
+        email
+      }
+    }
+  `,
+    {},
+    {
+      Authorization: `Bearer ${login.signIn.token}`,
+    },
+  )
+
+  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
+
+test('me gets user when authenticated', async () => {
+  const expectedResult = {
+    id: '2',
+    username: 'pfraser',
+    email: 'pfraser@readingly.com',
+  }
+
+  const login = await loginUser('pfraser@readingly.com', 'pfraser')
+
+  const {me} = await authRequest(
+    `
+      query {
+        me {
+          id
+          username
+          email
+        }
+      }
+    `,
+    {},
+    login.signIn.token,
+  )
+
+  expect(me).toStrictEqual(expectedResult)
+})
+
+test('me rejects if not authenticated', async () => {
+  const error = await expectedErrorRequest(
+    `
+      query {
+        me {
+          id
+          username
+          email
+        }
+      }
+    `,
+    {},
+  )
+
+  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
