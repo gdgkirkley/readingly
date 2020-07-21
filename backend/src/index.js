@@ -1,6 +1,7 @@
 import logger from 'loglevel'
 import {startServer} from './start.js'
 
-logger.setLevel('info')
+const isTest = process.env.NODE_ENV !== 'test'
+logger.setLevel(isTest ? 'warn' : 'info')
 
 startServer()

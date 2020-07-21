@@ -1,4 +1,7 @@
 require('dotenv').config()
-const models = require('../src/models')
+const {sequelize} = require('../src/models')
+const {resetDb} = require('./dbUtils.js')
 
-afterAll(() => models.sequelize.close())
+afterEach(async () => await resetDb())
+
+//afterAll(async () => await sequelize.close())

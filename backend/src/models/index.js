@@ -5,11 +5,7 @@ import book from './book'
 import bookshelf from './bookshelf'
 import author from './author'
 
-const isTest = process.env.NODE_ENV === 'test'
-
-const db = isTest ? process.env.TEST_DATABASE : process.env.DATABASE
-
-logger.info('Connecting to ' + (isTest ? 'test' : 'dev') + 'db')
+const db = process.env.DATABASE
 
 const sequelize = new Sequelize(
   db,

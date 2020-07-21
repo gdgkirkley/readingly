@@ -6,8 +6,7 @@ import {applyMiddleware} from 'graphql-middleware'
 import errorMiddleware from './middleware/Error'
 import typeDefs from './schema'
 import resolvers from './resolvers'
-import models, {sequelize} from './models'
-import {createUsers, createBooks, createBookshelves} from './seeds'
+import models from './models'
 import {authMiddleware} from './utils/auth'
 import {permissions} from './utils/permission'
 
@@ -31,19 +30,6 @@ async function startServer({port = process.env.PORT} = {}) {
   })
 
   server.applyMiddleware({app, path: '/graphql'})
-
-  const seed = process.env.SEED_DATABASE || process.env.NODE_ENV === 'test'
-
-  await sequelize.sync({
-    force: seed,
-  })
-
-  if (seed) {
-    logger.info('Seeding database')
-    await createUsers()
-    await createBooks()
-    await createBookshelves()
-  }
 
   app.listen({port: port}, () => {
     logger.info(`Listening on port ${port}`)
