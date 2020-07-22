@@ -25,21 +25,27 @@ const isReadingOwnBookshelf = rule()(
   },
 )
 
-const permissions = shield({
-  Query: {
-    user: or(isReadingOwnUser, canReadAllData),
-    users: canReadAllData,
-    me: isAuthenticated,
+// Run in debug mode when not in production to receive more accurate errors
+const permissions = shield(
+  {
+    Query: {
+      user: or(isReadingOwnUser, canReadAllData),
+      users: canReadAllData,
+      me: isAuthenticated,
 
-    bookshelves: canReadAllData,
-    bookshelf: or(isReadingOwnBookshelf, canReadAllData),
-    mybookshelves: isAuthenticated,
+      bookshelves: canReadAllData,
+      bookshelf: or(isReadingOwnBookshelf, canReadAllData),
+      mybookshelves: isAuthenticated,
+    },
+    Mutation: {
+      searchBook: isAuthenticated,
+      createAuthor: canReadAllData,
+    },
   },
-  Mutation: {
-    searchBook: isAuthenticated,
-    createAuthor: canReadAllData,
+  {
+    debug: process.env.NODE_ENV === 'production' ? false : true,
   },
-})
+)
 
 export {
   permissions,
