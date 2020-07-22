@@ -67,6 +67,23 @@ export default {
 
       return Array.from(books)
     },
+    createBook: async (parent, args, {models}) => {
+      return await models.Book.create({
+        ...args,
+      })
+    },
+    updateBook: async (parent, {id, ...rest}, {models}) => {
+      const book = await models.Book.findByPk(id)
+
+      book = {
+        ...book,
+        ...rest,
+      }
+
+      book.save()
+
+      return book
+    },
   },
 
   Book: {

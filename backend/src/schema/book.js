@@ -8,6 +8,24 @@ export default gql`
 
   extend type Mutation {
     searchBook(search: String!): [Book!]
+    createBook(
+      title: String!
+      description: String
+      googleBooksId: String!
+      authors: [String!]
+      thumbnail: String!
+      pageCount: Int!
+      publishDate: String
+    ): Book!
+    updateBook(
+      id: ID!
+      title: String
+      description: String
+      authors: [String]
+      thumbnail: String
+      pageCount: Int
+      publishDate: String
+    ): Book!
   }
 
   type Book {

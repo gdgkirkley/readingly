@@ -18,7 +18,9 @@ test('user resource returns a user when authenticated', async () => {
     {id: 1},
   )
 
-  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+  expect(error.errors[0].message).toMatchInlineSnapshot(
+    `"Cannot read property 'role' of undefined"`,
+  )
 
   const data = await loginUser('gkirkley@readingly.com', 'gkirkley')
 

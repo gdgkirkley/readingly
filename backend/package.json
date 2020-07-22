@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "jest --watch --runInBand",
+    "test:coverage": "jest --coverage --runInBand",
     "start": "node .",
     "build": "babel --delete-dir-on-start --out-dir dist --copy-files --ignore \"**/__tests__/**,**/__mocks__/**\" --no-copy-ignored src"
   },
