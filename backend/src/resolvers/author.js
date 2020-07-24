@@ -4,7 +4,7 @@ export default {
       return await models.Author.findAll()
     },
     author: async (parent, {id}, {models}) => {
-      return await models.Author.findByPk({id})
+      return await models.Author.findByPk(id)
     },
   },
 
