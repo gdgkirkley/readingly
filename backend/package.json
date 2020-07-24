@@ -47,6 +47,7 @@
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.5",
+    "faker": "^4.1.0",
     "jest": "^26.1.0",
     "nodemon": "^2.0.4",
     "object-hash": "^2.0.3",

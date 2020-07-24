@@ -1,4 +1,5 @@
 import {Op} from 'sequelize'
+import logger from 'loglevel'
 import {getGoogleBooks} from '../utils/googleBooks'
 
 export default {
@@ -68,21 +69,41 @@ export default {
       return Array.from(books)
     },
     createBook: async (parent, args, {models}) => {
-      return await models.Book.create({
+      const book = await models.Book.create({
         ...args,
       })
-    },
-    updateBook: async (parent, {id, ...rest}, {models}) => {
-      const book = await models.Book.findByPk(id)
 
-      book = {
-        ...book,
-        ...rest,
+      if (args.authors && args.authors.length) {
+        try {
+          await args.authors.forEach(async name => {
+            const [author] = await models.Author.findOrCreate({
+              where: {
+                name,
+              },
+            })
+
+            await book.addAuthor(author)
+          })
+        } catch (error) {
+          logger.error(error)
+        }
       }
 
-      book.save()
+      return await models.Book.findByPk(book.id)
+    },
+    updateBook: async (parent, {id, ...rest}, {models}) => {
+      await models.Book.update(
+        {
+          ...rest,
+        },
+        {
+          where: {
+            id: id,
+          },
+        },
+      )
 
-      return book
+      return await models.Book.findByPk(id)
     },
   },
 
