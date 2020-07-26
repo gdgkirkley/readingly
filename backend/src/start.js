@@ -1,8 +1,10 @@
 import express from 'express'
+import cors from 'cors'
 import logger from 'loglevel'
 import {ApolloServer} from 'apollo-server-express'
 import {makeExecutableSchema} from 'graphql-tools'
 import {applyMiddleware} from 'graphql-middleware'
+import {corsOrigins} from './cors'
 import errorMiddleware from './middleware/Error'
 import typeDefs from './schema'
 import resolvers from './resolvers'
@@ -13,6 +15,7 @@ import {permissions} from './utils/permission'
 async function startServer({port = process.env.PORT} = {}) {
   const app = express()
 
+  app.use(cors(corsOrigins()))
   app.use(errorMiddleware)
   app.use(authMiddleware)
 
@@ -29,6 +32,10 @@ async function startServer({port = process.env.PORT} = {}) {
     }),
   })
 
+  server.applyMiddleware({
+    app,
+    cors: corsOrigins(),
+  })
   server.applyMiddleware({app, path: '/graphql'})
 
   app.listen({port: port}, () => {
