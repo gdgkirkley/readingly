@@ -8,9 +8,9 @@ async function getGoogleBooks(search) {
 
     return response.data
   } catch (error) {
-    const data = error.response
-    logger.error(data)
-    throw new AxiosError('Unable to get books')
+    const data = error.response ? error.response.data : error.request
+    logger.error(data.error)
+    throw new Error(`Unable to get books: ${data.error.message}`)
   }
 }
 
@@ -20,9 +20,9 @@ async function getGoogleBook(googleBookId) {
 
     return response.data
   } catch (error) {
-    const data = error.response
-    logger.error(data)
-    throw new AxiosError('Unable to get books')
+    const data = error.response ? error.response.data : error.request
+    logger.error(data.error)
+    throw new Error(`Unable to get book: ${data.error.message}`)
   }
 }
 

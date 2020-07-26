@@ -9,10 +9,11 @@ export default gql`
 
   extend type Mutation {
     createBookshelf(title: String!): BookShelf
-    addBook(googleBookId: String!, bookshelfId: Int!): BookShelf
+    addBook(googleBookId: String!, bookshelfId: ID!): BookShelf
   }
 
   type BookShelf {
+    id: ID!
     title: String!
     createdAt: DateTime!
     user: User!
