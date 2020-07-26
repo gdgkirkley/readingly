@@ -3,7 +3,7 @@ import {gql} from 'apollo-server-express'
 export default gql`
   extend type Query {
     bookshelves: [BookShelf!]
-    bookshelf(id: ID!): BookShelf
+    bookshelf(bookshelfId: ID!): BookShelf
     mybookshelves: [BookShelf!]
   }
 

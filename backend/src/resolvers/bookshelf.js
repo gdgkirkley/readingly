@@ -6,8 +6,8 @@ export default {
     bookshelves: async (parent, args, {models}) => {
       return await models.BookShelf.findAll()
     },
-    bookshelf: async (parent, {id}, {models}) => {
-      return await models.BookShelf.findByPk(id)
+    bookshelf: async (parent, {bookshelfId}, {models}) => {
+      return await models.BookShelf.findByPk(bookshelfId)
     },
     mybookshelves: async (parent, args, {me, models}) => {
       return await models.BookShelf.findAll({
@@ -43,19 +43,20 @@ export default {
         return null
       }
 
-      const googleBook = await getGoogleBook(googleBookId)
-
-      const info = googleBook.volumeInfo
-
       let book
 
+      // If book exists, then no need to fetch info
       book = await models.Book.findOne({
         where: {
-          googleBooksId: googleBook.id,
+          googleBooksId: googleBookId,
         },
       })
 
       if (!book) {
+        const googleBook = await getGoogleBook(googleBookId)
+
+        const info = googleBook.volumeInfo
+
         book = await models.Book.create({
           title: info.title,
           description: info.description,
