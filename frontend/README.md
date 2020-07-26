@@ -1,3 +1,3 @@
-# Readingly Frontend
+# Readingly
 
-This is the frontend of the Readingly project. It's a React application with Typescript.
+This is the frontend of Readingly. It uses Next and Apollo.
