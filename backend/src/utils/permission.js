@@ -33,12 +33,13 @@ const permissions = shield(
       users: canReadAllData,
       me: isAuthenticated,
 
+      searchBook: isAuthenticated,
+
       bookshelves: canReadAllData,
       bookshelf: or(isReadingOwnBookshelf, canReadAllData),
       mybookshelves: isAuthenticated,
     },
     Mutation: {
-      searchBook: isAuthenticated,
       createAuthor: canReadAllData,
       addBook: isReadingOwnBookshelf,
     },

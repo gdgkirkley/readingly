@@ -4,10 +4,10 @@ export default gql`
   extend type Query {
     books: [Book!]
     book(id: ID!): Book
+    searchBook(search: String!): [Book!]
   }
 
   extend type Mutation {
-    searchBook(search: String!): [Book!]
     createBook(
       title: String!
       description: String

@@ -58,7 +58,7 @@ test('book returns a book', async () => {
 test('search books returns book results', async () => {
   const data = await authRequest(
     `
-      mutation($search: String!) {
+      query($search: String!) {
           searchBook(search: $search) {
               title
           }
@@ -75,7 +75,7 @@ test('search books returns book results', async () => {
 test('user can search and add book', async () => {
   const data = await authRequest(
     `
-        mutation($search: String!) {
+        query($search: String!) {
             searchBook(search: $search) {
                 title
                 description

@@ -5,6 +5,7 @@ import {
   NormalizedCacheObject,
 } from "@apollo/client";
 import withData from "../lib/withData";
+import Page from "../components/Page";
 
 interface AppPropsWithApollo extends AppProps {
   apollo: ApolloClient<NormalizedCacheObject>;
@@ -26,7 +27,9 @@ class Readingly extends App<AppPropsWithApollo> {
 
     return (
       <ApolloProvider client={apollo}>
-        <Component {...pageProps} />
+        <Page>
+          <Component {...pageProps} />
+        </Page>
       </ApolloProvider>
     );
   }

@@ -10,9 +10,6 @@ export default {
     book: async (parent, {id}, {models}) => {
       return await models.Book.findByPk(id)
     },
-  },
-
-  Mutation: {
     searchBook: async (parent, {search}, {models}) => {
       const books = new Set()
       const booksToAdd = await models.Book.findAll({
@@ -68,6 +65,9 @@ export default {
 
       return Array.from(books)
     },
+  },
+
+  Mutation: {
     createBook: async (parent, args, {models}) => {
       const book = await models.Book.create({
         ...args,
