@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { useUser } from "../hooks/useUser";
+import Signout from "./Signout";
 
 const StyledNav = styled.nav`
   margin: 0;
@@ -67,9 +68,7 @@ const Menu = (): JSX.Element => {
       </Link>
       {me && (
         <>
-          <Link href="/signout">
-            <a>Sign Out</a>
-          </Link>
+          <Signout />
         </>
       )}
       {!me && (

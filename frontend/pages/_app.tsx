@@ -7,6 +7,8 @@ import {
 import withData from "../lib/withData";
 import Page from "../components/Page";
 
+import "react-toastify/dist/ReactToastify.css";
+
 interface AppPropsWithApollo extends AppProps {
   apollo: ApolloClient<NormalizedCacheObject>;
 }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
+import { ToastContainer } from "react-toastify";
 import Meta from "./Meta";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -89,6 +90,16 @@ function Page(props): JSX.Element {
     <ThemeProvider theme={theme}>
       <Meta />
       <Header />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+      />
       <StyledPage>
         <Inner>{props.children}</Inner>
       </StyledPage>

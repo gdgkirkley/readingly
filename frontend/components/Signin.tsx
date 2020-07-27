@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import StyledForm, { InputGroup, ActionGroup } from "./styles/FormStyles";
-import { SIGN_IN_USER_MUTATION } from "../graphql/user";
+import { SIGN_IN_USER_MUTATION, CURRENT_USER_QUERY } from "../graphql/user";
 
 interface FormInputs {
   email: string;
@@ -20,6 +20,8 @@ const Signin = () => {
         login: data.email,
         password: data.password,
       },
+      refetchQueries: [{ query: CURRENT_USER_QUERY }],
+      awaitRefetchQueries: true,
     });
   };
 

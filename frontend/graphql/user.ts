@@ -19,3 +19,11 @@ export const SIGN_IN_USER_MUTATION = gql`
     }
   }
 `;
+
+export const SIGN_OUT_USER_MUTATION = gql`
+  mutation {
+    signout {
+      message
+    }
+  }
+`;

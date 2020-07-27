@@ -31,7 +31,6 @@ const permissions = shield(
     Query: {
       user: or(isReadingOwnUser, canReadAllData),
       users: canReadAllData,
-      me: isAuthenticated,
 
       bookshelves: canReadAllData,
       bookshelf: or(isReadingOwnBookshelf, canReadAllData),
