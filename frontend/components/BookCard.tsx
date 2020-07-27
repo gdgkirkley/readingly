@@ -34,10 +34,12 @@ const BookCard = ({ book, ...rest }: { book: Book }): JSX.Element => {
       {...rest}
     >
       <Card>
-        {book.thumbnail && (
+        {book?.thumbnail ? (
           <ImageContainer>
             <img src={book.thumbnail} alt={book.title} />
           </ImageContainer>
+        ) : (
+          <p>{book.title}</p>
         )}
       </Card>
     </Link>

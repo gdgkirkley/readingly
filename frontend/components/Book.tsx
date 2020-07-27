@@ -15,15 +15,20 @@ const Book = ({ googleBooksId }: { googleBooksId: string }) => {
   return (
     <div>
       <h1>{data.googleBook.title}</h1>
-      <p>By {data.googleBook.authors.map((author) => author)}</p>
-      <img src={data.googleBook.thumbnail} alt={data.googleBook.title} />
+      {data.googleBook?.authors.length && (
+        <p>By {data.googleBook.authors.map((author) => author)}</p>
+      )}
+      {data.googleBook.thumbnail && (
+        <img src={data.googleBook.thumbnail} alt={data.googleBook.title} />
+      )}
       <div dangerouslySetInnerHTML={{ __html: data.googleBook.description }} />
       <div>
         <h2>You May Also Like</h2>
         <BookGallery searchTerm={data.googleBook.authors[0]} />
-        {data.googleBook.categories.map((category) => (
-          <BookGallery searchTerm={category} />
-        ))}
+        {data.googleBook?.categories?.length &&
+          data.googleBook.categories.map((category) => (
+            <BookGallery searchTerm={category} />
+          ))}
       </div>
     </div>
   );

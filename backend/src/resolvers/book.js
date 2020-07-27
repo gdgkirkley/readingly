@@ -19,7 +19,9 @@ export default {
         publishDate: info.publishedDate,
         authors: info.authors,
         googleBooksId: result.id,
-        thumbnail: info.imageLinks.thumbnail,
+        thumbnail: info.imageLinks?.thumbnail
+          ? info.imageLinks.thumbnail
+          : null,
         pageCount: info.pageCount,
         categories: info.categories,
       }
@@ -66,7 +68,9 @@ export default {
               description: info.description,
               publishDate: info.publishedDate,
               googleBooksId: result.id,
-              thumbnail: info.imageLinks.thumbnail,
+              thumbnail: info.imageLinks?.thumbnail
+                ? info.imageLinks.thumbnail
+                : null,
               pageCount: info.pageCount,
             }
             return book

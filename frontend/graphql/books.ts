@@ -15,6 +15,7 @@ export const BOOK_SEARCH = gql`
     searchBook(search: $search) {
       thumbnail
       googleBooksId
+      title
     }
   }
 `;
