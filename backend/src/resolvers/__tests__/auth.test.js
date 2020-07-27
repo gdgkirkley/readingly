@@ -11,7 +11,7 @@ test('signUp creates new user', async () => {
     password: 'test123',
   }
 
-  const {cookies} = await api.post(process.env.API_URL, {
+  const {cookie} = await api.post(process.env.API_URL, {
     query: `
             mutation ($username: String!, $email: String!, $password: String!) {
                 signUp(username: $username, email: $email, password: $password) {
@@ -34,7 +34,7 @@ test('signUp creates new user', async () => {
         }
       `,
     {},
-    cookies[0],
+    cookie,
   )
 
   expect(me).toStrictEqual({
@@ -44,7 +44,7 @@ test('signUp creates new user', async () => {
 })
 
 test('login logs user in and returns user', async () => {
-  const {cookies} = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
   const {
     data: {me},
@@ -58,7 +58,7 @@ test('login logs user in and returns user', async () => {
             }
           `,
     {},
-    cookies[0],
+    cookie,
   )
 
   expect(me).toStrictEqual({

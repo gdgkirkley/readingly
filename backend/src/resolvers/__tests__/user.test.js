@@ -22,9 +22,11 @@ test('user resource returns a user when authenticated', async () => {
     `"Cannot read property 'role' of undefined"`,
   )
 
-  const data = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
-  const {user} = await authRequest(
+  const {
+    data: {user},
+  } = await authRequest(
     `
       query ($id: ID!){
           user(id: $id) {
@@ -35,7 +37,7 @@ test('user resource returns a user when authenticated', async () => {
       }
         `,
     {id: 1},
-    data.signIn.token,
+    cookie,
   )
 
   expect(user).toStrictEqual(expectedResult)
@@ -48,9 +50,11 @@ test('user resource does not allow USER role to fetch users except themselves', 
     email: 'pfraser@readingly.com',
   }
 
-  const data = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
-  const {user} = await authRequest(
+  const {
+    data: {user},
+  } = await authRequest(
     `
             query ($id: ID!){
                 user(id: $id) {
@@ -61,7 +65,7 @@ test('user resource does not allow USER role to fetch users except themselves', 
             }
         `,
     {id: 2},
-    data.signIn.token,
+    cookie,
   )
   expect(user).toStrictEqual(expectedResult)
 
@@ -77,7 +81,7 @@ test('user resource does not allow USER role to fetch users except themselves', 
         `,
     {id: 1},
     {
-      Authorization: `Bearer ${data.signIn.token}`,
+      Cookie: cookie,
     },
   )
 
@@ -91,9 +95,11 @@ test('user resource allows ADMIN role to fetch any user', async () => {
     email: 'pfraser@readingly.com',
   }
 
-  const data = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
-  const {user} = await authRequest(
+  const {
+    data: {user},
+  } = await authRequest(
     `
             query ($id: ID!){
                 user(id: $id) {
@@ -104,7 +110,7 @@ test('user resource allows ADMIN role to fetch any user', async () => {
             }
         `,
     {id: 2},
-    data.signIn.token,
+    cookie,
   )
 
   expect(user).toStrictEqual(expectedResult)
@@ -124,9 +130,11 @@ test('users returns all users if ADMIN', async () => {
     },
   ]
 
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
-  const {users} = await authRequest(
+  const {
+    data: {users},
+  } = await authRequest(
     `
             query {
                 users {
@@ -137,14 +145,14 @@ test('users returns all users if ADMIN', async () => {
             }
         `,
     {},
-    login.signIn.token,
+    cookie,
   )
 
   expect(users).toStrictEqual(expectedResult)
 })
 
 test('users rejects if not ADMIN', async () => {
-  const login = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
   const error = await expectedErrorRequest(
     `
@@ -158,7 +166,7 @@ test('users rejects if not ADMIN', async () => {
   `,
     {},
     {
-      Authorization: `Bearer ${login.signIn.token}`,
+      Cookie: cookie,
     },
   )
 
@@ -172,9 +180,11 @@ test('me gets user when authenticated', async () => {
     email: 'pfraser@readingly.com',
   }
 
-  const login = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
-  const {me} = await authRequest(
+  const {
+    data: {me},
+  } = await authRequest(
     `
       query {
         me {
@@ -185,7 +195,7 @@ test('me gets user when authenticated', async () => {
       }
     `,
     {},
-    login.signIn.token,
+    cookie,
   )
 
   expect(me).toStrictEqual(expectedResult)

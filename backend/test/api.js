@@ -5,7 +5,10 @@ const resolve = e => e
 
 const getCookies = res => {
   if (!res.headers['set-cookie']) return null
-  return res.headers['set-cookie'][0].split(',').map(item => item.split(';')[0])
+  const cookies = res.headers['set-cookie'][0]
+    .split(',')
+    .map(item => item.split(';')[0])
+  return cookies[0]
 }
 
 const api = axios.create({
@@ -19,7 +22,7 @@ const api = axios.create({
 // Helper utility to create better error messages
 api.interceptors.response.use(
   function onSuccess(response) {
-    return {data: getData(response), cookies: getCookies(response)}
+    return {data: getData(response), cookie: getCookies(response)}
   },
   function onError(result) {
     throw new Error(

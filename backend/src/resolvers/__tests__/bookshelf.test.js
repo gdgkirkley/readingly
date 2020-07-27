@@ -6,9 +6,9 @@ import api, {
 import {buildBook} from '../../../test/generate'
 
 test('create bookshelf creates a bookshelf', async () => {
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
-  const bookshelfData = await authRequest(
+  const {data: bookshelfData} = await authRequest(
     `
         mutation($title: String!) {
             createBookshelf(title: $title) {
@@ -17,14 +17,14 @@ test('create bookshelf creates a bookshelf', async () => {
         }
       `,
     {title: 'Favourites'},
-    login.signIn.token,
+    cookie,
   )
 
   expect(bookshelfData.createBookshelf.title).toBe('Favourites')
 })
 
 test('create bookshelf does not allow invalid title', async () => {
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
   const error = await expectedErrorRequest(
     `
@@ -36,7 +36,7 @@ test('create bookshelf does not allow invalid title', async () => {
       `,
     {title: ''},
     {
-      Authorization: `Bearer ${login.signIn.token}`,
+      Cookie: cookie,
     },
   )
 
@@ -46,10 +46,10 @@ test('create bookshelf does not allow invalid title', async () => {
 })
 
 test('addBook adds a book to a bookshelf', async () => {
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
   const prideAndPrejudiceGoogleBookId = 's1gVAAAAYAAJ'
 
-  const bookshelfData = await authRequest(
+  const {data: bookshelfData} = await authRequest(
     `
             mutation($title: String!) {
                 createBookshelf(title: $title) {
@@ -59,10 +59,12 @@ test('addBook adds a book to a bookshelf', async () => {
             }
           `,
     {title: 'Favourites'},
-    login.signIn.token,
+    cookie,
   )
 
-  const {addBook} = await authRequest(
+  const {
+    data: {addBook},
+  } = await authRequest(
     `
             mutation($googleBookId: String!, $bookshelfId: ID!) {
                 addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
@@ -78,7 +80,7 @@ test('addBook adds a book to a bookshelf', async () => {
       googleBookId: prideAndPrejudiceGoogleBookId,
       bookshelfId: bookshelfData.createBookshelf.id,
     },
-    login.signIn.token,
+    cookie,
   )
 
   expect(addBook.bookCount).toBe(1)
@@ -86,10 +88,10 @@ test('addBook adds a book to a bookshelf', async () => {
 })
 
 test('addBook does not create a book if it exists', async () => {
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
   const book = await buildBook()
 
-  const bookshelfData = await authRequest(
+  const {data: bookshelfData} = await authRequest(
     `
               mutation($title: String!) {
                   createBookshelf(title: $title) {
@@ -99,10 +101,10 @@ test('addBook does not create a book if it exists', async () => {
               }
             `,
     {title: 'Favourites'},
-    login.signIn.token,
+    cookie,
   )
 
-  const bookData = await authRequest(
+  const {data: bookData} = await authRequest(
     `
       mutation(
         $title: String!,
@@ -128,10 +130,12 @@ test('addBook does not create a book if it exists', async () => {
       }
   `,
     book,
-    login.signIn.token,
+    cookie,
   )
 
-  const {addBook} = await authRequest(
+  const {
+    data: {addBook},
+  } = await authRequest(
     `
               mutation($googleBookId: String!, $bookshelfId: ID!) {
                   addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
@@ -148,7 +152,7 @@ test('addBook does not create a book if it exists', async () => {
       googleBookId: book.googleBooksId,
       bookshelfId: bookshelfData.createBookshelf.id,
     },
-    login.signIn.token,
+    cookie,
   )
 
   expect(addBook.bookCount).toBe(1)
@@ -157,10 +161,10 @@ test('addBook does not create a book if it exists', async () => {
 })
 
 test("user cannot add book to another user's bookshelf", async () => {
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
   const prideAndPrejudiceGoogleBookId = 's1gVAAAAYAAJ'
 
-  const bookshelfData = await authRequest(
+  const {data: bookshelfData} = await authRequest(
     `
             mutation($title: String!) {
                 createBookshelf(title: $title) {
@@ -170,10 +174,13 @@ test("user cannot add book to another user's bookshelf", async () => {
             }
           `,
     {title: 'Favourites'},
-    login.signIn.token,
+    cookie,
   )
 
-  const otherLogin = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie: otherCookie} = await loginUser(
+    'pfraser@readingly.com',
+    'pfraser',
+  )
 
   const error = await expectedErrorRequest(
     `
@@ -192,7 +199,7 @@ test("user cannot add book to another user's bookshelf", async () => {
       bookshelfId: bookshelfData.createBookshelf.id,
     },
     {
-      Authorization: `Bearer ${otherLogin.signIn.token}`,
+      Cookie: otherCookie,
     },
   )
 
@@ -200,7 +207,7 @@ test("user cannot add book to another user's bookshelf", async () => {
 })
 
 test('addBook handles invalid Google Books id', async () => {
-  const {signIn} = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
   const error = await expectedErrorRequest(
     `
@@ -219,7 +226,7 @@ test('addBook handles invalid Google Books id', async () => {
       bookshelfId: 1,
     },
     {
-      Authorization: `Bearer ${signIn.token}`,
+      Cookie: cookie,
     },
   )
 
@@ -229,7 +236,7 @@ test('addBook handles invalid Google Books id', async () => {
 })
 
 test('mybookshelves returns user bookshelves', async () => {
-  const login = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
   await authRequest(
     `
@@ -240,10 +247,12 @@ test('mybookshelves returns user bookshelves', async () => {
           }
         `,
     {title: 'Favourites'},
-    login.signIn.token,
+    cookie,
   )
 
-  const {mybookshelves} = await authRequest(
+  const {
+    data: {mybookshelves},
+  } = await authRequest(
     `
             query {
                 mybookshelves {
@@ -252,7 +261,7 @@ test('mybookshelves returns user bookshelves', async () => {
             }
           `,
     {},
-    login.signIn.token,
+    cookie,
   )
 
   expect(mybookshelves).toHaveLength(1)
@@ -267,10 +276,12 @@ test('mybookshelves returns user bookshelves', async () => {
           }
         `,
     {title: 'Currently reading'},
-    login.signIn.token,
+    cookie,
   )
 
-  const {mybookshelves: mybs} = await authRequest(
+  const {
+    data: {mybookshelves: mybs},
+  } = await authRequest(
     `
             query {
                 mybookshelves {
@@ -279,7 +290,7 @@ test('mybookshelves returns user bookshelves', async () => {
             }
           `,
     {},
-    login.signIn.token,
+    cookie,
   )
 
   expect(mybs).toHaveLength(2)
@@ -288,9 +299,11 @@ test('mybookshelves returns user bookshelves', async () => {
 })
 
 test('bookshelf returns a bookshelf', async () => {
-  const login = await loginUser('pfraser@readingly.com', 'pfraser')
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
-  const {createBookshelf: created} = await authRequest(
+  const {
+    data: {createBookshelf: created},
+  } = await authRequest(
     `
           mutation($title: String!) {
               createBookshelf(title: $title) {
@@ -299,10 +312,10 @@ test('bookshelf returns a bookshelf', async () => {
           }
         `,
     {title: 'Favourites'},
-    login.signIn.token,
+    cookie,
   )
 
-  const data = await authRequest(
+  const {data} = await authRequest(
     `
           query($bookshelfId: ID!) {
               bookshelf(bookshelfId: $bookshelfId) {
@@ -311,7 +324,7 @@ test('bookshelf returns a bookshelf', async () => {
           }
         `,
     {bookshelfId: created.id},
-    login.signIn.token,
+    cookie,
   )
 
   expect(data.bookshelf.title).toBe('Favourites')

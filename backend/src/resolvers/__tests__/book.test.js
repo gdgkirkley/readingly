@@ -4,7 +4,8 @@ import {buildBook, getDescription} from '../../../test/generate'
 let login
 
 beforeEach(async () => {
-  login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  login = cookie
 })
 
 test('books returns an array of books', async () => {
@@ -15,7 +16,7 @@ test('books returns an array of books', async () => {
       'Austen’s most celebrated novel tells the story of Elizabeth Bennet, a bright, lively young woman with four sisters, and a mother determined to marry them to wealthy men. At a party near the Bennets’ home in the English countryside, Elizabeth meets the wealthy, proud Fitzwilliam Darcy. Elizabeth initially finds Darcy haughty and intolerable, but circumstances continue to unite the pair. Mr. Darcy finds himself captivated by Elizabeth’s wit and candor, while her reservations about his character slowly vanish. The story is as much a social critique as it is a love story, and the prose crackles with Austen’s wry wit.',
   }
 
-  const bookData = await api.post(`${process.env.API_URL}`, {
+  const {data: bookData} = await api.post(`${process.env.API_URL}`, {
     query: `
       query {
         books {
@@ -39,7 +40,7 @@ test('book returns a book', async () => {
       'Austen’s most celebrated novel tells the story of Elizabeth Bennet, a bright, lively young woman with four sisters, and a mother determined to marry them to wealthy men. At a party near the Bennets’ home in the English countryside, Elizabeth meets the wealthy, proud Fitzwilliam Darcy. Elizabeth initially finds Darcy haughty and intolerable, but circumstances continue to unite the pair. Mr. Darcy finds himself captivated by Elizabeth’s wit and candor, while her reservations about his character slowly vanish. The story is as much a social critique as it is a love story, and the prose crackles with Austen’s wry wit.',
   }
 
-  const bookData = await api.post(`${process.env.API_URL}`, {
+  const {data: bookData} = await api.post(`${process.env.API_URL}`, {
     query: `
       query($id: ID!) {
         book(id: $id) {
@@ -58,7 +59,9 @@ test('book returns a book', async () => {
 test('googleBook returns a book', async () => {
   const pillarsOfTheEarth = 'VB7IAgAAQBAJ'
 
-  const {data} = await api.post(`${process.env.API_URL}`, {
+  const {
+    data: {data},
+  } = await api.post(`${process.env.API_URL}`, {
     query: `
       query($googleBooksId: String!) {
         googleBook(googleBooksId: $googleBooksId) {
@@ -73,7 +76,7 @@ test('googleBook returns a book', async () => {
 })
 
 test('search books returns book results', async () => {
-  const data = await authRequest(
+  const {data} = await authRequest(
     `
       query($search: String!) {
           searchBook(search: $search) {
@@ -82,7 +85,7 @@ test('search books returns book results', async () => {
       }
   `,
     {search: 'Lord of the Rings'},
-    login.signIn.token,
+    login,
   )
 
   expect(data.searchBook).toHaveLength(10)
@@ -90,7 +93,7 @@ test('search books returns book results', async () => {
 })
 
 test('user can search and add book', async () => {
-  const data = await authRequest(
+  const {data} = await authRequest(
     `
         query($search: String!) {
             searchBook(search: $search) {
@@ -107,10 +110,10 @@ test('user can search and add book', async () => {
         }
     `,
     {search: 'Lord of the Rings'},
-    login.signIn.token,
+    login,
   )
 
-  const bookData = await authRequest(
+  const {data: bookData} = await authRequest(
     `
       mutation(
         $title: String!,
@@ -136,7 +139,7 @@ test('user can search and add book', async () => {
       }
   `,
     data.searchBook[0],
-    login.signIn.token,
+    login,
   )
 
   expect(bookData.createBook.title).toBe(data.searchBook[0].title)
@@ -145,7 +148,7 @@ test('user can search and add book', async () => {
 test('user can add book and update book', async () => {
   const book = await buildBook()
 
-  const bookData = await authRequest(
+  const {data: bookData} = await authRequest(
     `
       mutation(
         $title: String!,
@@ -171,12 +174,12 @@ test('user can add book and update book', async () => {
       }
   `,
     book,
-    login.signIn.token,
+    login,
   )
 
   const newDescription = getDescription()
 
-  const updateBookData = await authRequest(
+  const {data: updateBookData} = await authRequest(
     `
       mutation(
         $id: ID!
@@ -193,7 +196,7 @@ test('user can add book and update book', async () => {
       }
   `,
     {id: bookData.createBook.id, description: newDescription},
-    login.signIn.token,
+    login,
   )
 
   expect(updateBookData.updateBook.description).toBe(newDescription)

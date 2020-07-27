@@ -8,9 +8,9 @@ import {buildAuthor} from '../../../test/generate'
 test('createAuthor can create an author', async () => {
   const author = await buildAuthor()
 
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
-  const authorData = await authRequest(
+  const {data: authorData} = await authRequest(
     `
         mutation($name: String!) {
             createAuthor(name: $name) {
@@ -19,7 +19,7 @@ test('createAuthor can create an author', async () => {
         }
     `,
     author,
-    login.signIn.token,
+    cookie,
   )
 
   expect(authorData.createAuthor.name).toBe(author.name)
@@ -28,7 +28,7 @@ test('createAuthor can create an author', async () => {
 test('authors returns an array of authors', async () => {
   const {authorData, author} = await createAuthor()
 
-  const authors = await api.post(process.env.API_URL, {
+  const {data: authors} = await api.post(process.env.API_URL, {
     query: `
         query {
             authors {
@@ -45,7 +45,7 @@ test('authors returns an array of authors', async () => {
 test('authors returns an array of authors', async () => {
   const {authorData, author} = await createAuthor()
 
-  const auth = await api.post(process.env.API_URL, {
+  const {data: auth} = await api.post(process.env.API_URL, {
     query: `
           query($id: ID!) {
               author(id: $id) {
@@ -62,9 +62,9 @@ test('authors returns an array of authors', async () => {
 
 async function createAuthor() {
   const author = await buildAuthor()
-  const login = await loginUser('gkirkley@readingly.com', 'gkirkley')
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
-  const authorData = await authRequest(
+  const {data: authorData} = await authRequest(
     `
           mutation($name: String!) {
               createAuthor(name: $name) {
@@ -73,7 +73,7 @@ async function createAuthor() {
           }
       `,
     author,
-    login.signIn.token,
+    cookie,
   )
 
   return {authorData, author}
