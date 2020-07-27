@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { Book } from "../graphql/queries/books";
+import { Book } from "../graphql/books";
 
 const Card = styled.a``;
 

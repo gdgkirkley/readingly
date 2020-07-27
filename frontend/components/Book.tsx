@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/queries/books";
+import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import BookGallery from "./BookGallery";
 
 const Book = ({ googleBooksId }: { googleBooksId: string }) => {

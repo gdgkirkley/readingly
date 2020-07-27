@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useQuery } from "@apollo/client";
-import { BookData, BOOK_SEARCH } from "../graphql/queries/books";
+import { BookData, BOOK_SEARCH } from "../graphql/books";
 import BookCard from "./BookCard";
 
 const BookCards = styled.div`

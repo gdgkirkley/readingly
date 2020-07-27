@@ -75,6 +75,7 @@ const GlobalStyles = createGlobalStyle`
 const StyledPage = styled.div`
   background: white;
   color: ${(props) => props.theme.black};
+  min-height: calc(100vh - 300px);
 `;
 
 const Inner = styled.div`
