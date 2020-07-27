@@ -63,5 +63,10 @@ export default {
 
       return user
     },
+
+    signout: async (parent, args, {res}) => {
+      res.clearCookie('token')
+      return {message: 'Goodbye!'}
+    },
   },
 }

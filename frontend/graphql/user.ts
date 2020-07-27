@@ -13,7 +13,9 @@ export const CURRENT_USER_QUERY = gql`
 export const SIGN_IN_USER_MUTATION = gql`
   mutation($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
-      token
+      id
+      email
+      username
     }
   }
 `;

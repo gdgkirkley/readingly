@@ -22,7 +22,11 @@ const api = axios.create({
 // Helper utility to create better error messages
 api.interceptors.response.use(
   function onSuccess(response) {
-    return {data: getData(response), cookie: getCookies(response)}
+    return {
+      data: getData(response),
+      cookie: getCookies(response),
+      response: response,
+    }
   },
   function onError(result) {
     throw new Error(

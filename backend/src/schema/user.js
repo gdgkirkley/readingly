@@ -10,10 +10,11 @@ const schema = gql`
   extend type Mutation {
     signUp(username: String!, email: String!, password: String!): User!
     signIn(login: String!, password: String!): User!
+    signout: Message!
   }
 
-  type Token {
-    token: String!
+  type Message {
+    message: String!
   }
 
   type User {

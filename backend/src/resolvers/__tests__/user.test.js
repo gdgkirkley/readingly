@@ -1,4 +1,8 @@
-import {loginUser, expectedErrorRequest, authRequest} from '../../../test/api'
+import api, {
+  loginUser,
+  expectedErrorRequest,
+  authRequest,
+} from '../../../test/api'
 
 test('user resource returns a user when authenticated', async () => {
   const expectedResult = {
@@ -216,4 +220,32 @@ test('me rejects if not authenticated', async () => {
   )
 
   expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
+
+test('signout sends message and clearCookie response', async () => {
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
+
+  const {data, response} = await api.post(
+    process.env.API_URL,
+    {
+      query: `
+    mutation {
+      signout {
+        message
+      }
+    }
+    `,
+      variables: {},
+    },
+    {
+      Cookie: cookie,
+    },
+  )
+
+  expect(response.headers['set-cookie']).toMatchInlineSnapshot(`
+    Array [
+      "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT",
+    ]
+  `)
+  expect(data.data.signout.message).toBe('Goodbye!')
 })

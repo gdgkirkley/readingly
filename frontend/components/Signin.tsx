@@ -23,8 +23,6 @@ const Signin = () => {
     });
   };
 
-  console.log(data);
-
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <InputGroup>
