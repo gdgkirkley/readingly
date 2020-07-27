@@ -4,6 +4,7 @@ export default gql`
   extend type Query {
     books: [Book!]
     book(id: ID!): Book
+    googleBook(googleBooksId: String!): Book
     searchBook(search: String!): [Book!]
   }
 

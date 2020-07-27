@@ -1,6 +1,6 @@
 import {Op} from 'sequelize'
 import logger from 'loglevel'
-import {getGoogleBooks} from '../utils/googleBooks'
+import {getGoogleBooks, getGoogleBook} from '../utils/googleBooks'
 
 export default {
   Query: {
@@ -9,6 +9,19 @@ export default {
     },
     book: async (parent, {id}, {models}) => {
       return await models.Book.findByPk(id)
+    },
+    googleBook: async (parent, {googleBooksId}, ctx) => {
+      const result = await getGoogleBook(googleBooksId)
+      const info = result.volumeInfo
+      const book = {
+        title: info.title,
+        description: info.description,
+        publishDate: info.publishedDate,
+        googleBooksId: result.id,
+        thumbnail: info.imageLinks.thumbnail,
+        pageCount: info.pageCount,
+      }
+      return book
     },
     searchBook: async (parent, {search}, {models}) => {
       const books = new Set()

@@ -6,9 +6,9 @@ export default function Home(): JSX.Element {
   return (
     <>
       <BookGallery searchTerm="Historical Fiction" />
-      <BookGallery searchTerm="Art History" />
+      <BookGallery searchTerm="Fantasy" />
       <BookGallery searchTerm="Classics" />
-      <BookGallery searchTerm="Cracking" />
+      <BookGallery searchTerm="C.S. Lewis" />
     </>
   );
 }

@@ -55,6 +55,23 @@ test('book returns a book', async () => {
   expect(bookData.data.book).toStrictEqual(expectedResult)
 })
 
+test('googleBook returns a book', async () => {
+  const pillarsOfTheEarth = 'VB7IAgAAQBAJ'
+
+  const {data} = await api.post(`${process.env.API_URL}`, {
+    query: `
+      query($googleBooksId: String!) {
+        googleBook(googleBooksId: $googleBooksId) {
+          title
+        }
+      }
+    `,
+    variables: {googleBooksId: pillarsOfTheEarth},
+  })
+
+  expect(data.googleBook.title).toBe('The Pillars of the Earth')
+})
+
 test('search books returns book results', async () => {
   const data = await authRequest(
     `
