@@ -4,7 +4,7 @@ export default gql`
   extend type Query {
     books: [Book!]
     book(id: ID!): Book
-    googleBook(googleBooksId: String!): Book
+    googleBook(googleBooksId: String!): GoogleBook
     searchBook(search: String!): [Book!]
   }
 
@@ -40,5 +40,16 @@ export default gql`
     publishDate: String
     createdAt: DateTime
     updatedAt: DateTime
+  }
+
+  type GoogleBook {
+    googleBooksId: String!
+    title: String!
+    description: String
+    authors: [String!]
+    thumbnail: String
+    pageCount: Int!
+    publishDate: String
+    categories: [String!]
   }
 `

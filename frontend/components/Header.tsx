@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Menu from "./Menu";
+import Link from "next/link";
 
 const StyledHeader = styled.header`
   display: grid;
@@ -31,7 +32,11 @@ const Header = (): JSX.Element => {
   return (
     <StyledHeader>
       <Logo>
-        Reading<span>ly</span>
+        <Link href="/" prefetch>
+          <a>
+            Reading<span>ly</span>
+          </a>
+        </Link>
       </Logo>
       <Menu />
     </StyledHeader>

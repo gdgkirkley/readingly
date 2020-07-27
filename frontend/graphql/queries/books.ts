@@ -19,9 +19,24 @@ export const BOOK_SEARCH = gql`
   }
 `;
 
+export const GOOGLE_BOOK_QUERY = gql`
+  query($googleBooksId: String!) {
+    googleBook(googleBooksId: $googleBooksId) {
+      title
+      thumbnail
+      description
+      authors
+      pageCount
+      publishDate
+      categories
+    }
+  }
+`;
+
 export interface BookData {
   books: Book[];
   searchBook: Book[];
+  googleBook: GoogleBook;
 }
 
 export interface Book {
@@ -35,6 +50,10 @@ export interface Book {
   publishDate: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface GoogleBook extends Book {
+  categories: string[];
 }
 
 export default BOOK_QUERY;

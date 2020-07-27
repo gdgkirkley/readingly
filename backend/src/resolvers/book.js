@@ -17,9 +17,11 @@ export default {
         title: info.title,
         description: info.description,
         publishDate: info.publishedDate,
+        authors: info.authors,
         googleBooksId: result.id,
         thumbnail: info.imageLinks.thumbnail,
         pageCount: info.pageCount,
+        categories: info.categories,
       }
       return book
     },

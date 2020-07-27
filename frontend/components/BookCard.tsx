@@ -27,7 +27,12 @@ const ImageContainer = styled.div`
 
 const BookCard = ({ book, ...rest }: { book: Book }): JSX.Element => {
   return (
-    <Link href={`/book/${book.googleBooksId}`} passHref {...rest}>
+    <Link
+      href={`/book/[googleBooksId]`}
+      as={`/book/${book.googleBooksId}`}
+      passHref
+      {...rest}
+    >
       <Card>
         {book.thumbnail && (
           <ImageContainer>
