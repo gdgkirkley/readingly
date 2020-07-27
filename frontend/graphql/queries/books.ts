@@ -12,7 +12,7 @@ const BOOK_QUERY = gql`
 
 export const BOOK_SEARCH = gql`
   query($search: String!) {
-    searchBooks(search: $search) {
+    searchBook(search: $search) {
       thumbnail
       googleBooksId
     }
@@ -21,7 +21,7 @@ export const BOOK_SEARCH = gql`
 
 export interface BookData {
   books: Book[];
-  searchBooks: Book[];
+  searchBook: Book[];
 }
 
 export interface Book {

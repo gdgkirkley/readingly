@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import Meta from "./Meta";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const theme = {
   black: "#393939",
+  yellow: "#f4b52e",
+  purple: "#8242F6",
+  red: "#E75248",
+  lightgrey: "rgb(250, 250, 250)",
   maxWidth: "1200px",
 };
 
@@ -72,9 +78,11 @@ function Page(props): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <Meta />
+      <Header />
       <StyledPage>
         <Inner>{props.children}</Inner>
       </StyledPage>
+      <Footer />
       <GlobalStyles />
     </ThemeProvider>
   );

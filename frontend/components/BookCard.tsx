@@ -16,11 +16,18 @@ const ImageContainer = styled.div`
     box-shadow: 0 2px 2px -1px #a3a3a3;
     transition: box-shadow 0.2s, transform 0.2s;
   }
+
+  &:hover {
+    & img {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 4px -2px #919191;
+    }
+  }
 `;
 
-const BookCard = ({ book }: { book: Book }): JSX.Element => {
+const BookCard = ({ book, ...rest }: { book: Book }): JSX.Element => {
   return (
-    <Link href="/" passHref>
+    <Link href={`/book/${book.googleBooksId}`} passHref {...rest}>
       <Card>
         {book.thumbnail && (
           <ImageContainer>
