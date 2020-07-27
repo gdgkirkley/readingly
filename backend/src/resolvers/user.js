@@ -29,14 +29,19 @@ export default {
   },
 
   Mutation: {
-    signUp: async (parent, {username, email, password}, {models}) => {
+    signUp: async (parent, {username, email, password}, {models, res}) => {
       const user = await models.User.create({username, email, password})
       const token = await getUserToken(user)
 
-      return {token}
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      })
+
+      return user
     },
 
-    signIn: async (parent, {login, password}, {models}) => {
+    signIn: async (parent, {login, password}, {models, res}) => {
       const user = await models.User.findByLogin(login)
 
       if (!user) {
@@ -50,7 +55,13 @@ export default {
       }
 
       const token = await getUserToken(user)
-      return {token}
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      })
+
+      return user
     },
   },
 }

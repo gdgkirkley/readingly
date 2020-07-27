@@ -45,6 +45,12 @@ const authMiddleware = expressJWT({
   secret,
   algorithms: ['HS256'],
   credentialsRequired: false,
+  getToken: function fromCookie(req) {
+    if (req.cookies && req.cookies.token) {
+      return req.cookies.token
+    }
+    return null
+  },
 })
 
 export {getSaltAndHash, isPasswordValid, getUserToken, authMiddleware}

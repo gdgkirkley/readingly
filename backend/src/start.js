@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import logger from 'loglevel'
 import {ApolloServer} from 'apollo-server-express'
 import {makeExecutableSchema} from 'graphql-tools'
@@ -16,6 +17,7 @@ async function startServer({port = process.env.PORT} = {}) {
   const app = express()
 
   app.use(cors(corsOrigins()))
+  app.use(cookieParser())
   app.use(errorMiddleware)
   app.use(authMiddleware)
 
@@ -26,9 +28,10 @@ async function startServer({port = process.env.PORT} = {}) {
 
   const server = new ApolloServer({
     schema,
-    context: ({req}) => ({
+    context: ({req, res}) => ({
       models,
       me: req.user,
+      res,
     }),
   })
 

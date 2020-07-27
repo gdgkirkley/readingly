@@ -3,16 +3,23 @@ import axios from 'axios'
 const getData = res => res.data
 const resolve = e => e
 
+const getCookies = res => {
+  if (!res.headers['set-cookie']) return null
+  return res.headers['set-cookie'][0].split(',').map(item => item.split(';')[0])
+}
+
 const api = axios.create({
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
+  adapter: require('axios/lib/adapters/http'),
 })
 
 // Helper utility to create better error messages
 api.interceptors.response.use(
   function onSuccess(response) {
-    return getData(response)
+    return {data: getData(response), cookies: getCookies(response)}
   },
   function onError(result) {
     throw new Error(
@@ -24,20 +31,21 @@ api.interceptors.response.use(
 )
 
 async function loginUser(email, password) {
-  const {data} = await api.post(process.env.API_URL, {
+  return await api.post(process.env.API_URL, {
     query: `
               mutation ($login: String!, $password: String!){
                   signIn(login: $login, password: $password) {
-                      token
+                      id
+                      email
+                      username
                   }
               }
           `,
     variables: {login: email, password: password},
   })
-  return data
 }
 
-async function authRequest(query, variables, token) {
+async function authRequest(query, variables, cookie) {
   const {data} = await api.post(
     process.env.API_URL,
     {
@@ -46,7 +54,7 @@ async function authRequest(query, variables, token) {
     },
     {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Cookie: cookie,
       },
     },
   )
@@ -55,7 +63,7 @@ async function authRequest(query, variables, token) {
 }
 
 async function expectedErrorRequest(query, variables, headers) {
-  const result = await api
+  const {data} = await api
     .post(
       process.env.API_URL,
       {
@@ -68,7 +76,7 @@ async function expectedErrorRequest(query, variables, headers) {
     )
     .catch(resolve)
 
-  return result
+  return data
 }
 
 export default api
