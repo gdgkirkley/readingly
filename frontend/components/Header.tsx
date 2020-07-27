@@ -32,7 +32,7 @@ const Header = (): JSX.Element => {
   return (
     <StyledHeader>
       <Logo>
-        <Link href="/" prefetch>
+        <Link href="/">
           <a>
             Reading<span>ly</span>
           </a>

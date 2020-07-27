@@ -51,6 +51,7 @@ const GlobalStyles = createGlobalStyle`
         font-size: 1.5rem;
         line-height: 2;
         font-family: 'Inter', Arial, Helvetica, sans-serif;
+        min-height: 100vh;
     }
     h1, h2, h3, h4, h5, h6 {
       font-weight: 800;
@@ -60,6 +61,14 @@ const GlobalStyles = createGlobalStyle`
     }
     a {
         text-decoration: none;
+    }
+    button {
+      border: 0 solid #e2e8f0;
+      cursor: pointer;
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(66,153,225,.5);
+        outline: 0;
+      }
     }
 `;
 
