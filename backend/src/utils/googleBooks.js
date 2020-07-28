@@ -4,7 +4,9 @@ const googleBooksEndpoint = 'https://www.googleapis.com/books/v1/volumes'
 
 async function getGoogleBooks(search) {
   try {
-    const response = await axios.get(`${googleBooksEndpoint}?q=${search}`)
+    const response = await axios.get(
+      `${googleBooksEndpoint}?q=${search}&maxResults=16`,
+    )
 
     return response.data
   } catch (error) {

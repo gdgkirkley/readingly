@@ -4,13 +4,13 @@ import Menu from "./Menu";
 import Link from "next/link";
 
 const StyledHeader = styled.header`
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  flex: 1 1 150px;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: stretch;
 
   @media (max-width: 1300px) {
-    grid-template-columns: 1fr;
     justify-content: center;
   }
 `;
@@ -23,6 +23,10 @@ const Logo = styled.h1`
   z-index: 2;
   color: white;
   background: ${(props) => props.theme.red};
+  border-radius: 0.25rem;
+  & a {
+    color: white;
+  }
   & span {
     color: ${(props) => props.theme.yellow};
   }

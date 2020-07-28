@@ -44,18 +44,12 @@ const StyledNav = styled.nav`
         transform: scaleX(1);
       }
     }
-
-    @media (max-width: 700px) {
-      font-size: 10px;
-      padding: 0 10px;
-    }
   }
 
   @media (max-width: 1300px) {
     border-top: 1px solid ${(props) => props.theme.lightgrey};
     width: 100%;
     justify-content: center;
-    font-size: 1.5rem;
   }
 `;
 

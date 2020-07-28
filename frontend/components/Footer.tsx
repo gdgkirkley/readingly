@@ -9,6 +9,8 @@ const StyledFooter = styled.footer`
 
 const FooterContent = styled.footer`
   display: flex;
+  flex-wrap: wrap;
+  padding: 2rem;
   margin: 0 auto;
   max-width: ${(props) => props.theme.maxWidth};
   justify-content: space-between;

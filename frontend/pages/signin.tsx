@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const StyledSignIn = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  place-items: center;
+  height: 100%;
 `;
 
 const SignInPage = () => {

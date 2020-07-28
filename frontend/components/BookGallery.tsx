@@ -5,9 +5,12 @@ import { BookData, BOOK_SEARCH } from "../graphql/books";
 import BookCard from "./BookCard";
 
 const BookCards = styled.div`
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-gap: 16px;
+  display: flex;
+  flex: 0 1 128px;
+  flex-wrap: wrap;
+  gap: 12px;
+  place-items: center;
+  justify-self: center;
 `;
 
 const BookGallery = ({ searchTerm }: { searchTerm: string }) => {

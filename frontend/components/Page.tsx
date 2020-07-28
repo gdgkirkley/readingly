@@ -74,9 +74,11 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const StyledPage = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   background: white;
   color: ${(props) => props.theme.black};
-  min-height: calc(100vh - 300px);
+  height: 100vh;
 `;
 
 const Inner = styled.div`
@@ -89,7 +91,6 @@ function Page(props): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <Meta />
-      <Header />
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -101,9 +102,10 @@ function Page(props): JSX.Element {
         pauseOnHover
       />
       <StyledPage>
+        <Header />
         <Inner>{props.children}</Inner>
+        <Footer />
       </StyledPage>
-      <Footer />
       <GlobalStyles />
     </ThemeProvider>
   );

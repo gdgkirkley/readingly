@@ -3,12 +3,12 @@ import Link from "next/link";
 import styled from "styled-components";
 import { Book } from "../graphql/books";
 
-const Card = styled.a``;
+const Card = styled.a`
+  max-width: 128px;
+  text-align: center;
+`;
 
 const ImageContainer = styled.div`
-  position: relative;
-  display: block;
-
   & img {
     display: block;
     width: 100%;
@@ -34,13 +34,13 @@ const BookCard = ({ book, ...rest }: { book: Book }): JSX.Element => {
       {...rest}
     >
       <Card>
-        {book?.thumbnail ? (
-          <ImageContainer>
+        <ImageContainer>
+          {book?.thumbnail ? (
             <img src={book.thumbnail} alt={book.title} />
-          </ImageContainer>
-        ) : (
-          <p>{book.title}</p>
-        )}
+          ) : (
+            book.title
+          )}
+        </ImageContainer>
       </Card>
     </Link>
   );
