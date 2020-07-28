@@ -16,18 +16,23 @@ const Book = ({ googleBooksId }: { googleBooksId: string }) => {
     <div>
       <h1>{data.googleBook.title}</h1>
       {data.googleBook?.authors.length && (
-        <p>By {data.googleBook.authors.map((author) => author)}</p>
+        <p data-testid="book-authors">
+          By {data.googleBook.authors.map((author) => author)}
+        </p>
       )}
       {data.googleBook.thumbnail && (
         <img src={data.googleBook.thumbnail} alt={data.googleBook.title} />
       )}
-      <div dangerouslySetInnerHTML={{ __html: data.googleBook.description }} />
+      <div
+        dangerouslySetInnerHTML={{ __html: data.googleBook.description }}
+        data-testid="book-description"
+      />
       <div>
         <h2>You May Also Like</h2>
         <BookGallery searchTerm={data.googleBook.authors[0]} />
         {data.googleBook?.categories?.length &&
           data.googleBook.categories.map((category) => (
-            <BookGallery searchTerm={category} />
+            <BookGallery key={category} searchTerm={category} />
           ))}
       </div>
     </div>

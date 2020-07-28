@@ -24,7 +24,7 @@ const BookGallery = ({ searchTerm }: { searchTerm: string }) => {
       <h2>{searchTerm}</h2>
       <BookCards>
         {data.searchBook.map((book) => {
-          return <BookCard key={book.id} book={book} />;
+          return <BookCard key={book.googleBooksId} book={book} />;
         })}
       </BookCards>
     </div>

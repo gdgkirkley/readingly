@@ -28,31 +28,39 @@ const Signin = () => {
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <InputGroup>
-        <label htmlFor="Email">Email</label>
+        <label htmlFor="email">Email</label>
         <input
           type="text"
           placeholder="Email"
           name="email"
+          id="email"
           ref={register({ required: true, pattern: /^\S+@\S+$/i })}
         />
         {errors.email?.type === "required" && (
-          <p className="error-message">Email is required</p>
+          <p className="error-message" data-testid="validation-error">
+            Email is required
+          </p>
         )}
         {errors.email?.type === "pattern" && (
-          <p className="error-message">Email must be an email</p>
+          <p className="error-message" data-testid="validation-error">
+            Email must be an email
+          </p>
         )}
       </InputGroup>
 
       <InputGroup className="last">
-        <label htmlFor="Password">Password</label>
+        <label htmlFor="password">Password</label>
         <input
           type="password"
           placeholder="Password"
           name="password"
+          id="password"
           ref={register({ required: true })}
         />
         {errors.password && (
-          <p className="error-message">Password is required</p>
+          <p className="error-message" data-testid="validation-error">
+            Password is required
+          </p>
         )}
       </InputGroup>
       <ActionGroup>
