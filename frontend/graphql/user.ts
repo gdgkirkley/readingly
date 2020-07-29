@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { Book } from "./books";
 
 export const CURRENT_USER_QUERY = gql`
   query {
@@ -27,3 +28,18 @@ export const SIGN_OUT_USER_MUTATION = gql`
     }
   }
 `;
+
+// TODO create bookshelf type
+export type User = {
+  id: string;
+  email: string;
+  username: string;
+  bookshelves?: {
+    id: string;
+    title: string;
+    createdAt: string;
+    user: User;
+    books: Book[];
+    bookCount: number;
+  };
+};
