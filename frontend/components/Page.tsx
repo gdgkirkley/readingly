@@ -87,7 +87,7 @@ const Inner = styled.div`
   max-width: ${(props) => props.theme.maxWidth};
 `;
 
-function Page(props): JSX.Element {
+const Page: React.FC = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Meta />
@@ -109,6 +109,6 @@ function Page(props): JSX.Element {
       <GlobalStyles />
     </ThemeProvider>
   );
-}
+};
 
 export default Page;

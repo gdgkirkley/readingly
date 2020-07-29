@@ -17,7 +17,11 @@ const BookCards = styled.div`
   justify-self: center;
 `;
 
-const BookGallery = ({ searchTerm }: { searchTerm: string }) => {
+type Props = {
+  searchTerm: string;
+};
+
+const BookGallery = ({ searchTerm }: Props) => {
   const { data, loading, error } = useQuery<BookData>(BOOK_SEARCH, {
     variables: { search: searchTerm },
   });

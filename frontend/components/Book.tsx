@@ -71,7 +71,11 @@ const BannerTitle = styled.h1`
   }
 `;
 
-const Book = ({ googleBooksId }: { googleBooksId: string }) => {
+type Props = {
+  googleBooksId: string;
+};
+
+const Book = ({ googleBooksId }: Props) => {
   const { data, loading, error } = useQuery<BookData>(GOOGLE_BOOK_QUERY, {
     variables: { googleBooksId: googleBooksId },
   });

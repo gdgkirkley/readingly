@@ -32,7 +32,11 @@ const ImageContainer = styled.div`
   }
 `;
 
-const BookCard = ({ book, ...rest }: { book: Book }): JSX.Element => {
+type Props = {
+  book: Book;
+};
+
+const BookCard = ({ book, ...rest }: Props) => {
   return (
     <Link
       href={`/book/[googleBooksId]`}

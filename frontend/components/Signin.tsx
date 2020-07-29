@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 import StyledForm, { InputGroup, ActionGroup } from "./styles/FormStyles";
 import { SIGN_IN_USER_MUTATION, CURRENT_USER_QUERY } from "../graphql/user";
 
-interface FormInputs {
+type FormInputs = {
   email: string;
   password: string;
-}
+};
 
 const Signin = () => {
   const [signIn, { data, error, loading }] = useMutation(SIGN_IN_USER_MUTATION);

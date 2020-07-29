@@ -32,7 +32,7 @@ const Logo = styled.h1`
   }
 `;
 
-const Header = (): JSX.Element => {
+const Header = () => {
   return (
     <StyledHeader>
       <Logo>

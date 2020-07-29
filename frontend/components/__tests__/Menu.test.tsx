@@ -35,13 +35,19 @@ test("<Menu /> renders a header with user links when user present", async () => 
   await waitFor(() => {
     const menuLinks = screen.getAllByRole("link");
 
-    expect(menuLinks).toHaveLength(2);
+    expect(menuLinks).toHaveLength(4);
 
     expect(menuLinks[0]).toHaveTextContent(/books/i);
     expect(menuLinks[0]).toHaveAttribute("href", "/books");
 
+    expect(menuLinks[1]).toHaveTextContent(/bookshelves/i);
+    expect(menuLinks[1]).toHaveAttribute("href", "/mybookshelves");
+
+    expect(menuLinks[2]).toHaveTextContent(/account/i);
+    expect(menuLinks[2]).toHaveAttribute("href", "/myaccount");
+
     // See tests in Signout.test.tsx
-    expect(menuLinks[1]).toHaveTextContent(/sign out/i);
+    expect(menuLinks[3]).toHaveTextContent(/sign out/i);
   });
 });
 

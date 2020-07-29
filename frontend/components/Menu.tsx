@@ -9,7 +9,7 @@ const StyledNav = styled.nav`
   padding: 0;
   display: flex;
   justify-self: end;
-  font-size: 2rem;
+  font-size: 1.8rem;
 
   & a,
   button {
@@ -53,7 +53,7 @@ const StyledNav = styled.nav`
   }
 `;
 
-const Menu = (): JSX.Element => {
+const Menu = () => {
   const me = useUser();
   return (
     <StyledNav>
@@ -62,6 +62,12 @@ const Menu = (): JSX.Element => {
       </Link>
       {me && (
         <>
+          <Link href="/mybookshelves">
+            <a>Bookshelves</a>
+          </Link>
+          <Link href="/myaccount">
+            <a>Account</a>
+          </Link>
           <Signout />
         </>
       )}
