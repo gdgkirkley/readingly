@@ -1,4 +1,4 @@
-import {rule, shield, or} from 'graphql-shield'
+import {rule, shield, or, and} from 'graphql-shield'
 import logger from 'loglevel'
 
 function getPermissions(user) {
@@ -40,7 +40,7 @@ const permissions = shield(
       createAuthor: canReadAllData,
       addBook: isReadingOwnBookshelf,
 
-      updateUser: isReadingOwnUser,
+      updateUser: and(isAuthenticated, isReadingOwnUser),
     },
   },
   {

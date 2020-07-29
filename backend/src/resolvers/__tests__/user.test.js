@@ -275,10 +275,30 @@ test('updateUser updates the user and returns', async () => {
   expect(data.updateUser.username).toBe('mynewname')
 })
 
-test('updateUser does not allow user to change another user', async () => {
+test('updateUser does not allow not logged in or user to change another user', async () => {
+  const noUserError = await expectedErrorRequest(
+    `
+    mutation($id: ID!, $email: String, $username: String) {
+      updateUser(id: $id, email: $email, username: $username) {
+        email
+        username
+      }
+    }
+  `,
+    {
+      id: 1,
+      username: 'mynewname',
+      email: 'gkirkley@readingly.ca',
+    },
+  )
+
+  expect(noUserError.errors[0].message).toMatchInlineSnapshot(
+    `"Not Authorised!"`,
+  )
+
   const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
-  const error = await expectedErrorRequest(
+  const authError = await expectedErrorRequest(
     `
     mutation($id: ID!, $email: String, $username: String) {
       updateUser(id: $id, email: $email, username: $username) {
@@ -297,5 +317,5 @@ test('updateUser does not allow user to change another user', async () => {
     },
   )
 
-  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+  expect(authError.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
 })
