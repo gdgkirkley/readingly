@@ -4,9 +4,13 @@ import { useQuery } from "@apollo/client";
 import { BookData, BOOK_SEARCH } from "../graphql/books";
 import BookCard from "./BookCard";
 
+const Gallery = styled.div`
+  justify-self: center;
+`;
+
 const BookCards = styled.div`
   display: flex;
-  flex: 0 1 128px;
+  flex: 1 1 156px;
   flex-wrap: wrap;
   gap: 12px;
   place-items: center;
@@ -23,14 +27,14 @@ const BookGallery = ({ searchTerm }: { searchTerm: string }) => {
   if (error) return null;
 
   return (
-    <div>
+    <Gallery>
       <h2>{searchTerm}</h2>
-      <BookCards>
+      <BookCards data-testid="cards">
         {data.searchBook.map((book) => {
           return <BookCard key={book.googleBooksId} book={book} />;
         })}
       </BookCards>
-    </div>
+    </Gallery>
   );
 };
 

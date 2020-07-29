@@ -40,6 +40,7 @@ test("<Menu /> renders a header with user links when user present", async () => 
     expect(menuLinks[0]).toHaveTextContent(/books/i);
     expect(menuLinks[0]).toHaveAttribute("href", "/books");
 
+    // See tests in Signout.test.tsx
     expect(menuLinks[1]).toHaveTextContent(/sign out/i);
   });
 });
