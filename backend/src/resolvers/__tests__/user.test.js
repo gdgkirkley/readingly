@@ -205,8 +205,8 @@ test('me gets user when authenticated', async () => {
   expect(me).toStrictEqual(expectedResult)
 })
 
-test('me rejects if not authenticated', async () => {
-  const error = await expectedErrorRequest(
+test('me returns null if not authenticated', async () => {
+  const {data} = await authRequest(
     `
       query {
         me {
@@ -217,9 +217,10 @@ test('me rejects if not authenticated', async () => {
       }
     `,
     {},
+    null,
   )
 
-  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+  expect(data.me).toBe(null)
 })
 
 test('signout sends message and clearCookie response', async () => {
@@ -248,4 +249,53 @@ test('signout sends message and clearCookie response', async () => {
     ]
   `)
   expect(data.data.signout.message).toBe('Goodbye!')
+})
+
+test('updateUser updates the user and returns', async () => {
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
+
+  const {data} = await authRequest(
+    `
+    mutation($id: ID!, $email: String, $username: String) {
+      updateUser(id: $id, email: $email, username: $username) {
+        email
+        username
+      }
+    }
+  `,
+    {
+      id: 1,
+      username: 'mynewname',
+      email: 'gkirkley@readingly.ca',
+    },
+    cookie,
+  )
+
+  expect(data.updateUser.email).toBe('gkirkley@readingly.ca')
+  expect(data.updateUser.username).toBe('mynewname')
+})
+
+test('updateUser does not allow user to change another user', async () => {
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
+
+  const error = await expectedErrorRequest(
+    `
+    mutation($id: ID!, $email: String, $username: String) {
+      updateUser(id: $id, email: $email, username: $username) {
+        email
+        username
+      }
+    }
+  `,
+    {
+      id: 1,
+      username: 'mynewname',
+      email: 'gkirkley@readingly.ca',
+    },
+    {
+      Cookie: cookie,
+    },
+  )
+
+  expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
 })

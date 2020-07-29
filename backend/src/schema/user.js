@@ -11,6 +11,8 @@ const schema = gql`
     signUp(username: String!, email: String!, password: String!): User!
     signIn(login: String!, password: String!): User!
     signout: Message!
+
+    updateUser(id: ID, email: String, username: String): User!
   }
 
   type Message {

@@ -68,5 +68,20 @@ export default {
       res.clearCookie('token')
       return {message: 'Goodbye!'}
     },
+
+    updateUser: async (parent, {id, ...rest}, {models}) => {
+      await models.User.update(
+        {
+          ...rest,
+        },
+        {
+          where: {
+            id: id,
+          },
+        },
+      )
+
+      return await models.User.findByPk(id)
+    },
   },
 }
