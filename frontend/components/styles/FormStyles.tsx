@@ -42,33 +42,17 @@ const StyledForm = styled.form`
       margin-right: 0.5rem;
     }
   }
-
-  & button {
-    color: #fff;
-    opacity: 0.8;
-    background: ${(props) => props.theme.red};
-    padding: 1rem 2rem;
-    font-size: 1.7rem;
-    font-weight: 600;
-    border-radius: 0.25rem;
-    line-height: inherit;
-    transition: opacity 0.1s ease-in-out;
-
-    &:hover {
-      opacity: 1;
-      background: ${(props) => props.theme.red};
-    }
-  }
 `;
 
 export const InputGroup = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 `;
 
 export const ActionGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 1rem;
 `;
 
 export default StyledForm;

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import StyledForm, { InputGroup, ActionGroup } from "./styles/FormStyles";
+import Button from "./styles/ButtonStyles";
 import { SIGN_IN_USER_MUTATION, CURRENT_USER_QUERY } from "../graphql/user";
 
 type FormInputs = {
@@ -64,7 +65,7 @@ const Signin = () => {
         )}
       </InputGroup>
       <ActionGroup>
-        <button type="submit">Sign{loading && "ing"} In</button>
+        <Button themeColor="red">Sign{loading && "ing"} In</Button>
         <Link href="/forgot">
           <a>Forgot Password?</a>
         </Link>

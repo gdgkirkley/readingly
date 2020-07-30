@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { User } from "../graphql/user";
 import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
+import Button from "./styles/ButtonStyles";
 
 type Props = {
   me: User;
@@ -40,7 +41,7 @@ const Account = ({ me }: Props) => {
         <input type="username" name="username" id="username" ref={register} />
       </InputGroup>
       <ActionGroup>
-        <button type="submit">Update account</button>
+        <Button themeColor="purple">Update account</Button>
       </ActionGroup>
     </FormStyles>
   );

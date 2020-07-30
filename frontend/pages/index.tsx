@@ -1,9 +1,12 @@
+import { useRouter } from "next/router";
 import BookCategorySearch from "../components/BookCategorySearch";
 import SearchBar, { SearchInputs } from "../components/SearchBar";
 
 export default function Home(): JSX.Element {
+  const router = useRouter();
   const handleSearch = (data: SearchInputs) => {
-    console.log(data);
+    const search = new URLSearchParams(`q=${data.search}`);
+    router.push(`/search?${search}`);
   };
 
   return (

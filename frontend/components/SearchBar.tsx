@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import FormStyles from "./styles/FormStyles";
+import FormStyles, { ActionGroup } from "./styles/FormStyles";
+import Button from "./styles/ButtonStyles";
 
 const SearchFormStyles = styled(FormStyles)`
   max-width: 100%;
   box-shadow: none;
   padding: 0;
+  display: grid;
+  justify-content: center;
+`;
+
+const SearchButton = styled(ActionGroup)`
+  justify-content: center;
 `;
 
 const Bar = styled.div`
@@ -46,10 +53,19 @@ export type SearchInputs = {
 
 type Props = {
   handleSearch(data: SearchInputs): void;
+  defaultValue?: string;
 };
 
-const SearchBar = ({ handleSearch }: Props) => {
-  const { register, handleSubmit, errors } = useForm<SearchInputs>();
+const SearchBar = ({ handleSearch, defaultValue }: Props) => {
+  const { register, handleSubmit, errors, reset } = useForm<SearchInputs>();
+
+  useEffect(() => {
+    if (!defaultValue) return;
+
+    reset({
+      search: defaultValue,
+    });
+  }, [defaultValue]);
 
   const onSubmit = (data: SearchInputs) => {
     handleSearch(data);
@@ -61,12 +77,18 @@ const SearchBar = ({ handleSearch }: Props) => {
         <SearchIcon />
         <input
           type="text"
+          id="search"
           name="search"
           placeholder="Search a book..."
           ref={register}
           autoComplete="off"
         />
       </Bar>
+      <SearchButton>
+        <Button themeColor="yellow" type="submit">
+          Search
+        </Button>
+      </SearchButton>
     </SearchFormStyles>
   );
 };
