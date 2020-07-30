@@ -21,3 +21,14 @@ test("<BookShelfListing /> renders a bookshelf", async () => {
     bookshelf.books.length
   );
 });
+
+test("<BookShelfListing /> renders a placeholder if no books", async () => {
+  const bookshelf = await buildBookshelf({ books: [], bookCount: 0 });
+
+  render(<BookShelfListing bookshelf={bookshelf} />);
+
+  expect(screen.getByTestId("book-image-placeholder")).toBeInTheDocument();
+  expect(
+    screen.getByTestId("bookshelf-count").textContent
+  ).toMatchInlineSnapshot(`"There are 0 books on this list"`);
+});

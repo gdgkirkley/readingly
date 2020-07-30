@@ -71,7 +71,11 @@ type Props = {
 };
 
 const BookImagePlaceholder = ({ width = 180, height = 280 }: Props) => (
-  <BookImage width={width} height={height}></BookImage>
+  <BookImage
+    data-testid="book-image-placeholder"
+    width={width}
+    height={height}
+  ></BookImage>
 );
 
 export default BookImagePlaceholder;

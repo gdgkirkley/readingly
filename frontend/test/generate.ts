@@ -58,6 +58,7 @@ async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
     createdAt: getDate(),
     bookCount: getNumber(),
     books: [book1, book2, book3],
+    ...overrides,
   };
 }
 
