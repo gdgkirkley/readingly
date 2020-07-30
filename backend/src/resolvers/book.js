@@ -28,7 +28,7 @@ export default {
       return book
     },
     searchBook: async (parent, {search}, {models}) => {
-      const books = new Set()
+      const books = new Map()
       const booksToAdd = await models.Book.findAll({
         where: {
           [Op.or]: [
@@ -48,7 +48,7 @@ export default {
       })
 
       booksToAdd.forEach(book => {
-        books.add(book)
+        books.set(book.googleBooksId, book)
       })
 
       if (books.size < 10) {
@@ -78,11 +78,11 @@ export default {
         )
 
         bookResults.forEach(result => {
-          books.add(result)
+          books.set(result.googleBooksId, result)
         })
       }
 
-      return Array.from(books)
+      return Array.from(books.values())
     },
   },
 

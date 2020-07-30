@@ -88,7 +88,7 @@ test('search books returns book results', async () => {
     login,
   )
 
-  expect(data.searchBook).toHaveLength(10)
+  expect(data.searchBook).toHaveLength(16)
   expect(data.searchBook).toContainEqual({title: 'The Lord of the Rings'})
 })
 
