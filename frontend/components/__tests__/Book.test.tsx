@@ -2,17 +2,21 @@ import React from "react";
 import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, waitFor } from "@testing-library/react";
 import Book from "../Book";
+import { MY_BOOKSHELVES_QUERY } from "../../graphql/bookshelves";
+import { CURRENT_USER_QUERY } from "../../graphql/user";
 import { GOOGLE_BOOK_QUERY, BOOK_SEARCH } from "../../graphql/books";
-import { buildBook } from "../../test/generate";
+import { buildBook, buildUser, buildBookshelf } from "../../test/generate";
 
 afterEach(() => {
   cleanup();
 });
 
 test("<Book /> renders a book", async () => {
+  const user = await buildUser();
   const book = await buildBook();
   const book2 = await buildBook();
   const book3 = await buildBook();
+  const bookshelf = await buildBookshelf();
   const mocks = [
     {
       request: {
@@ -31,7 +35,35 @@ test("<Book /> renders a book", async () => {
             pageCount: book.pageCount,
             publishDate: book.publishDate,
             categories: book.categories,
+            googleBooksId: book.googleBooksId,
           },
+        },
+      },
+    },
+    // The following two are for the AddToBookshelf component
+    {
+      request: {
+        query: CURRENT_USER_QUERY,
+        variables: {},
+      },
+      result: {
+        data: {
+          me: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: MY_BOOKSHELVES_QUERY,
+        variables: {},
+      },
+      result: {
+        data: {
+          mybookshelves: [bookshelf],
         },
       },
     },

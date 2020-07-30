@@ -1,6 +1,7 @@
 import faker from "faker";
 import { User } from "../graphql/user";
 import { GoogleBook } from "../graphql/books";
+import { BookShelf } from "../graphql/bookshelves";
 
 const getEmail = faker.internet.email;
 const getAdmin = faker.random.boolean;
@@ -46,4 +47,18 @@ async function buildUser({ ...overrides } = {}): Promise<User> {
   };
 }
 
-export { buildBook, buildUser };
+async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
+  const book1 = await buildBook();
+  const book2 = await buildBook();
+  const book3 = await buildBook();
+
+  return {
+    id: getId(),
+    title: getWord(),
+    createdAt: getDate(),
+    bookCount: getNumber(),
+    books: [book1, book2, book3],
+  };
+}
+
+export { buildBook, buildUser, buildBookshelf };
