@@ -11,6 +11,7 @@ const BookShelfView = styled.div`
   grid-template-columns: auto 1fr;
   grid-gap: 24px;
   margin: 20px 0px;
+  justify-content: center;
   align-items: center;
 
   padding: 2rem 0;
@@ -23,7 +24,8 @@ const BookShelfView = styled.div`
     margin: 0;
   }
 
-  & a {
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -38,6 +40,8 @@ const ImageContainer = styled.div`
 const BooksDisplay = styled.div`
   display: flex;
   flex: 1 1 80px;
+  flex-wrap: wrap;
+  gap: 12px;
   margin: 20px 0px;
 
   & img {
@@ -50,10 +54,15 @@ const Links = styled.div`
   margin-top: 40px;
 
   & a {
-    background-color: ${(props) => props.theme.yellow};
     color: #fff;
     padding: 1rem 2rem;
     border-radius: 0.25rem;
+
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 `;
 
@@ -84,11 +93,16 @@ const BookShelfListing = ({ bookshelf }: Props) => {
         {bookshelf.books?.length ? (
           <BooksDisplay data-testid="bookshelf-books">
             {bookshelf.books.map((book) => (
-              <BookCard key={book.id} book={book} />
+              <BookCard key={book.id} book={book} width={80} />
             ))}
           </BooksDisplay>
         ) : null}
         <Links>
+          <Link href="/books" passHref>
+            <Button themeColor="black" as="a">
+              View all
+            </Button>
+          </Link>
           <Link href="/books" passHref>
             <Button themeColor="yellow" as="a">
               Add books

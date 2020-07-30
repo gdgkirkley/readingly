@@ -9,6 +9,9 @@ import {
   MY_BOOKSHELVES_QUERY,
 } from "../../graphql/bookshelves";
 import { buildBookshelf, buildBook, buildUser } from "../../test/generate";
+import { toast } from "react-toastify";
+
+jest.mock("react-toastify");
 
 afterEach(() => {
   cleanup();
@@ -105,5 +108,9 @@ test("<AddToBookshelf /> renders when user present", async () => {
     expect(button).toBeInTheDocument();
     expect(bookshelf.books).toContain(book);
     expect(bookshelf.bookCount).toBe(originalBookCount + 1);
+    expect(toast.success).toHaveBeenCalledTimes(1);
+    expect(toast.success).toHaveBeenCalledWith(
+      `${book.title} added to ${bookshelf.title}!`
+    );
   });
 });

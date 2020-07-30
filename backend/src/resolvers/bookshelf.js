@@ -22,9 +22,12 @@ export default {
     user: async (bookshelf, args, {models}) => {
       return await models.User.findByPk(bookshelf.userId)
     },
-    books: async (bookshelf, args, {models}) => {
+    books: async (bookshelf, {limit, offset}, {models}) => {
       const bs = await models.BookShelf.findByPk(bookshelf.id)
-      return await bs.getBooks()
+      return await bs.getBooks({
+        limit: limit ? limit : 50,
+        offset: offset ? offset : 0,
+      })
     },
     bookCount: async (bookshelf, args, {models}) => {
       const bs = await models.BookShelf.findByPk(bookshelf.id)

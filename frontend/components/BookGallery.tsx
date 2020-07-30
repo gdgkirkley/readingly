@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { useQuery } from "@apollo/client";
-import { BookData, BOOK_SEARCH } from "../graphql/books";
 import BookCard from "./BookCard";
-
-const Gallery = styled.div`
-  justify-self: center;
-`;
+import { Book } from "../graphql/books";
 
 const BookCards = styled.div`
   display: flex;
@@ -18,27 +13,16 @@ const BookCards = styled.div`
 `;
 
 type Props = {
-  searchTerm: string;
+  books: Book[];
 };
 
-const BookGallery = ({ searchTerm }: Props) => {
-  const { data, loading, error } = useQuery<BookData>(BOOK_SEARCH, {
-    variables: { search: searchTerm },
-  });
-
-  if (loading) return <p>Loading...</p>;
-
-  if (error) return null;
-
+const BookGallery = ({ books }: Props) => {
   return (
-    <Gallery>
-      <h2>{searchTerm}</h2>
-      <BookCards data-testid="cards">
-        {data.searchBook.map((book) => {
-          return <BookCard key={book.googleBooksId} book={book} />;
-        })}
-      </BookCards>
-    </Gallery>
+    <BookCards data-testid="cards">
+      {books.map((book) => {
+        return <BookCard key={book.googleBooksId} book={book} />;
+      })}
+    </BookCards>
   );
 };
 

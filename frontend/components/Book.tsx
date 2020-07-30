@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
-import BookGallery from "./BookGallery";
+import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
 
 const BookPage = styled.div`
@@ -108,11 +108,11 @@ const Book = ({ googleBooksId }: Props) => {
       <div>
         <h2>You May Also Like</h2>
         {data.googleBook.authors && (
-          <BookGallery searchTerm={data.googleBook.authors[0]} />
+          <BookCategorySearch searchTerm={data.googleBook.authors[0]} />
         )}
         {data.googleBook?.categories?.length &&
           data.googleBook.categories.map((category) => (
-            <BookGallery key={category} searchTerm={category} />
+            <BookCategorySearch key={category} searchTerm={category} />
           ))}
       </div>
     </BookPage>

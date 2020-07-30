@@ -3,12 +3,16 @@ import Link from "next/link";
 import styled from "styled-components";
 import { Book } from "../graphql/books";
 
+type ContainerProps = {
+  width: number;
+};
+
 const Card = styled.a`
   text-align: center;
 `;
 
-const ImageContainer = styled.div`
-  width: 128px;
+const ImageContainer = styled.div<ContainerProps>`
+  width: ${(props) => props.width}px;
   display: flex;
   justify-content: center;
 
@@ -34,9 +38,15 @@ const ImageContainer = styled.div`
 
 type Props = {
   book: Book;
+  width?: number;
 };
 
-const BookCard = ({ book, ...rest }: Props) => {
+/**
+ * A book card component that displays either the image or title
+ * @param book the book to display
+ * @param width the width of the card. Defaults to 128px.
+ */
+const BookCard = ({ book, width = 128, ...rest }: Props) => {
   return (
     <Link
       href={`/book/[googleBooksId]`}
@@ -45,7 +55,7 @@ const BookCard = ({ book, ...rest }: Props) => {
       {...rest}
     >
       <Card>
-        <ImageContainer>
+        <ImageContainer width={width}>
           {book?.thumbnail ? (
             <img src={book.thumbnail} alt={book.title} />
           ) : (

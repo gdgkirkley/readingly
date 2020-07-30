@@ -17,7 +17,7 @@ export default gql`
     title: String!
     createdAt: DateTime!
     user: User!
-    books: [Book!]
+    books(limit: Int, offset: Int): [Book!]
     bookCount: Int!
   }
 `

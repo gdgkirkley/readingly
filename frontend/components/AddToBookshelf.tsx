@@ -34,6 +34,8 @@ const AddToBookshelf = ({ book }: Props) => {
       refetchQueries: [{ query: MY_BOOKSHELVES_QUERY }],
       awaitRefetchQueries: true,
     });
+
+    toast.success(`${book.title} added to ${data.mybookshelves[0].title}!`);
   };
 
   if (!me) return null;
