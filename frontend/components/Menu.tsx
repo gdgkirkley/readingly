@@ -49,31 +49,37 @@ const StyledNav = styled.nav`
   @media (max-width: 1300px) {
     border-top: 1px solid ${(props) => props.theme.lightgrey};
     width: 100%;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 `;
 
-const Menu = () => {
+type Props = {
+  onClick(): void;
+};
+
+const Menu = ({ onClick }: Props) => {
   const me = useUser();
   return (
     <StyledNav>
       <Link href="/books">
-        <a>Books</a>
+        <a onClick={onClick}>Books</a>
       </Link>
       {me && (
         <>
           <Link href="/mybookshelves">
-            <a>Bookshelves</a>
+            <a onClick={onClick}>Bookshelves</a>
           </Link>
           <Link href="/myaccount">
-            <a>Account</a>
+            <a onClick={onClick}>Account</a>
           </Link>
-          <Signout />
+          <Signout onClick={onClick} />
         </>
       )}
       {!me && (
         <Link href="/signin">
-          <a>Sign In</a>
+          <a onClick={onClick}>Sign In</a>
         </Link>
       )}
     </StyledNav>

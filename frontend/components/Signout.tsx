@@ -3,7 +3,11 @@ import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import { SIGN_OUT_USER_MUTATION, CURRENT_USER_QUERY } from "../graphql/user";
 
-const Signout = () => {
+type Props = {
+  onClick(): void;
+};
+
+const Signout = ({ onClick }: Props) => {
   const [signout] = useMutation(SIGN_OUT_USER_MUTATION, {
     onError: () => {
       toast.error("There was a problem signing out! Please try again.");
@@ -17,6 +21,7 @@ const Signout = () => {
 
   const handleSignout = () => {
     signout();
+    onClick();
   };
 
   return (

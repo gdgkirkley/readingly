@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 import styled from "styled-components";
 import Menu from "./Menu";
-import Link from "next/link";
+import useWindowSize from "../hooks/useWindowSize";
+
+const Hamburger = dynamic(() => import("hamburger-react"));
 
 const StyledHeader = styled.header`
   display: flex;
@@ -11,7 +15,8 @@ const StyledHeader = styled.header`
   align-items: stretch;
 
   @media (max-width: 1300px) {
-    justify-content: center;
+    align-items: center;
+    margin-right: 2rem;
   }
 `;
 
@@ -33,6 +38,24 @@ const Logo = styled.h1`
 `;
 
 const Header = () => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  const { width } = useWindowSize();
+
+  useEffect(() => {
+    if (width !== undefined && width > 768) {
+      setOpen(false);
+    }
+  }, [width]);
+
+  const handleMenuButtonClick = (): void => {
+    if (width && width !== undefined && width > 768) {
+      return;
+    }
+
+    setOpen(!open);
+  };
+
   return (
     <StyledHeader>
       <Logo>
@@ -42,7 +65,16 @@ const Header = () => {
           </a>
         </Link>
       </Logo>
-      <Menu />
+      {width < 768 ? (
+        <Hamburger toggled={open} toggle={handleMenuButtonClick} />
+      ) : null}
+      {width < 768 ? (
+        open ? (
+          <Menu onClick={handleMenuButtonClick} />
+        ) : null
+      ) : (
+        <Menu onClick={handleMenuButtonClick} />
+      )}
     </StyledHeader>
   );
 };

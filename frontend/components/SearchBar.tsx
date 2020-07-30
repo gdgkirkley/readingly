@@ -45,6 +45,14 @@ const Bar = styled.div`
       box-shadow: none;
     }
   }
+
+  @media (max-width: 768px) {
+    width: 350px;
+
+    & input {
+      width: 275px;
+    }
+  }
 `;
 
 export type SearchInputs = {
