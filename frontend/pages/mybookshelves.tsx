@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import { MY_BOOKSHELVES_QUERY, BookShelfData } from "../graphql/bookshelves";
-import BookShelfView from "../components/BookShelf";
+import BookShelfView from "../components/BookShelfListing";
 
 const BookShelfPage = styled.div`
   width: ${(props) => props.theme.maxWidth};

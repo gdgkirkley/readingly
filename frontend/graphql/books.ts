@@ -30,6 +30,7 @@ export const GOOGLE_BOOK_QUERY = gql`
       pageCount
       publishDate
       categories
+      googleBooksId
     }
   }
 `;

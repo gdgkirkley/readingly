@@ -4,6 +4,7 @@ import { Book } from "./books";
 export const MY_BOOKSHELVES_QUERY = gql`
   query {
     mybookshelves {
+      id
       title
       createdAt
       bookCount
@@ -17,8 +18,8 @@ export const MY_BOOKSHELVES_QUERY = gql`
 `;
 
 export const ADD_BOOK_MUTATION = gql`
-  mutation($googleBooksId: String!, $bookshelfId: ID!) {
-    addBook(googleBooksId: $googleBooksId, bookshelfId: $bookshelfId) {
+  mutation($googleBookId: String!, $bookshelfId: ID!) {
+    addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
       bookCount
     }
   }

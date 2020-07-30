@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import BookGallery from "./BookGallery";
+import AddToBookshelf from "./AddToBookshelf";
 
 const BookPage = styled.div`
   font-size: 1vw;
@@ -99,6 +100,7 @@ const Book = ({ googleBooksId }: Props) => {
           By {data.googleBook.authors.map((author) => author)}
         </p>
       )}
+      <AddToBookshelf book={data.googleBook} />
       <div
         dangerouslySetInnerHTML={{ __html: data.googleBook.description }}
         data-testid="book-description"
