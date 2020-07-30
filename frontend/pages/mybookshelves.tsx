@@ -5,10 +5,8 @@ import { MY_BOOKSHELVES_QUERY, BookShelfData } from "../graphql/bookshelves";
 import BookShelfView from "../components/BookShelfListing";
 
 const BookShelfPage = styled.div`
-  max-width: ${(props) => props.theme.maxWidth};
+  width: 100%;
   display: grid;
-  justify-content: center;
-  align-items: center;
 `;
 
 const MyBookshelves = () => {

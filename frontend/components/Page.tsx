@@ -74,17 +74,17 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const StyledPage = styled.div`
-  display: grid;
-  grid-template-rows: auto 1fr auto;
   background: white;
   color: ${(props) => props.theme.black};
   height: 100vh;
 `;
 
-const Inner = styled.div`
+const Inner = styled.main`
   margin: 0 auto;
   padding: 2rem;
-  max-width: ${(props) => props.theme.maxWidth};
+  width: ${(props) => props.theme.maxWidth};
+  max-width: 100%;
+  min-height: calc(100vh - 300px);
 `;
 
 const Page: React.FC = (props) => {
