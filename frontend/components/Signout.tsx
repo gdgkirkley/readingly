@@ -14,6 +14,7 @@ const Signout = ({ onClick }: Props) => {
     },
     onCompleted: () => {
       toast.success("Goodbye!");
+      onClick();
     },
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
     awaitRefetchQueries: true,
@@ -21,7 +22,6 @@ const Signout = ({ onClick }: Props) => {
 
   const handleSignout = () => {
     signout();
-    onClick();
   };
 
   return (

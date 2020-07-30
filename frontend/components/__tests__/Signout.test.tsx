@@ -15,9 +15,10 @@ afterEach(() => {
 });
 
 test("<Signout /> renders", () => {
+  const onClick = jest.fn();
   render(
     <MockedProvider>
-      <Signout />
+      <Signout onClick={onClick} />
     </MockedProvider>
   );
 
@@ -25,6 +26,7 @@ test("<Signout /> renders", () => {
 });
 
 test("<Signout /> signs out the user", async () => {
+  const onClick = jest.fn();
   let signOutMutationCalled = false;
 
   const mocks = [
@@ -56,7 +58,7 @@ test("<Signout /> signs out the user", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Signout />
+      <Signout onClick={onClick} />
     </MockedProvider>
   );
 
@@ -69,10 +71,14 @@ test("<Signout /> signs out the user", async () => {
     expect(toast.success).toHaveBeenCalled();
     expect(toast.success).toHaveBeenCalledTimes(1);
     expect(toast.success).toHaveBeenCalledWith("Goodbye!");
+
+    expect(onClick).toHaveBeenCalled();
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
 
 test("<Signout /> handles error", async () => {
+  const onClick = jest.fn();
   const mocks = [
     {
       request: {
@@ -95,7 +101,7 @@ test("<Signout /> handles error", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Signout />
+      <Signout onClick={onClick} />
     </MockedProvider>
   );
 
@@ -108,5 +114,6 @@ test("<Signout /> handles error", async () => {
     expect(toast.error).toHaveBeenCalledWith(
       "There was a problem signing out! Please try again."
     );
+    expect(onClick).not.toHaveBeenCalled();
   });
 });

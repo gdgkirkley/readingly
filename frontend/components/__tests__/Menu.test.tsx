@@ -11,6 +11,7 @@ afterEach(() => {
 
 // See Header.test.tsx for related tests
 test("<Menu /> renders a header with user links when user present", async () => {
+  const onClick = jest.fn();
   const user = await buildUser();
 
   const mocks = [
@@ -28,7 +29,7 @@ test("<Menu /> renders a header with user links when user present", async () => 
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Menu />
+      <Menu onClick={onClick} />
     </MockedProvider>
   );
 
@@ -52,6 +53,7 @@ test("<Menu /> renders a header with user links when user present", async () => 
 });
 
 test("<Menu /> renders header without user links when no user", async () => {
+  const onClick = jest.fn();
   const mocks = [
     {
       request: {
@@ -67,7 +69,7 @@ test("<Menu /> renders header without user links when no user", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Menu />
+      <Menu onClick={onClick} />
     </MockedProvider>
   );
 
