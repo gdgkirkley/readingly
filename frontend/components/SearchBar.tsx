@@ -80,7 +80,7 @@ const SearchBar = ({ handleSearch, defaultValue }: Props) => {
   };
 
   return (
-    <SearchFormStyles onSubmit={handleSubmit(onSubmit)}>
+    <SearchFormStyles onSubmit={handleSubmit(onSubmit)} role="form">
       <Bar>
         <SearchIcon />
         <input
@@ -88,6 +88,7 @@ const SearchBar = ({ handleSearch, defaultValue }: Props) => {
           id="search"
           name="search"
           placeholder="Search a book..."
+          aria-label="Search books"
           ref={register}
           autoComplete="off"
         />
