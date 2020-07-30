@@ -8,6 +8,7 @@ import {
   BookShelfData,
 } from "../graphql/bookshelves";
 import { useUser } from "../hooks/useUser";
+import Button from "./styles/ButtonStyles";
 
 type Props = {
   book: Book;
@@ -42,7 +43,11 @@ const AddToBookshelf = ({ book }: Props) => {
     toast.error("There was an error loading bookshelves. Please refresh.");
   }
 
-  return <button onClick={handleClick}>Add to Bookshelf</button>;
+  return (
+    <Button themeColor="yellow" onClick={handleClick}>
+      Add to bookshelf
+    </Button>
+  );
 };
 
 export default AddToBookshelf;

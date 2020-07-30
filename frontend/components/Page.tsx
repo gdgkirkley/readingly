@@ -5,7 +5,7 @@ import Meta from "./Meta";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const theme = {
+export const theme = {
   black: "#393939",
   yellow: "#f4b52e",
   purple: "#8242F6",
