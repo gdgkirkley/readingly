@@ -5,6 +5,8 @@ import BookImagePlaceholder from "./BookImagePlaceholder";
 import BookCard from "./BookCard";
 import Link from "next/link";
 import Button from "./styles/ButtonStyles";
+import UpdateBookshelf from "./UpdateBookShelf";
+import DeleteBookshelf from "./DeleteBookShelf";
 
 const BookShelfView = styled.div`
   display: grid;
@@ -103,11 +105,8 @@ const BookShelfListing = ({ bookshelf }: Props) => {
               View all
             </Button>
           </Link>
-          <Link href="/books" passHref>
-            <Button themeColor="yellow" as="a">
-              Add books
-            </Button>
-          </Link>
+          <UpdateBookshelf title={bookshelf.title} bookshelfId={bookshelf.id} />
+          <DeleteBookshelf title={bookshelf.title} bookshelfId={bookshelf.id} />
         </Links>
       </div>
     </BookShelfView>

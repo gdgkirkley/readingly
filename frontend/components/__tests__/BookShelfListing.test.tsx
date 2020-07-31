@@ -11,7 +11,11 @@ afterEach(() => {
 test("<BookShelfListing /> renders a bookshelf", async () => {
   const bookshelf = await buildBookshelf();
 
-  render(<BookShelfListing bookshelf={bookshelf} />);
+  render(
+    <MockedProvider mocks={[]} addTypename={false}>
+      <BookShelfListing bookshelf={bookshelf} />
+    </MockedProvider>
+  );
 
   expect(screen.getByRole("heading")).toHaveTextContent(bookshelf.title);
   expect(screen.getByTestId("bookshelf-count")).toHaveTextContent(
@@ -25,7 +29,11 @@ test("<BookShelfListing /> renders a bookshelf", async () => {
 test("<BookShelfListing /> renders a placeholder if no books", async () => {
   const bookshelf = await buildBookshelf({ books: [], bookCount: 0 });
 
-  render(<BookShelfListing bookshelf={bookshelf} />);
+  render(
+    <MockedProvider mocks={[]} addTypename={false}>
+      <BookShelfListing bookshelf={bookshelf} />
+    </MockedProvider>
+  );
 
   expect(screen.getByTestId("book-image-placeholder")).toBeInTheDocument();
   expect(

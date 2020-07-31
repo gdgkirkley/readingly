@@ -3,13 +3,23 @@ import styled from "styled-components";
 type ButtonProps = {
   color?: string;
   themeColor: string;
+  invert?: boolean;
 };
 
 const Button = styled.button<ButtonProps>`
-  color: #fff;
+  color: ${(props) =>
+    props.invert
+      ? props.themeColor
+        ? props.theme[props.themeColor]
+        : props.color
+      : "#fff"};
   opacity: 0.8;
   background: ${(props) =>
-    props.themeColor ? props.theme[props.themeColor] : props.color};
+    props.invert
+      ? "none"
+      : props.themeColor
+      ? props.theme[props.themeColor]
+      : props.color};
   padding: 1rem 2rem;
   font-size: 1.7rem;
   font-weight: 600;

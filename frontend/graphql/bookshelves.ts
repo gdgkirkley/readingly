@@ -34,6 +34,23 @@ export const CREATE_BOOKSHELF_MUTATION = gql`
   }
 `;
 
+export const UPDATE_BOOKSHELF_MUTATION = gql`
+  mutation($bookshelfId: ID!, $title: String!) {
+    updateBookshelf(bookshelfId: $bookshelfId, title: $title) {
+      id
+      title
+    }
+  }
+`;
+
+export const DELETE_BOOKSHELF_MUTATION = gql`
+  mutation($bookshelfId: ID!) {
+    deleteBookshelf(bookshelfId: $bookshelfId) {
+      message
+    }
+  }
+`;
+
 export type BookShelfData = {
   mybookshelves?: BookShelf[];
 };
