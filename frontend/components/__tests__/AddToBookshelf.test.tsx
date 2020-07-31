@@ -7,9 +7,11 @@ import { CURRENT_USER_QUERY } from "../../graphql/user";
 import {
   ADD_BOOK_MUTATION,
   MY_BOOKSHELVES_QUERY,
+  MY_BOOKSHELF_QUERY,
 } from "../../graphql/bookshelves";
 import { buildBookshelf, buildBook, buildUser } from "../../test/generate";
 import { toast } from "react-toastify";
+import MyBookshelves from "../../pages/mybookshelves";
 
 jest.mock("react-toastify");
 
@@ -81,6 +83,17 @@ test("<AddToBookshelf /> renders when user present", async () => {
       result: {
         data: {
           mybookshelves: [bookshelf],
+        },
+      },
+    },
+    {
+      request: {
+        query: MY_BOOKSHELF_QUERY,
+        variables: { title: bookshelf.title },
+      },
+      result: {
+        data: {
+          mybookshelf: bookshelf,
         },
       },
     },

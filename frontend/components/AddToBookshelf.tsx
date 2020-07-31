@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { Book } from "../graphql/books";
 import {
   MY_BOOKSHELVES_QUERY,
+  MY_BOOKSHELF_QUERY,
   ADD_BOOK_MUTATION,
   BookShelfData,
 } from "../graphql/bookshelves";
@@ -31,7 +32,13 @@ const AddToBookshelf = ({ book }: Props) => {
         googleBookId: book.googleBooksId,
         bookshelfId: data.mybookshelves[0].id,
       },
-      refetchQueries: [{ query: MY_BOOKSHELVES_QUERY }],
+      refetchQueries: [
+        { query: MY_BOOKSHELVES_QUERY },
+        {
+          query: MY_BOOKSHELF_QUERY,
+          variables: { title: data.mybookshelves[0].title },
+        },
+      ],
       awaitRefetchQueries: true,
     });
 
