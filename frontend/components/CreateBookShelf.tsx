@@ -43,6 +43,7 @@ const CreateBookShelf = () => {
 
     if (!error && !loading) {
       toast.success(`${data.title} has been created!`);
+      setOpen(false);
     }
   };
 
