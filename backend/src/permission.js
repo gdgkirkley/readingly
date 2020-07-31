@@ -21,6 +21,11 @@ const isReadingOwnUser = rule()((parent, {id}, {me}) => {
 const isReadingOwnBookshelf = rule()(
   async (parent, {bookshelfId}, {me, models}) => {
     const bs = await models.BookShelf.findByPk(bookshelfId)
+
+    if (!bs) {
+      throw new Error('Invalid bookshelf ID')
+    }
+
     return me && me.id.toString() === bs.userId.toString()
   },
 )

@@ -329,3 +329,72 @@ test('bookshelf returns a bookshelf', async () => {
 
   expect(data.bookshelf.title).toBe('Favourites')
 })
+
+test('can create, update, delete a bookshelf', async () => {
+  const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
+
+  const {
+    data: {createBookshelf: created},
+  } = await authRequest(
+    `
+          mutation($title: String!) {
+              createBookshelf(title: $title) {
+                  id
+                  title
+                  bookCount
+              }
+          }
+        `,
+    {title: 'Favourites'},
+    cookie,
+  )
+
+  expect(created.title).toBe('Favourites')
+  expect(created.bookCount).toBe(0)
+
+  const {data} = await authRequest(
+    `
+          mutation($bookshelfId: ID!, $title: String!) {
+            updateBookshelf(bookshelfId: $bookshelfId, title: $title) {
+              title
+            }
+          }
+        `,
+    {bookshelfId: created.id, title: 'My Favourites'},
+    cookie,
+  )
+
+  expect(data.updateBookshelf.title).toBe('My Favourites')
+
+  const {data: deleteData} = await authRequest(
+    `
+          mutation($bookshelfId: ID!) {
+            deleteBookshelf(bookshelfId: $bookshelfId) {
+              message
+            }
+          }
+        `,
+    {bookshelfId: created.id},
+    cookie,
+  )
+
+  expect(deleteData.deleteBookshelf.message).toMatchInlineSnapshot(
+    `"Bookshelf deleted"`,
+  )
+
+  const {
+    data: {mybookshelves},
+  } = await authRequest(
+    `
+            query {
+                mybookshelves {
+                    title
+                }
+            }
+          `,
+    {},
+    cookie,
+  )
+
+  expect(mybookshelves).toHaveLength(0)
+})

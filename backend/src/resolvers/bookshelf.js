@@ -39,22 +39,26 @@ export default {
     createBookshelf: async (parent, {title}, {me, models}) => {
       return await models.BookShelf.create({title, userId: me.id})
     },
-    updateBookshelf: async (parent, {id, title}, {models}) => {
-      return await models.BookShelf.update(
+    updateBookshelf: async (parent, {bookshelfId, title}, {models}) => {
+      await models.BookShelf.update(
         {title},
         {
           where: {
-            id,
+            id: bookshelfId,
           },
         },
       )
+
+      return await models.BookShelf.findByPk(bookshelfId)
     },
-    deleteBookshelf: async (parent, {id}, {models}) => {
-      return await models.BookShelf.destroy({
+    deleteBookshelf: async (parent, {bookshelfId}, {models}) => {
+      await models.BookShelf.destroy({
         where: {
-          id,
+          id: bookshelfId,
         },
       })
+
+      return {message: 'Bookshelf deleted'}
     },
     addBook: async (parent, {googleBookId, bookshelfId}, {models}) => {
       const bookshelf = await models.BookShelf.findByPk(bookshelfId)
