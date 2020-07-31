@@ -88,7 +88,11 @@ const UpdateBookshelf = ({ bookshelfId, title }: Props) => {
               />
             </InputGroup>
             <ActionGroup justifyContent="center">
-              <Button themeColor="purple" type="submit">
+              <Button
+                themeColor="purple"
+                type="submit"
+                data-testid="update-button"
+              >
                 Edit
               </Button>
             </ActionGroup>

@@ -1,41 +1,37 @@
 import React from "react";
 import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, waitFor } from "@testing-library/react";
-import CreateBookshelf from "../CreateBookShelf";
+import UpdateBookShelf from "../UpdateBookShelf";
 import userEvent from "@testing-library/user-event";
 import {
-  CREATE_BOOKSHELF_MUTATION,
+  UPDATE_BOOKSHELF_MUTATION,
   MY_BOOKSHELVES_QUERY,
 } from "../../graphql/bookshelves";
-import { getUUID, buildBookshelf } from "../../test/generate";
-import { toast } from "react-toastify";
-
-jest.mock("react-toastify");
+import { buildBookshelf } from "../../test/generate";
 
 afterEach(() => {
   cleanup();
 });
 
-test("<CreateBookshelf /> renders", async () => {
+test("<UpdateBookshelf /> renders", async () => {
   const bookshelf = await buildBookshelf();
-  const title = "Favourites";
-  let createBookshelfMutationCalled = false;
-  let id = await getUUID();
-  const newShelf = await buildBookshelf({ title, id });
+  const newTitle = "My Favourites";
+  let updateBookshelfMutationCalled = false;
 
   const mocks = [
     {
       request: {
-        query: CREATE_BOOKSHELF_MUTATION,
-        variables: { title },
+        query: UPDATE_BOOKSHELF_MUTATION,
+        variables: { bookshelfId: bookshelf.id, title: newTitle },
       },
       result: () => {
-        createBookshelfMutationCalled = true;
+        updateBookshelfMutationCalled = true;
+        bookshelf.title = newTitle;
         return {
           data: {
-            createBookshelf: {
-              id,
-              title,
+            updateBookshelf: {
+              id: bookshelf.id,
+              title: bookshelf.title,
             },
           },
         };
@@ -48,7 +44,7 @@ test("<CreateBookshelf /> renders", async () => {
       },
       result: {
         data: {
-          mybookshelves: [bookshelf, newShelf],
+          mybookshelves: [bookshelf],
         },
       },
     },
@@ -56,15 +52,15 @@ test("<CreateBookshelf /> renders", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <CreateBookshelf />
+      <UpdateBookShelf bookshelfId={bookshelf.id} title={bookshelf.title} />
     </MockedProvider>
   );
 
-  const createButton = screen.getByRole("button");
+  const editButton = screen.getByRole("button");
 
-  expect(createButton).toBeInTheDocument();
+  expect(editButton).toBeInTheDocument();
 
-  userEvent.click(createButton);
+  userEvent.click(editButton);
 
   let form: HTMLElement;
   let titleInput: HTMLElement;
@@ -73,24 +69,27 @@ test("<CreateBookshelf /> renders", async () => {
   await waitFor(() => {
     form = screen.getByRole("form");
     titleInput = screen.getByLabelText(/title/i);
-    submitButton = screen.getByRole("button", { name: /create/i });
+    submitButton = screen.getByTestId("update-button");
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(form).toBeInTheDocument();
     expect(titleInput).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
+
+    expect(form).toHaveFormValues({
+      title: bookshelf.title,
+    });
   });
 
-  await userEvent.type(titleInput, title);
+  await userEvent.clear(titleInput);
+  await userEvent.type(titleInput, "My Favourites");
 
   expect(form).toHaveFormValues({
-    title: title,
+    title: "My Favourites",
   });
 
   userEvent.click(submitButton);
 
   await waitFor(() => {
-    expect(createBookshelfMutationCalled).toBeTruthy();
-    expect(toast.success).toHaveBeenCalledTimes(1);
-    expect(toast.success).toHaveBeenCalledWith(`${title} has been created!`);
+    expect(updateBookshelfMutationCalled).toBeTruthy();
   });
 });
