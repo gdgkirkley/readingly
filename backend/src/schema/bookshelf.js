@@ -5,6 +5,7 @@ export default gql`
     bookshelves: [BookShelf!]
     bookshelf(bookshelfId: ID!): BookShelf
     mybookshelves: [BookShelf!]
+    mybookshelf(title: String!): BookShelf!
   }
 
   extend type Mutation {

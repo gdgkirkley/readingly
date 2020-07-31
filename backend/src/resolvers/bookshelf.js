@@ -16,6 +16,14 @@ export default {
         },
       })
     },
+    mybookshelf: async (parent, {title}, {me, models}) => {
+      return await models.BookShelf.findOne({
+        where: {
+          userId: me.id,
+          title,
+        },
+      })
+    },
   },
 
   BookShelf: {

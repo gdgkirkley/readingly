@@ -209,6 +209,20 @@ test("user cannot add book to another user's bookshelf", async () => {
 test('addBook handles invalid Google Books id', async () => {
   const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
 
+  const {
+    data: {mybookshelf: bookshelf},
+  } = await authRequest(
+    `
+            query($title: String!) {
+                mybookshelf(title: $title) {
+                  id
+                }
+            }
+          `,
+    {title: 'Favourites'},
+    cookie,
+  )
+
   const error = await expectedErrorRequest(
     `
                 mutation($googleBookId: String!, $bookshelfId: ID!) {
@@ -223,7 +237,7 @@ test('addBook handles invalid Google Books id', async () => {
               `,
     {
       googleBookId: 'asdflmnasvs3',
-      bookshelfId: 1,
+      bookshelfId: bookshelf.id,
     },
     {
       Cookie: cookie,
@@ -235,7 +249,7 @@ test('addBook handles invalid Google Books id', async () => {
   )
 })
 
-test('mybookshelves returns user bookshelves', async () => {
+test('mybookshelves and mybookshelf returns user bookshelves', async () => {
   const {cookie} = await loginUser('pfraser@readingly.com', 'pfraser')
 
   await authRequest(
@@ -296,6 +310,22 @@ test('mybookshelves returns user bookshelves', async () => {
   expect(mybs).toHaveLength(2)
   expect(mybs).toContainEqual({title: 'Favourites'})
   expect(mybs).toContainEqual({title: 'Currently reading'})
+
+  const {
+    data: {mybookshelf: bookshelf},
+  } = await authRequest(
+    `
+            query($title: String!) {
+                mybookshelf(title: $title) {
+                    title
+                }
+            }
+          `,
+    {title: 'Currently reading'},
+    cookie,
+  )
+
+  expect(bookshelf.title).toBe('Currently reading')
 })
 
 test('bookshelf returns a bookshelf', async () => {
