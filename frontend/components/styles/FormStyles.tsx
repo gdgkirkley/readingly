@@ -48,10 +48,15 @@ export const InputGroup = styled.div`
   margin-bottom: 2rem;
 `;
 
-export const ActionGroup = styled.div`
+type ActionGroupProps = {
+  justifyContent?: string;
+};
+
+export const ActionGroup = styled.div<ActionGroupProps>`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: "center";
+  justify-content: ${(props) =>
+    props.justifyContent ? props.justifyContent : "space-between"};
   margin-top: 1rem;
 `;
 

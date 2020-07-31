@@ -34,6 +34,7 @@ const Account = ({ me }: Props) => {
           name="email"
           id="email"
           ref={register({ pattern: /^\S+@\S+$/i })}
+          autoFocus
         />
       </InputGroup>
       <InputGroup>

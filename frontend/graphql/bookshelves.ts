@@ -25,6 +25,15 @@ export const ADD_BOOK_MUTATION = gql`
   }
 `;
 
+export const CREATE_BOOKSHELF_MUTATION = gql`
+  mutation($title: String!) {
+    createBookshelf(title: $title) {
+      id
+      title
+    }
+  }
+`;
+
 export type BookShelfData = {
   mybookshelves?: BookShelf[];
 };

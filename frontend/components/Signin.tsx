@@ -36,6 +36,7 @@ const Signin = () => {
           name="email"
           id="email"
           ref={register({ required: true, pattern: /^\S+@\S+$/i })}
+          autoFocus
         />
         {errors.email?.type === "required" && (
           <p className="error-message" data-testid="validation-error">

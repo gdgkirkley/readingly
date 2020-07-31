@@ -13,6 +13,8 @@ const Card = styled.a`
 
 const ImageContainer = styled.div<ContainerProps>`
   width: ${(props) => props.width}px;
+  height: auto;
+  overflow: hidden;
   display: flex;
   justify-content: center;
 
@@ -59,7 +61,7 @@ const BookCard = ({ book, width = 128, ...rest }: Props) => {
           {book?.thumbnail ? (
             <img src={book.thumbnail} alt={book.title} />
           ) : (
-            book.title
+            book.title.substring(0, 50)
           )}
         </ImageContainer>
       </Card>
