@@ -38,6 +38,8 @@ const permissions = shield(
     },
     Mutation: {
       createAuthor: canReadAllData,
+      updateBookshelf: isReadingOwnBookshelf,
+      deleteBookshelf: isReadingOwnBookshelf,
       addBook: isReadingOwnBookshelf,
 
       updateUser: and(isAuthenticated, isReadingOwnUser),

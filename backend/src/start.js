@@ -11,7 +11,7 @@ import typeDefs from './schema'
 import resolvers from './resolvers'
 import models from './models'
 import {authMiddleware} from './utils/auth'
-import {permissions} from './utils/permission'
+import {permissions} from './permission'
 
 async function startServer({port = process.env.PORT} = {}) {
   const app = express()

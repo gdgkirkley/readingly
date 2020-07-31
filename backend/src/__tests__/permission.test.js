@@ -1,5 +1,4 @@
 import * as hashFunction from 'object-hash'
-import models from '../../models'
 import {
   isAuthenticated,
   canReadAllData,
