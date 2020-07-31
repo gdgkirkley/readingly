@@ -9,7 +9,7 @@ afterEach(() => {
   cleanup();
 });
 
-test("<BookGallery /> renders a list of book cards", async () => {
+test("<BookCategorySearch /> renders a list of book cards", async () => {
   const search = "The Lord of the Rings";
   const book1 = await buildBook();
   const book2 = await buildBook();
@@ -18,7 +18,7 @@ test("<BookGallery /> renders a list of book cards", async () => {
     {
       request: {
         query: BOOK_SEARCH,
-        variables: { search },
+        variables: { search, limit: 16, offset: 0 },
       },
       result: {
         data: {
@@ -59,12 +59,12 @@ test("<BookGallery /> renders a list of book cards", async () => {
   });
 });
 
-test("<BookGallery /> handles error", async () => {
+test("<BookCategorySearch /> handles error", async () => {
   const mocks = [
     {
       request: {
         query: BOOK_SEARCH,
-        variables: { search: "INVALID BOOK" },
+        variables: { search: "INVALID BOOK", limit: 16, offset: 0 },
       },
       error: new Error("Oh no!"),
     },

@@ -28,6 +28,10 @@ export default {
       return book
     },
     searchBook: async (parent, {search, limit, offset}, {models}) => {
+      if (limit && limit > 40) {
+        throw new Error('Limit must be less than 40')
+      }
+
       const books = new Map()
       const booksToAdd = await models.Book.findAll({
         where: {

@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import { BookData, BOOK_SEARCH } from "../graphql/books";
 import BookGallery from "./BookGallery";
+import Button from "./styles/ButtonStyles";
 
 const Gallery = styled.div`
   justify-self: center;
+`;
+
+const Action = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 `;
 
 type Props = {
@@ -13,18 +20,41 @@ type Props = {
 };
 
 const BookCategorySearch = ({ searchTerm }: Props) => {
-  const { data, loading, error } = useQuery<BookData>(BOOK_SEARCH, {
-    variables: { search: searchTerm },
+  const { data, loading, error, fetchMore } = useQuery<BookData>(BOOK_SEARCH, {
+    variables: { search: searchTerm, offset: 0, limit: 16 },
+    fetchPolicy: "cache-and-network",
+    notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) return <p>Loading...</p>;
+  const handleLoadMore = (): void => {
+    fetchMore({
+      variables: {
+        offset: data.searchBook.length,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        console.log(fetchMoreResult);
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          searchBook: [...prev.searchBook, ...fetchMoreResult.searchBook],
+        });
+      },
+    });
+  };
 
-  if (error) return null;
+  if (!data && loading) return <p>Loading...</p>;
+
+  if (error || !data) return null;
 
   return (
     <Gallery>
       <h2>{searchTerm}</h2>
       <BookGallery books={data.searchBook} />
+      {loading ? <p>Loading more...</p> : null}
+      <Action>
+        <Button themeColor="red" onClick={handleLoadMore} disabled={loading}>
+          Load{loading ? "ing" : ""} more
+        </Button>
+      </Action>
     </Gallery>
   );
 };

@@ -11,8 +11,8 @@ const BOOK_QUERY = gql`
 `;
 
 export const BOOK_SEARCH = gql`
-  query($search: String!) {
-    searchBook(search: $search) {
+  query($search: String!, $offset: Int, $limit: Int) {
+    searchBook(search: $search, offset: $offset, limit: $limit) {
       thumbnail
       googleBooksId
       title

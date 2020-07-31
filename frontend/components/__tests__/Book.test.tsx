@@ -72,6 +72,8 @@ test("<Book /> renders a book", async () => {
         query: BOOK_SEARCH,
         variables: {
           search: book.authors[0],
+          limit: 16,
+          offset: 0,
         },
       },
       result: {
@@ -91,6 +93,8 @@ test("<Book /> renders a book", async () => {
         query: BOOK_SEARCH,
         variables: {
           search: book.categories[0],
+          limit: 16,
+          offset: 0,
         },
       },
       result: {
