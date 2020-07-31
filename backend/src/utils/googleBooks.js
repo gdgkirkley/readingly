@@ -2,10 +2,10 @@ import logger from 'loglevel'
 import axios, {AxiosError} from 'axios'
 const googleBooksEndpoint = 'https://www.googleapis.com/books/v1/volumes'
 
-async function getGoogleBooks(search) {
+async function getGoogleBooks(search, limit = 16, offset = 0) {
   try {
     const response = await axios.get(
-      `${googleBooksEndpoint}?q=${search}&maxResults=16`,
+      `${googleBooksEndpoint}?q=${search}&maxResults=${limit}&startIndex=${offset}`,
     )
 
     return response.data

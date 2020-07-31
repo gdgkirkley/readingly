@@ -27,7 +27,7 @@ export default {
       }
       return book
     },
-    searchBook: async (parent, {search}, {models}) => {
+    searchBook: async (parent, {search, limit, offset}, {models}) => {
       const books = new Map()
       const booksToAdd = await models.Book.findAll({
         where: {
@@ -45,16 +45,18 @@ export default {
           ],
         },
         order: [['title']],
+        limit: limit ? limit : 16,
+        offset: offset ? offset : 0,
       })
 
       booksToAdd.forEach(book => {
         books.set(book.googleBooksId, book)
       })
 
-      if (books.size < 10) {
+      if (books.size < 16) {
         const searchTerm = encodeURI(search)
 
-        const results = await getGoogleBooks(searchTerm)
+        const results = await getGoogleBooks(searchTerm, limit, offset)
 
         if (!results?.items?.length) {
           return null

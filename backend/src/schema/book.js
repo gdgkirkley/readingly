@@ -5,7 +5,7 @@ export default gql`
     books: [Book!]
     book(id: ID!): Book
     googleBook(googleBooksId: String!): GoogleBook
-    searchBook(search: String!): [Book!]
+    searchBook(search: String!, limit: Int, offset: Int): [Book!]
   }
 
   extend type Mutation {
