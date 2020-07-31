@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { toast } from "react-toastify";
 import { useQuery, useMutation } from "@apollo/client";
 import { Book } from "../graphql/books";
@@ -10,6 +11,10 @@ import {
 } from "../graphql/bookshelves";
 import { useUser } from "../hooks/useUser";
 import Button from "./styles/ButtonStyles";
+
+const AddToBookshelfButton = styled(Button)`
+  margin: 2rem 0 3rem;
+`;
 
 type Props = {
   book: Book;
@@ -53,9 +58,9 @@ const AddToBookshelf = ({ book }: Props) => {
   }
 
   return (
-    <Button themeColor="yellow" onClick={handleClick}>
+    <AddToBookshelfButton themeColor="yellow" onClick={handleClick}>
       Add to bookshelf
-    </Button>
+    </AddToBookshelfButton>
   );
 };
 

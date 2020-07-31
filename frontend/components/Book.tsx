@@ -6,18 +6,7 @@ import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
 
 const BookPage = styled.div`
-  font-size: 1vw;
-
-  @media (max-width: 1600px) {
-    font-size: 1.2vw;
-  }
-  @media (max-width: 1300px) {
-    font-size: 2vw;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 4vw;
-  }
+  font-size: 1.7rem;
 `;
 
 const Banner = styled.div<{ background: string }>`
@@ -59,7 +48,7 @@ const BannerContent = styled.div`
 `;
 
 const BannerTitle = styled.h1`
-  font-size: 9rem;
+  font-size: 5rem;
   margin: 0;
   line-height: 1;
   position: relative;
@@ -67,7 +56,6 @@ const BannerTitle = styled.h1`
   max-width: 70%;
 
   @media (max-width: 1300px) {
-    font-size: 15vw;
     max-width: 100%;
   }
 `;
