@@ -24,7 +24,12 @@ type FormInputs = {
 
 const CreateBookShelf = () => {
   const [createBookshelf, { data, error, loading }] = useMutation(
-    CREATE_BOOKSHELF_MUTATION
+    CREATE_BOOKSHELF_MUTATION,
+    {
+      onError: () => {
+        toast.error("There was an error creating bookshelf");
+      },
+    }
   );
   const { register, handleSubmit } = useForm<FormInputs>();
   const [open, setOpen] = useState(false);

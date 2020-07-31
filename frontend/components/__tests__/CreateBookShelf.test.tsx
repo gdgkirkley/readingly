@@ -94,3 +94,60 @@ test("<CreateBookshelf /> renders", async () => {
     expect(toast.success).toHaveBeenCalledWith(`${title} has been created!`);
   });
 });
+
+test("<CreateBookshelf /> handles create error", async () => {
+  const title = "Favourites";
+
+  const mocks = [
+    {
+      request: {
+        query: CREATE_BOOKSHELF_MUTATION,
+        variables: { title },
+      },
+      error: new Error("Can't create shelf"),
+    },
+  ];
+
+  render(
+    <MockedProvider
+      mocks={mocks}
+      addTypename={false}
+      defaultOptions={{
+        mutate: {
+          errorPolicy: "all",
+        },
+      }}
+    >
+      <CreateBookshelf />
+    </MockedProvider>
+  );
+
+  const createButton = screen.getByRole("button");
+
+  userEvent.click(createButton);
+
+  let form: HTMLElement;
+  let titleInput: HTMLElement;
+  let submitButton: HTMLElement;
+
+  await waitFor(() => {
+    form = screen.getByRole("form");
+    titleInput = screen.getByLabelText(/title/i);
+    submitButton = screen.getByRole("button", { name: /create/i });
+  });
+
+  await userEvent.type(titleInput, title);
+
+  expect(form).toHaveFormValues({
+    title: title,
+  });
+
+  userEvent.click(submitButton);
+
+  await waitFor(() => {
+    expect(toast.error).toHaveBeenCalledTimes(1);
+    expect(toast.error).toHaveBeenCalledWith(
+      `There was an error creating bookshelf`
+    );
+  });
+});

@@ -34,7 +34,7 @@ const MyBookshelves = () => {
         <div>
           <h1>My Bookshelves</h1>
           <div>
-            You have {mybookshelves.length || 0} bookshel
+            You have {mybookshelves.length || "no"} bookshel
             {mybookshelves.length === 1 ? "f" : "ves"}
           </div>
         </div>
@@ -43,13 +43,11 @@ const MyBookshelves = () => {
         </div>
       </BookshelfHeader>
       <div>
-        {mybookshelves?.length ? (
-          mybookshelves.map((shelf) => {
-            return <BookShelfView key={shelf.id} bookshelf={shelf} />;
-          })
-        ) : (
-          <p>You have no bookshelves</p>
-        )}
+        {mybookshelves?.length
+          ? mybookshelves.map((shelf) => {
+              return <BookShelfView key={shelf.id} bookshelf={shelf} />;
+            })
+          : null}
       </div>
     </BookShelfPage>
   );

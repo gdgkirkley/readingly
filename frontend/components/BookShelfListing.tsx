@@ -100,7 +100,11 @@ const BookShelfListing = ({ bookshelf }: Props) => {
           </BooksDisplay>
         ) : null}
         <Links>
-          <Link href="/books" passHref>
+          <Link
+            href="/shelf/[title]"
+            as={`/shelf/${encodeURI(bookshelf.title)}`}
+            passHref
+          >
             <Button themeColor="black" as="a">
               View all
             </Button>

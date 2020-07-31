@@ -29,7 +29,12 @@ type Props = {
 
 const UpdateBookshelf = ({ bookshelfId, title }: Props) => {
   const [updateBookshelf, { data, error, loading }] = useMutation(
-    UPDATE_BOOKSHELF_MUTATION
+    UPDATE_BOOKSHELF_MUTATION,
+    {
+      onError: () => {
+        toast.error(`There was an error updating ${title}`);
+      },
+    }
   );
   const { register, handleSubmit, reset } = useForm<FormInputs>({
     defaultValues: {

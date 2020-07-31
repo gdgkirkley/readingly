@@ -17,6 +17,22 @@ export const MY_BOOKSHELVES_QUERY = gql`
   }
 `;
 
+export const MY_BOOKSHELF_QUERY = gql`
+  query($title: String!) {
+    mybookshelf(title: $title) {
+      id
+      title
+      createdAt
+      bookCount
+      books {
+        googleBooksId
+        title
+        thumbnail
+      }
+    }
+  }
+`;
+
 export const ADD_BOOK_MUTATION = gql`
   mutation($googleBookId: String!, $bookshelfId: ID!) {
     addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
@@ -53,6 +69,7 @@ export const DELETE_BOOKSHELF_MUTATION = gql`
 
 export type BookShelfData = {
   mybookshelves?: BookShelf[];
+  mybookshelf: BookShelf;
 };
 
 export type BookShelf = {
