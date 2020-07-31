@@ -50,7 +50,7 @@ const CreateBookShelf = () => {
   return (
     <>
       <Button themeColor="purple" onClick={toggleModal}>
-        Create a bookshelf
+        Add a bookshelf
       </Button>
       <Dialog
         role="dialog"
@@ -72,7 +72,7 @@ const CreateBookShelf = () => {
               />
             </InputGroup>
             <ActionGroup justifyContent="center">
-              <Button themeColor="purple" type="submit">
+              <Button themeColor="purple" type="submit" name="create">
                 Create
               </Button>
             </ActionGroup>

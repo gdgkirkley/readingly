@@ -62,4 +62,4 @@ async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
   };
 }
 
-export { buildBook, buildUser, buildBookshelf };
+export { buildBook, buildUser, buildBookshelf, getUUID };
