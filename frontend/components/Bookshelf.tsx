@@ -27,7 +27,7 @@ const Bookshelf = ({ title }: Props) => {
         There {shelf.bookCount == 1 ? "is" : "are"} {shelf.bookCount} book
         {shelf.bookCount == 1 ? null : "s"} on this list
       </p>
-      <BookGallery books={shelf.books} />
+      <BookGallery books={shelf.books} displayRemove={true} bookshelf={shelf} />
       <p>You created this list on {formatDate(shelf.createdAt)}</p>
     </div>
   );

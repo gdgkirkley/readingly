@@ -63,6 +63,22 @@ const DialogHeader = styled.div`
   margin-bottom: 30px;
 `;
 
+// Reusable style for inner dialog content
+export const InnerDialogContent = styled.div`
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  font-size: 1.7rem;
+  text-align: center;
+
+  & .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
 const ESCAPE_KEY_CODE = 27;
 
 type Props = {

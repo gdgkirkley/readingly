@@ -41,6 +41,14 @@ export const ADD_BOOK_MUTATION = gql`
   }
 `;
 
+export const REMOVE_BOOK_MUTATION = gql`
+  mutation($googleBooksId: String!, $bookshelfId: ID!) {
+    removeBook(googleBooksId: $googleBooksId, bookshelfId: $bookshelfId) {
+      bookCount
+    }
+  }
+`;
+
 export const CREATE_BOOKSHELF_MUTATION = gql`
   mutation($title: String!) {
     createBookshelf(title: $title) {
