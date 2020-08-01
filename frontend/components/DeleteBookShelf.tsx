@@ -23,7 +23,12 @@ type Props = {
 
 const DeleteBookshelf = ({ bookshelfId, title }: Props) => {
   const [deleteBookshelf, { data, error, loading }] = useMutation(
-    DELETE_BOOKSHELF_MUTATION
+    DELETE_BOOKSHELF_MUTATION,
+    {
+      onError: () => {
+        toast.error(`There was an error deleting ${title}`);
+      },
+    }
   );
   const [open, setOpen] = useState(false);
 
