@@ -18,8 +18,14 @@ const BookShelfView = styled.div`
 
   padding: 2rem 0;
 
-  border-top: 1px solid ${(props) => props.theme.lightgrey};
-  border-bottom: 1px solid ${(props) => props.theme.lightgrey};
+  &:first-of-type {
+    border-top: 1px dotted ${(props) => props.theme.black};
+  }
+  border-bottom: 1px dotted ${(props) => props.theme.black};
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 
   & h2,
   p {
@@ -37,6 +43,11 @@ const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  & img {
+    border: 1px dotted ${(props) => props.theme.black};
+    border-radius: 0.25rem;
+  }
 `;
 
 const BooksDisplay = styled.div`

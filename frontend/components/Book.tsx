@@ -7,6 +7,10 @@ import AddToBookshelf from "./AddToBookshelf";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
+
+  & p {
+    margin: 0;
+  }
 `;
 
 const Banner = styled.div<{ background: string }>`

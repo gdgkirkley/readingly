@@ -127,3 +127,48 @@ test("<AddToBookshelf /> renders when user present", async () => {
     );
   });
 });
+
+test("<AddtoBookshelf /> handles case when user has no bookshelves", async () => {
+  const user = await buildUser();
+  const book = await buildBook();
+
+  const mocks = [
+    {
+      request: {
+        query: CURRENT_USER_QUERY,
+        variables: {},
+      },
+      result: {
+        data: {
+          me: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: MY_BOOKSHELVES_QUERY,
+        variables: {},
+      },
+      result: {
+        data: {
+          mybookshelves: [],
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <AddToBookshelf book={book} />
+    </MockedProvider>
+  );
+
+  await waitFor(() => {
+    expect(screen.getByRole("link")).toHaveTextContent("Create a bookshelf");
+    expect(screen.queryByText(/add to bookshelf/i)).toBeFalsy();
+  });
+});

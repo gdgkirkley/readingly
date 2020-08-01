@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { useQuery, useMutation } from "@apollo/client";
@@ -10,9 +11,19 @@ import {
   BookShelfData,
 } from "../graphql/bookshelves";
 import { useUser } from "../hooks/useUser";
-import Button from "./styles/ButtonStyles";
+import Button, {
+  ButtonGroup,
+  ButtonGroupRoot,
+  ButtonGroupDropdownContainer,
+  ButtonGroupDropdown,
+} from "./styles/ButtonStyles";
+import CaretDown from "./icons/CaretDown";
 
 const AddToBookshelfButton = styled(Button)`
+  /* margin: 2rem 0 3rem; */
+`;
+
+const CreateLinkContainer = styled.div`
   margin: 2rem 0 3rem;
 `;
 
@@ -21,6 +32,8 @@ type Props = {
 };
 
 const AddToBookshelf = ({ book }: Props) => {
+  const [width, setWidth] = useState(0);
+  const dropdownContainer = useRef(null);
   const me = useUser();
   const { data, error, loading } = useQuery<BookShelfData>(
     MY_BOOKSHELVES_QUERY
@@ -30,6 +43,11 @@ const AddToBookshelf = ({ book }: Props) => {
     addBook,
     { data: dataAdd, error: errorAdd, loading: loadingAdd },
   ] = useMutation(ADD_BOOK_MUTATION);
+
+  useEffect(() => {
+    if (!dropdownContainer.current) return;
+    setWidth(dropdownContainer.current.offsetWidth);
+  }, [dropdownContainer.current]);
 
   const handleClick = (): void => {
     addBook({
@@ -57,10 +75,37 @@ const AddToBookshelf = ({ book }: Props) => {
     toast.error("There was an error loading bookshelves. Please refresh.");
   }
 
+  if (!data.mybookshelves?.length) {
+    return (
+      <CreateLinkContainer>
+        <Link href="/mybookshelves" passHref>
+          <Button themeColor="yellow" as="a">
+            Create a bookshelf
+          </Button>
+        </Link>
+      </CreateLinkContainer>
+    );
+  }
+
   return (
-    <AddToBookshelfButton themeColor="yellow" onClick={handleClick}>
-      Add to bookshelf
-    </AddToBookshelfButton>
+    <ButtonGroupRoot>
+      <ButtonGroup ref={dropdownContainer}>
+        <AddToBookshelfButton themeColor="yellow" onClick={handleClick}>
+          Add to bookshelf
+        </AddToBookshelfButton>
+        <Button themeColor="yellow">
+          <CaretDown />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroupDropdownContainer groupWidth={width}>
+        <ButtonGroupDropdown>
+          <ul>
+            <li>Testing a bigger 1</li>
+            <li>Test 2</li>
+          </ul>
+        </ButtonGroupDropdown>
+      </ButtonGroupDropdownContainer>
+    </ButtonGroupRoot>
   );
 };
 
