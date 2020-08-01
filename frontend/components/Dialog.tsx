@@ -129,7 +129,7 @@ const Dialog: React.FC<Props> = ({
     <DialogStyle>
       <DialogContent ref={outer} aria-label={accessibilityLabel} role={role}>
         <DialogClose themeColor="purple" onClick={toggleModal}>
-          X
+          X<span className="hidden-text">Close Dialog</span>
         </DialogClose>
         {heading && (
           <DialogHeader>
