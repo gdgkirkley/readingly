@@ -428,3 +428,75 @@ test('can create, update, delete a bookshelf', async () => {
 
   expect(mybookshelves).toHaveLength(0)
 })
+
+test('removeBook removes the book from the list', async () => {
+  const prideAndPrejudiceGoogleBookId = 's1gVAAAAYAAJ'
+
+  const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
+
+  const {
+    data: {mybookshelf: bookshelf},
+  } = await authRequest(
+    `
+            query($title: String!) {
+                mybookshelf(title: $title) {
+                  id
+                    title
+                }
+            }
+          `,
+    {title: 'Favourites'},
+    cookie,
+  )
+
+  const {
+    data: {addBook},
+  } = await authRequest(
+    `
+            mutation($googleBookId: String!, $bookshelfId: ID!) {
+                addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
+                    title
+                    books {
+                        title
+                        googleBooksId
+                    }
+                    bookCount
+                }
+            }
+          `,
+    {
+      googleBookId: prideAndPrejudiceGoogleBookId,
+      bookshelfId: bookshelf.id,
+    },
+    cookie,
+  )
+
+  expect(addBook.books).toHaveLength(1)
+  expect(addBook.bookCount).toBe(1)
+  expect(addBook.books[0].googleBooksId).toBe(prideAndPrejudiceGoogleBookId)
+
+  const {
+    data: {removeBook},
+  } = await authRequest(
+    `
+    mutation($googleBooksId: String!, $bookshelfId: ID!) {
+      removeBook(googleBooksId: $googleBooksId, bookshelfId: $bookshelfId) {
+          title
+          books {
+              title
+              googleBooksId
+          }
+          bookCount
+      }
+  }
+    `,
+    {
+      googleBooksId: prideAndPrejudiceGoogleBookId,
+      bookshelfId: bookshelf.id,
+    },
+    cookie,
+  )
+
+  expect(removeBook.books).toHaveLength(0)
+  expect(removeBook.bookCount).toBe(0)
+})

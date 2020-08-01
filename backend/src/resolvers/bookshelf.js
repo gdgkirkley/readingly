@@ -119,5 +119,30 @@ export default {
 
       return bookshelf
     },
+    removeBook: async (parent, {googleBooksId, bookshelfId}, {models}) => {
+      const bookshelf = await models.BookShelf.findByPk(bookshelfId)
+
+      if (!bookshelf) {
+        return null
+      }
+
+      const book = await models.Book.findOne({
+        where: {
+          googleBooksId,
+        },
+      })
+
+      if (!book) {
+        return null
+      }
+
+      if (await bookshelf.hasBook(book)) {
+        bookshelf.removeBook(book)
+      } else {
+        throw new Error('This book is not on this bookshelf!')
+      }
+
+      return bookshelf
+    },
   },
 }
