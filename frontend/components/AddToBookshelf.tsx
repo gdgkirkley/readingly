@@ -154,6 +154,7 @@ const AddToBookshelf = ({ book }: Props) => {
           aria-expanded={open}
         >
           <CaretDown />
+          <span className="hidden-text">Open Bookshelf List</span>
         </Button>
       </ButtonGroup>
       {open ? (

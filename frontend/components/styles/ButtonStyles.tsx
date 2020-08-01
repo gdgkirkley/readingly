@@ -4,6 +4,7 @@ type ButtonProps = {
   color?: string;
   themeColor: string;
   invert?: boolean;
+  iconButton?: boolean;
 };
 
 const Button = styled.button<ButtonProps>`
@@ -29,6 +30,15 @@ const Button = styled.button<ButtonProps>`
   box-shadow: ${(props) => (props.invert ? "" : "0 4px 4px -2px #919191")};
   display: inline-flex;
   align-items: center;
+
+  & .hidden-text {
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    width: 1px;
+  }
 
   &:hover,
   :focus {
@@ -63,12 +73,12 @@ export const ButtonGroup = styled.div`
     box-shadow: none;
   }
 
-  & :not(:last-child) {
+  & button:not(:last-child) {
     border-right: 1px solid ${(props) => props.theme.lightgrey};
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
-  & :not(:first-child) {
+  & button:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
