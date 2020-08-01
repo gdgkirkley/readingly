@@ -63,16 +63,17 @@ const AddToBookshelf = ({ book }: Props) => {
     });
 
     toast.success(`${book.title} added to ${shelf.title}!`);
+    toggle();
   };
 
   const toggle = () => {
     setOpen(!open);
   };
 
-  const select = (event: React.MouseEvent): void => {
+  const select = (event: React.MouseEvent, index: number): void => {
     if (!event.currentTarget) return;
     setSelected(event.currentTarget.id);
-    toggle();
+    setCursor(index);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent): void => {
@@ -113,7 +114,6 @@ const AddToBookshelf = ({ book }: Props) => {
         nextIndex = prevIndex;
       }
     }
-    console.log("Next Index", nextIndex);
     setCursor(nextIndex);
     setSelected(data.mybookshelves[nextIndex].title);
   };
@@ -165,7 +165,7 @@ const AddToBookshelf = ({ book }: Props) => {
                 <li
                   key={shelf.id}
                   id={shelf.title}
-                  onClick={select}
+                  onClick={(e) => select(e, index)}
                   onKeyDown={handleKeyDown}
                   role="option"
                   aria-selected={shelf.title === selected && cursor === index}

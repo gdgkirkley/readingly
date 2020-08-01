@@ -22,6 +22,7 @@ afterEach(() => {
 test("<AddToBookshelf /> renders when user present", async () => {
   const user = await buildUser();
   const bookshelf = await buildBookshelf();
+  const bookshelf2 = await buildBookshelf();
   const book = await buildBook();
 
   let addBookMutationCalled = false;
@@ -50,7 +51,7 @@ test("<AddToBookshelf /> renders when user present", async () => {
       },
       result: {
         data: {
-          mybookshelves: [bookshelf],
+          mybookshelves: [bookshelf, bookshelf2],
         },
       },
     },
@@ -119,19 +120,47 @@ test("<AddToBookshelf /> renders when user present", async () => {
   expect(addButton).toBeDisabled();
 
   expect(dropdownButton).toBeInTheDocument();
+  expect(dropdownButton).not.toBeDisabled();
 
-  // userEvent.click(button);
+  userEvent.click(dropdownButton);
 
-  // await waitFor(() => {
-  //   expect(addBookMutationCalled).toBeTruthy();
-  //   expect(button).toBeInTheDocument();
-  //   expect(bookshelf.books).toContain(book);
-  //   expect(bookshelf.bookCount).toBe(originalBookCount + 1);
-  //   expect(toast.success).toHaveBeenCalledTimes(1);
-  //   expect(toast.success).toHaveBeenCalledWith(
-  //     `${book.title} added to ${bookshelf.title}!`
-  //   );
-  // });
+  const menu = screen.getByRole("listbox");
+
+  expect(menu).toBeInTheDocument();
+
+  const options = screen.getAllByRole("option");
+
+  expect(options[0]).toHaveTextContent(bookshelf.title);
+  expect(options[1]).toHaveTextContent(bookshelf2.title);
+
+  userEvent.click(options[1]);
+
+  expect(options[0]).toHaveAttribute("aria-selected", "false");
+  expect(options[1]).toHaveAttribute("aria-selected", "true");
+
+  expect(menu).toHaveAttribute("aria-activedescendant", bookshelf2.title);
+  expect(addButton).toHaveTextContent(`Add to ${bookshelf2.title}`);
+
+  userEvent.click(options[0]);
+
+  expect(options[0]).toHaveAttribute("aria-selected", "true");
+  expect(options[1]).toHaveAttribute("aria-selected", "false");
+
+  expect(menu).toHaveAttribute("aria-activedescendant", bookshelf.title);
+  expect(addButton).toHaveTextContent(`Add to ${bookshelf.title}`);
+
+  userEvent.click(addButton);
+
+  await waitFor(() => {
+    expect(addBookMutationCalled).toBeTruthy();
+    expect(addButton).toBeInTheDocument();
+    expect(bookshelf.books).toContain(book);
+    expect(bookshelf.bookCount).toBe(originalBookCount + 1);
+    expect(toast.success).toHaveBeenCalledTimes(1);
+    expect(toast.success).toHaveBeenCalledWith(
+      `${book.title} added to ${bookshelf.title}!`
+    );
+  });
 });
 
 test("<AddtoBookshelf /> handles case when user has no bookshelves", async () => {
