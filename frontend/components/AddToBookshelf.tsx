@@ -32,8 +32,9 @@ type Props = {
 };
 
 const AddToBookshelf = ({ book }: Props) => {
-  const [width, setWidth] = useState(0);
-  const dropdownContainer = useRef(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<string>(null);
+  const [cursor, setCursor] = useState<number>(0);
   const me = useUser();
   const { data, error, loading } = useQuery<BookShelfData>(
     MY_BOOKSHELVES_QUERY
@@ -44,28 +45,77 @@ const AddToBookshelf = ({ book }: Props) => {
     { data: dataAdd, error: errorAdd, loading: loadingAdd },
   ] = useMutation(ADD_BOOK_MUTATION);
 
-  useEffect(() => {
-    if (!dropdownContainer.current) return;
-    setWidth(dropdownContainer.current.offsetWidth);
-  }, [dropdownContainer.current]);
-
   const handleClick = (): void => {
+    const shelf = data.mybookshelves.find((shelf) => shelf.title === selected);
     addBook({
       variables: {
         googleBookId: book.googleBooksId,
-        bookshelfId: data.mybookshelves[0].id,
+        bookshelfId: shelf.id,
       },
       refetchQueries: [
         { query: MY_BOOKSHELVES_QUERY },
         {
           query: MY_BOOKSHELF_QUERY,
-          variables: { title: data.mybookshelves[0].title },
+          variables: { title: shelf.title },
         },
       ],
       awaitRefetchQueries: true,
     });
 
-    toast.success(`${book.title} added to ${data.mybookshelves[0].title}!`);
+    toast.success(`${book.title} added to ${shelf.title}!`);
+  };
+
+  const toggle = () => {
+    setOpen(!open);
+  };
+
+  const select = (event: React.MouseEvent): void => {
+    if (!event.currentTarget) return;
+    setSelected(event.currentTarget.id);
+    toggle();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent): void => {
+    const keyCode = event.keyCode;
+    if (keyCode === 13) {
+      setSelected(event.currentTarget.id);
+    } else if (keyCode === 27) {
+      setOpen(!open);
+    } else if (keyCode === 40 || keyCode === 38) {
+      highlightNext(keyCode);
+    }
+  };
+
+  const highlightNext = (keyCode: number) => {
+    const maxIndex = data.mybookshelves.length - 1;
+    if (maxIndex === 0 || maxIndex === null || maxIndex === undefined) {
+      return null;
+    }
+
+    let prevIndex = cursor;
+    let nextIndex = 0;
+
+    if (!selected) {
+      prevIndex = -1;
+    }
+
+    if (keyCode === 40) {
+      if (prevIndex < maxIndex) {
+        nextIndex = prevIndex + 1;
+      } else {
+        nextIndex = prevIndex;
+      }
+    }
+    if (keyCode === 38) {
+      if (prevIndex > 0) {
+        nextIndex = prevIndex - 1;
+      } else {
+        nextIndex = prevIndex;
+      }
+    }
+    console.log("Next Index", nextIndex);
+    setCursor(nextIndex);
+    setSelected(data.mybookshelves[nextIndex].title);
   };
 
   if (!me) return null;
@@ -89,22 +139,44 @@ const AddToBookshelf = ({ book }: Props) => {
 
   return (
     <ButtonGroupRoot>
-      <ButtonGroup ref={dropdownContainer}>
-        <AddToBookshelfButton themeColor="yellow" onClick={handleClick}>
-          Add to bookshelf
+      <ButtonGroup>
+        <AddToBookshelfButton
+          themeColor="yellow"
+          onClick={handleClick}
+          disabled={!selected}
+        >
+          {selected ? `Add to ${selected}` : "Choose a bookshelf:"}
         </AddToBookshelfButton>
-        <Button themeColor="yellow">
+        <Button
+          themeColor="yellow"
+          onClick={toggle}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+        >
           <CaretDown />
         </Button>
       </ButtonGroup>
-      <ButtonGroupDropdownContainer groupWidth={width}>
-        <ButtonGroupDropdown>
-          <ul>
-            <li>Testing a bigger 1</li>
-            <li>Test 2</li>
-          </ul>
-        </ButtonGroupDropdown>
-      </ButtonGroupDropdownContainer>
+      {open ? (
+        <ButtonGroupDropdownContainer>
+          <ButtonGroupDropdown>
+            <ul role="listbox" tabIndex={-1} aria-activedescendant={selected}>
+              {data.mybookshelves.map((shelf, index) => (
+                <li
+                  key={shelf.id}
+                  id={shelf.title}
+                  onClick={select}
+                  onKeyDown={handleKeyDown}
+                  role="option"
+                  aria-selected={shelf.title === selected && cursor === index}
+                  tabIndex={0}
+                >
+                  {shelf.title}
+                </li>
+              ))}
+            </ul>
+          </ButtonGroupDropdown>
+        </ButtonGroupDropdownContainer>
+      ) : null}
     </ButtonGroupRoot>
   );
 };

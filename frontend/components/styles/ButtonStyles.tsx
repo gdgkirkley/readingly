@@ -30,13 +30,26 @@ const Button = styled.button<ButtonProps>`
   display: inline-flex;
   align-items: center;
 
-  &:hover {
+  &:hover,
+  :focus {
     opacity: 1;
     background: ${(props) => props.color};
   }
 
+  &:focus {
+    border: 2px solid lightblue;
+  }
+
   & svg {
     width: 16px;
+  }
+
+  &:disabled {
+    opacity: 1;
+
+    &:hover {
+      cursor: initial;
+    }
   }
 `;
 
@@ -68,16 +81,16 @@ export const ButtonGroupRoot = styled.div`
   position: relative;
 `;
 
-type ContainerProps = {
-  groupWidth: number;
-};
-
-export const ButtonGroupDropdownContainer = styled.div<ContainerProps>`
+export const ButtonGroupDropdownContainer = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
-  transform: translate(${(props) => props.groupWidth / 3}px, 75px);
+  transform: translate(0px, 75px);
+  min-width: 236px;
+  max-height: 300px;
+  overflow-y: auto;
   will-change: transform;
+  box-shadow: 0 4px 4px -2px #919191;
 `;
 
 export const ButtonGroupDropdown = styled.div`
@@ -86,7 +99,6 @@ export const ButtonGroupDropdown = styled.div`
   transform-origin: center top;
   transition: opacity 251ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     transform 167ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: 0 4px 4px -2px #919191;
   border-radius: 0.25rem;
   background-color: #fff;
 
@@ -110,6 +122,16 @@ export const ButtonGroupDropdown = styled.div`
       text-align: left;
       justify-content: flex-start;
       align-items: center;
+
+      &:hover {
+        background-color: ${(props) => props.theme.lightgrey};
+        cursor: pointer;
+      }
+
+      &[aria-selected="true"] {
+        background-color: ${(props) => props.theme.yellow};
+        color: #fff;
+      }
     }
   }
 `;
