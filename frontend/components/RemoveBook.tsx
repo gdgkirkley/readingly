@@ -69,7 +69,7 @@ const RemoveBook = ({ book, bookshelf }: Props) => {
   return (
     <>
       <RemoveButton themeColor="red" onClick={toggle}>
-        x
+        x<span className="hidden-text">Remove from bookshelf</span>
       </RemoveButton>
 
       <Dialog
@@ -79,13 +79,14 @@ const RemoveBook = ({ book, bookshelf }: Props) => {
         toggleModal={toggle}
       >
         <InnerDialogContent>
+          <h1>Confirm Removal</h1>
           <p>
             Are you sure you want to remove <strong>{book.title}</strong> from{" "}
             <strong>{bookshelf.title}</strong>?
           </p>
           <div className="container">
             <Button themeColor="red" onClick={handleConfirm}>
-              Remove
+              Confirm Remove
             </Button>
           </div>
         </InnerDialogContent>
