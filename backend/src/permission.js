@@ -30,6 +30,16 @@ const isReadingOwnBookshelf = rule()(
   },
 )
 
+const isAccessingOwnReading = rule()(async (parent, {id}, {me, models}) => {
+  const r = await models.Reading.findByPk(id)
+
+  if (!r) {
+    throw new Error('Invalid Reading ID')
+  }
+
+  return me && me.id.toString() === r.userId.toString()
+})
+
 // Run in debug mode when not in production to receive more accurate errors
 const permissions = shield(
   {
@@ -40,6 +50,10 @@ const permissions = shield(
       bookshelves: canReadAllData,
       bookshelf: or(isReadingOwnBookshelf, canReadAllData),
       mybookshelves: isAuthenticated,
+
+      readings: isAuthenticated,
+      reading: and(isAuthenticated, isAccessingOwnReading),
+      bookReadings: isAuthenticated,
     },
     Mutation: {
       createAuthor: canReadAllData,
@@ -50,6 +64,8 @@ const permissions = shield(
       updateUser: and(isAuthenticated, isReadingOwnUser),
 
       createReading: isAuthenticated,
+      updateReading: and(isAuthenticated, isAccessingOwnReading),
+      deleteReading: and(isAuthenticated, isAccessingOwnReading),
     },
   },
   {
