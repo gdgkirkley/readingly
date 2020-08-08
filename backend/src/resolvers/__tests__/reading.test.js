@@ -17,6 +17,16 @@ test('reading can CRUD readings', async () => {
   expect(createdReading.bookId).toBe(newReading.bookId)
   expect(createdReading.userId).toBe(1)
 
+  const readingBook = await reading.Reading.book(createdReading, {}, {models})
+
+  expect(readingBook.id).toBe(newReading.bookId)
+  // This will only change if seed data changes
+  expect(readingBook.title).toMatchInlineSnapshot(`"Pride and Prejudice"`)
+
+  const readingUser = await reading.Reading.user(createdReading, {}, {})
+
+  expect(readingUser.id).toBe(1)
+
   const queriedReadings = await reading.Query.readings(
     {},
     {},
