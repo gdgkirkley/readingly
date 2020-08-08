@@ -4,6 +4,7 @@ import user from './user'
 import book from './book'
 import bookshelf from './bookshelf'
 import author from './author'
+import reading from './reading'
 
 const db = process.env.DATABASE
 
@@ -23,6 +24,7 @@ const models = {
   Book: book(sequelize, DataTypes),
   BookShelf: bookshelf(sequelize),
   Author: author(sequelize),
+  Reading: reading(sequelize),
 }
 
 Object.keys(models).forEach(key => {

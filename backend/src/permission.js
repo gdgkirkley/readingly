@@ -48,6 +48,8 @@ const permissions = shield(
       addBook: isReadingOwnBookshelf,
 
       updateUser: and(isAuthenticated, isReadingOwnUser),
+
+      createReading: isAuthenticated,
     },
   },
   {
