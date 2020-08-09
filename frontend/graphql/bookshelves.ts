@@ -34,7 +34,7 @@ export const MY_BOOKSHELF_QUERY = gql`
 `;
 
 export const ADD_BOOK_MUTATION = gql`
-  mutation($googleBookId: String!, $bookshelfId: ID!) {
+  mutation($googleBookId: ID!, $bookshelfId: ID!) {
     addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
       bookCount
     }
@@ -42,7 +42,7 @@ export const ADD_BOOK_MUTATION = gql`
 `;
 
 export const REMOVE_BOOK_MUTATION = gql`
-  mutation($googleBooksId: String!, $bookshelfId: ID!) {
+  mutation($googleBooksId: ID!, $bookshelfId: ID!) {
     removeBook(googleBooksId: $googleBooksId, bookshelfId: $bookshelfId) {
       bookCount
     }

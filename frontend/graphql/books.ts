@@ -5,7 +5,7 @@ import { User } from "./user";
 const BOOK_QUERY = gql`
   query {
     books {
-      id
+      googleBooksId
       title
       thumbnail
     }
@@ -48,11 +48,10 @@ export const GOOGLE_BOOK_QUERY = gql`
 export interface BookData {
   books: Book[];
   searchBook: Book[];
-  googleBook: GoogleBook;
+  googleBook: Book;
 }
 
 export interface Book {
-  id: number;
   title: string;
   googleBooksId: string;
   description: string;
@@ -62,14 +61,11 @@ export interface Book {
   thumbnail: string;
   pageCount: number;
   publishDate: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface GoogleBook extends Book {
   categories: string[];
   publisher: string;
   averageRating: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Reading {
