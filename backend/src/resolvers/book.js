@@ -153,5 +153,20 @@ export default {
         },
       })
     },
+    bookshelves: async (book, args, {me, models}) => {
+      if (!me) return null
+
+      return await models.BookShelf.findAll({
+        include: [
+          {
+            model: models.Book,
+            where: {id: book.id},
+          },
+        ],
+        where: {
+          userId: me.id,
+        },
+      })
+    },
   },
 }
