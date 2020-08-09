@@ -8,6 +8,7 @@ const getUserName = faker.internet.userName
 const getId = faker.random.number
 const getUUID = faker.random.uuid
 const getNumber = faker.random.number
+const getFloat = faker.random.number({precision: 0.1})
 
 const getURL = faker.internet.url
 const getImage = faker.image.imageUrl
@@ -41,7 +42,7 @@ async function buildAuthor({...overrides} = {}) {
 
 async function buildReading({...overrides} = {}) {
   return {
-    progress: getNumber(),
+    progress: getFloat,
     bookId: getId(),
     userId: getId(),
     createdAt: getDate(),
