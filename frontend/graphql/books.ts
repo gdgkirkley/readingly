@@ -29,7 +29,9 @@ export const GOOGLE_BOOK_QUERY = gql`
       authors
       pageCount
       publishDate
+      publisher
       categories
+      averageRating
       googleBooksId
     }
   }
@@ -56,6 +58,8 @@ export interface Book {
 
 export interface GoogleBook extends Book {
   categories: string[];
+  publisher: string;
+  averageRating: string;
 }
 
 export default BOOK_QUERY;

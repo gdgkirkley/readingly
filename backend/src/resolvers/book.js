@@ -19,6 +19,8 @@ export default {
         publishDate: info.publishedDate,
         authors: info.authors,
         googleBooksId: result.id,
+        publisher: info.publisher,
+        averageRating: info.averageRating,
         thumbnail: info.imageLinks?.thumbnail
           ? info.imageLinks.thumbnail
           : null,
@@ -73,6 +75,8 @@ export default {
               title: info.title,
               description: info.description,
               publishDate: info.publishedDate,
+              publisher: info.publisher,
+              averageRating: info.averageRating,
               googleBooksId: result.id,
               thumbnail: info.imageLinks?.thumbnail
                 ? info.imageLinks.thumbnail
@@ -136,6 +140,18 @@ export default {
     authors: async (book, args, {models}) => {
       const b = await models.Book.findByPk(book.id)
       return await b.getAuthors()
+    },
+    reading: async (book, args, {me, models}) => {
+      if (!me) {
+        return null
+      }
+
+      return await models.Reading.findAll({
+        where: {
+          userId: me.id,
+          bookId: book.id,
+        },
+      })
     },
   },
 }

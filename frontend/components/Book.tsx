@@ -83,6 +83,7 @@ const Book = ({ googleBooksId }: Props) => {
     categories,
     pageCount,
     publishDate,
+    publisher,
   } = data.googleBook;
 
   return (
@@ -99,16 +100,17 @@ const Book = ({ googleBooksId }: Props) => {
       {authors?.length && (
         <p data-testid="book-authors">By {getAuthorString(authors)}</p>
       )}
+      <div>
+        <p>
+          <strong>{pageCount}</strong> pages | Published{" "}
+          <strong>{formatDate(publishDate)}</strong> by {publisher}
+        </p>
+      </div>
       <AddToBookshelf book={data.googleBook} />
       <div
         dangerouslySetInnerHTML={{ __html: description }}
         data-testid="book-description"
       />
-      <div>
-        <h2>Book Details</h2>
-        <p>{pageCount} pages</p>
-        <p>Published {formatDate(publishDate)}</p>
-      </div>
       <div>
         <h2>You May Also Like</h2>
         {authors && <BookCategorySearch searchTerm={authors[0]} />}

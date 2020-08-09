@@ -35,6 +35,7 @@ export default gql`
     title: String!
     description: String
     authors: [Author!]
+    reading: [Reading!]
     thumbnail: String
     pageCount: Int!
     publishDate: String
@@ -50,6 +51,8 @@ export default gql`
     thumbnail: String
     pageCount: Int!
     publishDate: String
+    publisher: String
+    averageRating: Float
     categories: [String!]
   }
 `
