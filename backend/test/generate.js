@@ -39,4 +39,15 @@ async function buildAuthor({...overrides} = {}) {
   }
 }
 
-export {buildBook, buildAuthor, getDescription, getUUID}
+async function buildReading({...overrides} = {}) {
+  return {
+    progress: getNumber(),
+    bookId: getId(),
+    userId: getId(),
+    createdAt: getDate(),
+    updatedAt: getDate(),
+    ...overrides,
+  }
+}
+
+export {buildBook, buildAuthor, buildReading, getDescription, getUUID}

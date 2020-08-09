@@ -1,9 +1,9 @@
-import api, {
-  authRequest,
-  loginUser,
-  expectedErrorRequest,
-} from '../../../test/api'
-import {buildAuthor} from '../../../test/generate'
+/*
+ * Integration tests for the author schema
+ */
+
+import api, {authRequest, loginUser, expectedErrorRequest} from '../../test/api'
+import {buildAuthor} from '../../test/generate'
 
 test('createAuthor can create an author', async () => {
   const author = await buildAuthor()

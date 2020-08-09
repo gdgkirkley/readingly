@@ -1,8 +1,8 @@
-import api, {
-  authRequest,
-  loginUser,
-  expectedErrorRequest,
-} from '../../../test/api'
+/*
+ * Integration tests for the user auth schema
+ */
+
+import api, {authRequest, loginUser, expectedErrorRequest} from '../../test/api'
 
 test('signUp creates new user', async () => {
   const newUser = {

@@ -1,8 +1,8 @@
-import api, {
-  loginUser,
-  expectedErrorRequest,
-  authRequest,
-} from '../../../test/api'
+/*
+ * Integration tests for the user schema
+ */
+
+import api, {loginUser, expectedErrorRequest, authRequest} from '../../test/api'
 
 test('user resource returns a user when authenticated', async () => {
   const expectedResult = {

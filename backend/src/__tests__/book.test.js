@@ -1,5 +1,9 @@
-import api, {loginUser, authRequest} from '../../../test/api'
-import {buildBook, getDescription} from '../../../test/generate'
+/*
+ * Integration tests for the book schema
+ */
+
+import api, {loginUser, authRequest} from '../../test/api'
+import {buildBook, getDescription} from '../../test/generate'
 
 let login
 

@@ -1,9 +1,9 @@
-import api, {
-  authRequest,
-  loginUser,
-  expectedErrorRequest,
-} from '../../../test/api'
-import {buildBook} from '../../../test/generate'
+/*
+ * Integration tests for the bookshelf schema
+ */
+
+import api, {authRequest, loginUser, expectedErrorRequest} from '../../test/api'
+import {buildBook} from '../../test/generate'
 
 test('create bookshelf creates a bookshelf', async () => {
   const {cookie} = await loginUser('gkirkley@readingly.com', 'gkirkley')
