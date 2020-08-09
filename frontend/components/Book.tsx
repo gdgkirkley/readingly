@@ -4,13 +4,11 @@ import { useQuery } from "@apollo/client";
 import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
+import Head from "next/head";
+import { formatDate } from "../lib/formatDates";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
-
-  & p {
-    margin: 0;
-  }
 `;
 
 const Banner = styled.div<{ background: string }>`
@@ -77,38 +75,56 @@ const Book = ({ googleBooksId }: Props) => {
 
   if (error) return <p>Uh oh! {error.message}</p>;
 
+  const {
+    title,
+    thumbnail,
+    authors,
+    description,
+    categories,
+    pageCount,
+    publishDate,
+  } = data.googleBook;
+
   return (
     <BookPage>
-      <Banner background={data.googleBook.thumbnail}>
+      <Head>
+        <title>{title} | Readingly</title>
+      </Head>
+      <Banner background={thumbnail}>
         <BannerContent>
-          {data.googleBook.thumbnail && (
-            <img src={data.googleBook.thumbnail} alt={data.googleBook.title} />
-          )}
+          {thumbnail && <img src={thumbnail} alt={title} />}
         </BannerContent>
       </Banner>
-      <BannerTitle>{data.googleBook.title}</BannerTitle>
-      {data.googleBook?.authors?.length && (
-        <p data-testid="book-authors">
-          By {data.googleBook.authors.map((author) => author)}
-        </p>
+      <BannerTitle>{title}</BannerTitle>
+      {authors?.length && (
+        <p data-testid="book-authors">By {getAuthorString(authors)}</p>
       )}
       <AddToBookshelf book={data.googleBook} />
       <div
-        dangerouslySetInnerHTML={{ __html: data.googleBook.description }}
+        dangerouslySetInnerHTML={{ __html: description }}
         data-testid="book-description"
       />
       <div>
+        <h2>Book Details</h2>
+        <p>{pageCount} pages</p>
+        <p>Published {formatDate(publishDate)}</p>
+      </div>
+      <div>
         <h2>You May Also Like</h2>
-        {data.googleBook.authors && (
-          <BookCategorySearch searchTerm={data.googleBook.authors[0]} />
-        )}
-        {data.googleBook?.categories?.length &&
-          data.googleBook.categories.map((category) => (
+        {authors && <BookCategorySearch searchTerm={authors[0]} />}
+        {categories?.length &&
+          categories.map((category) => (
             <BookCategorySearch key={category} searchTerm={category} />
           ))}
       </div>
     </BookPage>
   );
 };
+
+function getAuthorString(authors: string[]) {
+  return authors.map((author, i) =>
+    i === authors.length - 1 ? author : author + ", "
+  );
+}
 
 export default Book;
