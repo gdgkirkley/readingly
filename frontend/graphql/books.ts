@@ -38,6 +38,7 @@ export const GOOGLE_BOOK_QUERY = gql`
       reading {
         id
         progress
+        createdAt
       }
       bookshelves {
         id

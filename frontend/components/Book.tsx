@@ -8,6 +8,7 @@ import Head from "next/head";
 import { formatDate } from "../lib/formatDates";
 import Link from "next/link";
 import UpdateReadingProgress from "./UpdateReadingProgress";
+import ReadingCard from "./ReadingCard";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -128,7 +129,6 @@ const Book = ({ googleBooksId }: Props) => {
                     </span>
                   ))}
                 </p>
-                <UpdateReadingProgress book={data.googleBook} />
               </>
             ) : null}
             {reading?.length ? (
@@ -136,11 +136,16 @@ const Book = ({ googleBooksId }: Props) => {
                 <p>
                   Reading:{" "}
                   {reading.map((read) => (
-                    <span key={read.id}>{read.progress}</span>
+                    <ReadingCard
+                      key={read.id}
+                      reading={read}
+                      totalPages={pageCount}
+                    />
                   ))}
                 </p>
               </>
             ) : null}
+            <UpdateReadingProgress book={data.googleBook} />
           </div>
           <hr />
         </>
