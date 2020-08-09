@@ -4,7 +4,7 @@ import { User } from "./user";
 
 export const ADD_READING_PROGRESS_MUTATION = gql`
   mutation($progress: Float!, $googleBooksId: ID!) {
-    addReading(progress: $progress, googleBooksId: $googleBooksId) {
+    createReading(progress: $progress, googleBooksId: $googleBooksId) {
       id
       progress
     }

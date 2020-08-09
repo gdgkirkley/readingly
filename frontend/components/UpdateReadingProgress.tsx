@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import Button from "./styles/ButtonStyles";
 import Form, { ActionGroup, InputGroup } from "./styles/FormStyles";
 import Dialog, { InnerDialogContent } from "./Dialog";
-import { Book } from "../graphql/books";
+import { Book, GOOGLE_BOOK_QUERY } from "../graphql/books";
 import { useMutation } from "@apollo/client";
 import { ADD_READING_PROGRESS_MUTATION } from "../graphql/reading";
+import { toast } from "react-toastify";
 
 const ReadingProgressForm = styled(Form)`
   box-shadow: none;
@@ -29,7 +30,7 @@ type Props = {
 };
 
 type FormData = {
-  progress: number;
+  progress: string;
 };
 
 const UpdateReadingProgress = ({ book }: Props) => {
@@ -43,13 +44,24 @@ const UpdateReadingProgress = ({ book }: Props) => {
 
   const toggle = () => setOpen(!open);
 
-  const onSubmit = (formData) => {
-    addReadingProgress({
+  const onSubmit = async (formData: FormData) => {
+    await addReadingProgress({
       variables: {
         googleBooksId: book.googleBooksId,
-        progress: formData.progress,
+        progress: parseFloat(formData.progress),
       },
+      refetchQueries: [
+        {
+          query: GOOGLE_BOOK_QUERY,
+          variables: { googleBooksId: book.googleBooksId },
+        },
+      ],
     });
+
+    if (!error) {
+      toast.success(`Reading progress added!`);
+      toggle();
+    }
   };
 
   return (
@@ -73,11 +85,12 @@ const UpdateReadingProgress = ({ book }: Props) => {
                 id="progress"
                 name="progress"
                 ref={register}
+                autoFocus
               />
               <strong>out of {book.pageCount} pages</strong>
             </InputGroup>
             <ActionGroup justifyContent="center">
-              <Button themeColor="purple">
+              <Button themeColor="purple" disabled={loading}>
                 Add{loading ? "ing" : null} Progress
               </Button>
             </ActionGroup>
