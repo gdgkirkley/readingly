@@ -40,6 +40,7 @@ export const GOOGLE_BOOK_QUERY = gql`
         progress
       }
       bookshelves {
+        id
         title
       }
     }

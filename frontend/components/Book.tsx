@@ -7,6 +7,7 @@ import AddToBookshelf from "./AddToBookshelf";
 import Head from "next/head";
 import { formatDate } from "../lib/formatDates";
 import Link from "next/link";
+import UpdateReadingProgress from "./UpdateReadingProgress";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -116,25 +117,29 @@ const Book = ({ googleBooksId }: Props) => {
           <div>
             <h3>My Activity</h3>
             {bookshelves?.length ? (
-              <p>
-                Bookshelves:{" "}
-                {bookshelves.map((shelf) => (
-                  <Link
-                    key={shelf.id}
-                    href={`/shelf/${encodeURI(shelf.title)}`}
-                  >
-                    {shelf.title}
-                  </Link>
-                ))}
-              </p>
+              <>
+                <p>
+                  Bookshelves:{" "}
+                  {bookshelves.map((shelf) => (
+                    <span key={shelf.id}>
+                      <Link href={`/shelf/${encodeURI(shelf.title)}`}>
+                        {shelf.title}
+                      </Link>
+                    </span>
+                  ))}
+                </p>
+                <UpdateReadingProgress book={data.googleBook} />
+              </>
             ) : null}
             {reading?.length ? (
-              <p>
-                Reading:{" "}
-                {reading.map((read) => (
-                  <span key={read.id}>{read.progress}</span>
-                ))}
-              </p>
+              <>
+                <p>
+                  Reading:{" "}
+                  {reading.map((read) => (
+                    <span key={read.id}>{read.progress}</span>
+                  ))}
+                </p>
+              </>
             ) : null}
           </div>
           <hr />
