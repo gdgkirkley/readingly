@@ -63,8 +63,8 @@ const Menu = ({ onClick }: Props) => {
   const me = useUser();
   return (
     <StyledNav>
-      <Link href="/books">
-        <a onClick={onClick}>Books</a>
+      <Link href="/search">
+        <a onClick={onClick}>Search Books</a>
       </Link>
       {me && (
         <>

@@ -12,11 +12,14 @@ afterEach(() => {
 });
 
 test("<Book /> renders a book", async () => {
+  const bookshelf = await buildBookshelf();
   const user = await buildUser();
-  const book = await buildBook({ googleBooksId: "test123" });
+  const book = await buildBook({
+    googleBooksId: "test123",
+    bookshelves: [bookshelf],
+  });
   const book2 = await buildBook();
   const book3 = await buildBook();
-  const bookshelf = await buildBookshelf();
   const mocks = [
     {
       request: {
@@ -126,9 +129,10 @@ test("<Book /> renders a book", async () => {
   await waitFor(() => {
     const headings = screen.getAllByRole("heading");
     expect(headings[0]).toHaveTextContent(book.title);
-    expect(headings[1]).toHaveTextContent(/you may also like/i);
-    expect(headings[2]).toHaveTextContent(book.authors[0]);
-    expect(headings[3]).toHaveTextContent(book.categories[0]);
+    expect(headings[1]).toHaveTextContent(/my activity/i);
+    expect(headings[2]).toHaveTextContent(/you may also like/i);
+    expect(headings[3]).toHaveTextContent(book.authors[0]);
+    expect(headings[4]).toHaveTextContent(book.categories[0]);
 
     const images = screen.getAllByRole("img");
 

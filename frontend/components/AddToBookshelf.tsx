@@ -3,7 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { useQuery, useMutation } from "@apollo/client";
-import { Book } from "../graphql/books";
+import { Book, GOOGLE_BOOK_QUERY } from "../graphql/books";
 import {
   MY_BOOKSHELVES_QUERY,
   MY_BOOKSHELF_QUERY,
@@ -53,6 +53,10 @@ const AddToBookshelf = ({ book }: Props) => {
         bookshelfId: shelf.id,
       },
       refetchQueries: [
+        {
+          query: GOOGLE_BOOK_QUERY,
+          variables: { googleBooksId: book.googleBooksId },
+        },
         { query: MY_BOOKSHELVES_QUERY },
         {
           query: MY_BOOKSHELF_QUERY,

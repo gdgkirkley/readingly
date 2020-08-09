@@ -36,6 +36,7 @@ export const GOOGLE_BOOK_QUERY = gql`
       averageRating
       googleBooksId
       reading {
+        id
         progress
       }
       bookshelves {
@@ -69,6 +70,7 @@ export interface Book {
 }
 
 interface Reading {
+  id: string;
   progress: number;
   book: Book;
   user: User;

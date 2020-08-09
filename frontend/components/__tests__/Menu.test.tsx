@@ -38,8 +38,8 @@ test("<Menu /> renders a header with user links when user present", async () => 
 
     expect(menuLinks).toHaveLength(4);
 
-    expect(menuLinks[0]).toHaveTextContent(/books/i);
-    expect(menuLinks[0]).toHaveAttribute("href", "/books");
+    expect(menuLinks[0]).toHaveTextContent(/search/i);
+    expect(menuLinks[0]).toHaveAttribute("href", "/search");
 
     expect(menuLinks[1]).toHaveTextContent(/bookshelves/i);
     expect(menuLinks[1]).toHaveAttribute("href", "/mybookshelves");
@@ -78,8 +78,8 @@ test("<Menu /> renders header without user links when no user", async () => {
 
     expect(menuLinks).toHaveLength(2);
 
-    expect(menuLinks[0]).toHaveTextContent(/books/i);
-    expect(menuLinks[0]).toHaveAttribute("href", "/books");
+    expect(menuLinks[0]).toHaveTextContent(/search/i);
+    expect(menuLinks[0]).toHaveAttribute("href", "/search");
 
     expect(menuLinks[1]).toHaveTextContent(/sign in/i);
   });

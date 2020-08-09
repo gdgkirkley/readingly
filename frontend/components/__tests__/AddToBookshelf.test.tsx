@@ -9,6 +9,7 @@ import {
   MY_BOOKSHELVES_QUERY,
   MY_BOOKSHELF_QUERY,
 } from "../../graphql/bookshelves";
+import { GOOGLE_BOOK_QUERY } from "../../graphql/books";
 import { buildBookshelf, buildBook, buildUser } from "../../test/generate";
 import { toast } from "react-toastify";
 
@@ -51,6 +52,32 @@ test("<AddToBookshelf /> renders when user present", async () => {
       result: {
         data: {
           mybookshelves: [bookshelf, bookshelf2],
+        },
+      },
+    },
+    {
+      request: {
+        query: GOOGLE_BOOK_QUERY,
+        variables: {
+          googleBooksId: book.googleBooksId,
+        },
+      },
+      result: {
+        data: {
+          googleBook: {
+            title: book.title,
+            thumbnail: book.thumbnail,
+            description: book.description,
+            authors: book.authors,
+            pageCount: book.pageCount,
+            publishDate: book.publishDate,
+            categories: book.categories,
+            averageRating: book.averageRating,
+            publisher: book.publisher,
+            bookshelves: book.bookshelves,
+            reading: book.reading,
+            googleBooksId: book.googleBooksId,
+          },
         },
       },
     },

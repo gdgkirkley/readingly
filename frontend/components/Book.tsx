@@ -6,6 +6,7 @@ import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
 import Head from "next/head";
 import { formatDate } from "../lib/formatDates";
+import Link from "next/link";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -84,6 +85,8 @@ const Book = ({ googleBooksId }: Props) => {
     pageCount,
     publishDate,
     publisher,
+    bookshelves,
+    reading,
   } = data.googleBook;
 
   return (
@@ -107,6 +110,36 @@ const Book = ({ googleBooksId }: Props) => {
         </p>
       </div>
       <AddToBookshelf book={data.googleBook} />
+      {bookshelves?.length || reading?.length ? (
+        <>
+          <hr />
+          <div>
+            <h3>My Activity</h3>
+            {bookshelves?.length ? (
+              <p>
+                Bookshelves:{" "}
+                {bookshelves.map((shelf) => (
+                  <Link
+                    key={shelf.id}
+                    href={`/shelf/${encodeURI(shelf.title)}`}
+                  >
+                    {shelf.title}
+                  </Link>
+                ))}
+              </p>
+            ) : null}
+            {reading?.length ? (
+              <p>
+                Reading:{" "}
+                {reading.map((read) => (
+                  <span key={read.id}>{read.progress}</span>
+                ))}
+              </p>
+            ) : null}
+          </div>
+          <hr />
+        </>
+      ) : null}
       <div
         dangerouslySetInnerHTML={{ __html: description }}
         data-testid="book-description"
