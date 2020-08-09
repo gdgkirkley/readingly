@@ -1,80 +1,146 @@
 import reading from '../reading'
 import models from '../../models'
+import {getUUID} from '../../../test/generate'
 
-test('reading can CRUD readings', async () => {
+const validUser = {id: 1}
+const parent = {}
+const context = {me: validUser, models}
+
+let testReading
+
+beforeEach(async () => {
+  testReading = await models.Reading.create({
+    progress: 0.5,
+    bookId: 1,
+    userId: validUser.id,
+  })
+})
+
+test('reading can create readings', async () => {
   const newReading = {
     progress: 0.3,
     bookId: 1,
   }
 
   const createdReading = await reading.Mutation.createReading(
-    {},
+    parent,
     {progress: newReading.progress, bookId: newReading.bookId},
-    {me: {id: 1}, models},
+    context,
   )
 
   expect(createdReading.progress).toBe(newReading.progress)
   expect(createdReading.bookId).toBe(newReading.bookId)
-  expect(createdReading.userId).toBe(1)
+  expect(createdReading.userId).toBe(validUser.id)
+})
 
-  const readingBook = await reading.Reading.book(createdReading, {}, {models})
+test('createReading returns error for invalid bookId', async () => {
+  await expect(
+    reading.Mutation.createReading(parent, {progress: 0.3, bookId: 2}, context),
+  ).rejects.toThrow(/no book/i)
+})
 
-  expect(readingBook.id).toBe(newReading.bookId)
+test('createReading rejects negative progress', async () => {
+  await expect(
+    reading.Mutation.createReading(
+      parent,
+      {progress: -0.5, bookId: 1},
+      context,
+    ),
+  ).rejects.toThrow(/cannot be negative/i)
+})
+
+test('reading can return book details', async () => {
+  const readingBook = await reading.Reading.book(testReading, {}, context)
+
+  expect(readingBook.id).toBe(testReading.bookId)
   // This will only change if seed data changes
   expect(readingBook.title).toMatchInlineSnapshot(`"Pride and Prejudice"`)
+})
 
-  const readingUser = await reading.Reading.user(createdReading, {}, {})
+test('reading can return user details', async () => {
+  const readingUser = await reading.Reading.user(testReading, {}, context)
 
-  expect(readingUser.id).toBe(1)
+  expect(readingUser.id).toBe(validUser.id)
+})
 
-  const queriedReadings = await reading.Query.readings(
-    {},
-    {},
-    {me: {id: 1}, models},
-  )
-
-  expect(queriedReadings).toHaveLength(1)
-  expect(queriedReadings[0].progress).toBe(newReading.progress)
-  expect(queriedReadings[0].bookId).toBe(newReading.bookId)
-
-  const queriedReading = await reading.Query.reading(
-    {},
-    {id: createdReading.id},
-    {me: {id: 1}, models},
-  )
-
-  expect(queriedReading.progress).toBe(newReading.progress)
-  expect(queriedReading.bookId).toBe(newReading.bookId)
-  expect(queriedReading.userId).toBe(1)
-
-  const queriedReadingByBookId = await reading.Query.bookReadings(
-    {},
-    {bookId: newReading.bookId},
-    {me: {id: 1}, models},
-  )
-
-  expect(queriedReadingByBookId).toHaveLength(1)
-  expect(queriedReadingByBookId[0].progress).toBe(newReading.progress)
-  expect(queriedReadingByBookId[0].bookId).toBe(newReading.bookId)
-  expect(queriedReadingByBookId[0].userId).toBe(1)
-
+test('reading can update reading', async () => {
   const updatedReading = await reading.Mutation.updateReading(
-    {},
-    {id: createdReading.id, progress: 0.3},
-    {me: {id: 1}, models},
+    parent,
+    {id: testReading.id, progress: 0.3},
+    context,
   )
 
   expect(updatedReading.progress).toBe(0.3)
-  expect(updatedReading.bookId).toBe(newReading.bookId)
+  expect(updatedReading.bookId).toBe(testReading.bookId)
   expect(updatedReading.userId).toBe(1)
+})
 
+test('updateReading rejects negative progress', async () => {
+  await expect(
+    reading.Mutation.updateReading(
+      parent,
+      {progress: -0.5, id: testReading.id},
+      context,
+    ),
+  ).rejects.toThrow(/cannot be negative/i)
+})
+
+test('reading can delete reading', async () => {
   const deleteMessage = await reading.Mutation.deleteReading(
-    {},
-    {id: createdReading.id},
-    {models},
+    parent,
+    {id: testReading.id},
+    context,
   )
 
   expect(deleteMessage.message).toMatchInlineSnapshot(
     `"Reading progress deleted"`,
   )
+})
+
+test('deleteReading throws error for invalid id', async () => {
+  const fakeUUID = getUUID()
+
+  await expect(
+    reading.Mutation.deleteReading(parent, {id: fakeUUID}, context),
+  ).rejects.toThrow(/no reading progress/i)
+})
+
+test('readings query returns readings', async () => {
+  const readings = await reading.Query.readings(parent, {}, context)
+
+  expect(readings).toEqual(
+    expect.arrayContaining([expect.objectContaining({id: testReading.id})]),
+  )
+})
+
+test('reading query returns a reading', async () => {
+  const r = await reading.Query.reading(parent, {id: testReading.id}, context)
+
+  expect(r.progress).toBe(testReading.progress)
+})
+
+test('reading query throws error for invalid reading id', async () => {
+  const fakeUUID = getUUID()
+
+  await expect(
+    reading.Query.reading(parent, {id: fakeUUID}, context),
+  ).rejects.toThrow(/no reading progress/i)
+})
+
+test('bookReading query returns reading', async () => {
+  const readings = await reading.Query.bookReadings(
+    parent,
+    {bookId: testReading.bookId},
+    context,
+  )
+
+  expect(readings).toEqual(
+    expect.arrayContaining([expect.objectContaining({id: testReading.id})]),
+  )
+})
+
+test('bookReading query throws error for invalid book', async () => {
+  await expect(
+    reading.Query.bookReadings(parent, {bookId: 100}, context),
+  ).rejects.toThrow(/no book/i)
 })

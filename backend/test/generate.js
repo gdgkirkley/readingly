@@ -39,4 +39,4 @@ async function buildAuthor({...overrides} = {}) {
   }
 }
 
-export {buildBook, buildAuthor, getDescription}
+export {buildBook, buildAuthor, getDescription, getUUID}
