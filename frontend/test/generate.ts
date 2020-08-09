@@ -1,6 +1,6 @@
 import faker from "faker";
 import { User } from "../graphql/user";
-import { GoogleBook } from "../graphql/books";
+import { Book } from "../graphql/books";
 import { BookShelf } from "../graphql/bookshelves";
 
 const getEmail = faker.internet.email;
@@ -21,9 +21,8 @@ const getDate = faker.date.future;
 const getWord = faker.lorem.word;
 const getSentence = faker.lorem.sentence;
 
-async function buildBook({ ...overrides } = {}): Promise<GoogleBook> {
+async function buildBook({ ...overrides } = {}): Promise<Book> {
   return {
-    id: getId(),
     title: getWord(),
     googleBooksId: getUUID(),
     description: getSentence(),
@@ -34,6 +33,10 @@ async function buildBook({ ...overrides } = {}): Promise<GoogleBook> {
     categories: [`${getWord()}`],
     createdAt: getDate(),
     updatedAt: getDate(),
+    averageRating: getNumber(),
+    publisher: getWord(),
+    bookshelves: [],
+    reading: [],
     ...overrides,
   };
 }

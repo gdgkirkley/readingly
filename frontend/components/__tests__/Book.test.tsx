@@ -13,7 +13,7 @@ afterEach(() => {
 
 test("<Book /> renders a book", async () => {
   const user = await buildUser();
-  const book = await buildBook();
+  const book = await buildBook({ googleBooksId: "test123" });
   const book2 = await buildBook();
   const book3 = await buildBook();
   const bookshelf = await buildBookshelf();
@@ -35,6 +35,10 @@ test("<Book /> renders a book", async () => {
             pageCount: book.pageCount,
             publishDate: book.publishDate,
             categories: book.categories,
+            averageRating: book.averageRating,
+            publisher: book.publisher,
+            bookshelves: book.bookshelves,
+            reading: book.reading,
             googleBooksId: book.googleBooksId,
           },
         },

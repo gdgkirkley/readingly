@@ -11,7 +11,6 @@ import {
 } from "../../graphql/bookshelves";
 import { buildBookshelf, buildBook, buildUser } from "../../test/generate";
 import { toast } from "react-toastify";
-import MyBookshelves from "../../pages/mybookshelves";
 
 jest.mock("react-toastify");
 

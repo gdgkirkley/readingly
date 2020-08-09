@@ -106,7 +106,7 @@ const BookShelfListing = ({ bookshelf }: Props) => {
         {bookshelf.books?.length ? (
           <BooksDisplay data-testid="bookshelf-books">
             {bookshelf.books.map((book) => (
-              <BookCard key={book.id} book={book} width={80} />
+              <BookCard key={book.googleBooksId} book={book} width={80} />
             ))}
           </BooksDisplay>
         ) : null}
