@@ -13,8 +13,8 @@ export default gql`
     updateBookshelf(bookshelfId: ID!, title: String!): BookShelf
     deleteBookshelf(bookshelfId: ID!): Message
 
-    addBook(googleBookId: String!, bookshelfId: ID!): BookShelf
-    removeBook(googleBooksId: String!, bookshelfId: ID!): BookShelf
+    addBook(googleBookId: ID!, bookshelfId: ID!): BookShelf
+    removeBook(googleBooksId: ID!, bookshelfId: ID!): BookShelf
   }
 
   type BookShelf {

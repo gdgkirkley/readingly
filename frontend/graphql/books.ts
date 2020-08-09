@@ -1,4 +1,6 @@
 import { gql } from "@apollo/client";
+import { BookShelf } from "./bookshelves";
+import { User } from "./user";
 
 const BOOK_QUERY = gql`
   query {
@@ -33,6 +35,12 @@ export const GOOGLE_BOOK_QUERY = gql`
       categories
       averageRating
       googleBooksId
+      reading {
+        progress
+      }
+      bookshelves {
+        title
+      }
     }
   }
 `;
@@ -49,6 +57,8 @@ export interface Book {
   googleBooksId: string;
   description: string;
   authors: string[];
+  reading: Reading[];
+  bookshelves: BookShelf[];
   thumbnail: string;
   pageCount: number;
   publishDate: string;
@@ -60,6 +70,14 @@ export interface GoogleBook extends Book {
   categories: string[];
   publisher: string;
   averageRating: string;
+}
+
+interface Reading {
+  progress: number;
+  book: Book;
+  user: User;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default BOOK_QUERY;

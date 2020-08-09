@@ -5,15 +5,17 @@ import bookshelf from '../bookshelf'
 const parent = {}
 const context = {me: {id: 1}, models}
 
+const validBookId = 's1gVAAAAYAAJ'
+
 test('book returns reading data', async () => {
-  const b = await book.Query.book(parent, {id: 1}, context)
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
 
   let bookReading = await book.Book.reading(b, {}, context)
 
   expect(bookReading).toHaveLength(0)
 
   const createdReading = await models.Reading.create({
-    bookId: b.id,
+    bookGoogleBooksId: b.googleBooksId,
     userId: context.me.id,
     progress: 0.5,
   })
@@ -27,7 +29,7 @@ test('book returns reading data', async () => {
 })
 
 test('book reading data is null if no user', async () => {
-  const b = await book.Query.book(parent, {id: 1}, context)
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
 
   const bookReading = await book.Book.reading(b, {}, {me: null, models})
 
@@ -35,7 +37,7 @@ test('book reading data is null if no user', async () => {
 })
 
 test('book bookshelf data is null if no user', async () => {
-  const b = await book.Query.book(parent, {id: 1}, context)
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
 
   const bookReading = await book.Book.bookshelves(b, {}, {me: null, models})
 
@@ -43,7 +45,7 @@ test('book bookshelf data is null if no user', async () => {
 })
 
 test('book returns bookshelf data', async () => {
-  const b = await book.Query.book(parent, {id: 1}, context)
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
 
   let bookBookshelves = await book.Book.bookshelves(b, {}, context)
 

@@ -43,7 +43,7 @@ async function buildAuthor({...overrides} = {}) {
 async function buildReading({...overrides} = {}) {
   return {
     progress: getFloat,
-    bookId: getId(),
+    googleBooksId: getUUID(),
     userId: getId(),
     createdAt: getDate(),
     updatedAt: getDate(),

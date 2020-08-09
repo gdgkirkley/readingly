@@ -12,35 +12,35 @@ export default {
       return await getReadingByID(id, models)
     },
 
-    bookReadings: async (parent, {bookId}, {me, models}) => {
-      const book = await models.Book.findByPk(bookId)
+    bookReadings: async (parent, {googleBooksId}, {me, models}) => {
+      const book = await models.Book.findByPk(googleBooksId)
 
       if (!book) {
-        throw new Error(`No book with ID ${bookId}`)
+        throw new Error(`No book with ID ${googleBooksId}`)
       }
 
       return await models.Reading.findAll({
         where: {
           userId: me.id,
-          bookId,
+          bookGoogleBooksId: googleBooksId,
         },
       })
     },
   },
 
   Mutation: {
-    createReading: async (parent, {progress, bookId}, {me, models}) => {
+    createReading: async (parent, {progress, googleBooksId}, {me, models}) => {
       checkProgress(progress)
 
-      const book = await models.Book.findByPk(bookId)
+      const book = await models.Book.findByPk(googleBooksId)
 
       if (!book) {
-        throw new Error(`There is no book for ID ${bookId}`)
+        throw new Error(`There is no book for ID ${googleBooksId}`)
       }
 
       return await models.Reading.create({
         progress,
-        bookId,
+        bookGoogleBooksId: googleBooksId,
         userId: me.id,
       })
     },

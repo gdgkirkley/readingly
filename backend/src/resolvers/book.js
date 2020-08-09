@@ -7,8 +7,8 @@ export default {
     books: async (parent, args, {models}) => {
       return await models.Book.findAll()
     },
-    book: async (parent, {id}, {models}) => {
-      return await models.Book.findByPk(id)
+    book: async (parent, {googleBooksId}, {models}) => {
+      return await models.Book.findByPk(googleBooksId)
     },
     googleBook: async (parent, {googleBooksId}, ctx) => {
       const result = await getGoogleBook(googleBooksId)
@@ -118,49 +118,52 @@ export default {
         }
       }
 
-      return await models.Book.findByPk(book.id)
+      return await models.Book.findByPk(book.googleBooksId)
     },
-    updateBook: async (parent, {id, ...rest}, {models}) => {
+    updateBook: async (parent, {googleBooksId, ...rest}, {models}) => {
       await models.Book.update(
         {
           ...rest,
         },
         {
           where: {
-            id: id,
+            googleBooksId,
           },
         },
       )
 
-      return await models.Book.findByPk(id)
+      return await models.Book.findByPk(googleBooksId)
     },
   },
 
   Book: {
-    authors: async (book, args, {models}) => {
-      const b = await models.Book.findByPk(book.id)
-      return await b.getAuthors()
-    },
+    // authors: async (book, args, {models}) => {
+    //   const b = await models.Book.findByPk(book.id)
+    //   return await b.getAuthors()
+    // },
     reading: async (book, args, {me, models}) => {
       if (!me) {
         return null
       }
 
+      if (!book.googleBooksId) return null
+
       return await models.Reading.findAll({
         where: {
           userId: me.id,
-          bookId: book.id,
+          bookGoogleBooksId: book.googleBooksId,
         },
       })
     },
     bookshelves: async (book, args, {me, models}) => {
       if (!me) return null
+      if (!book.googleBooksId) return null
 
       return await models.BookShelf.findAll({
         include: [
           {
             model: models.Book,
-            where: {id: book.id},
+            where: {googleBooksId: book.googleBooksId},
           },
         ],
         where: {

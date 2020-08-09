@@ -10,6 +10,8 @@ async function createBooks() {
     thumbnail:
       'http://books.google.com/books/content?id=s1gVAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
     pageCount: 401,
+    averageRating: 4,
+    publisher: "C. Scribner's sons",
   })
 }
 

@@ -1,20 +1,20 @@
-import {Model} from 'sequelize'
+import {Model, DataTypes} from 'sequelize'
 
 class Book extends Model {}
 
-const book = (sequelize, DataTypes) => {
+const book = sequelize => {
   Book.init(
     {
-      title: {
+      googleBooksId: {
         type: DataTypes.STRING,
+        primaryKey: true,
         allowNull: false,
         validate: {
           notEmpty: true,
         },
       },
-      googleBooksId: {
+      title: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -33,6 +33,15 @@ const book = (sequelize, DataTypes) => {
       },
       publishDate: {
         type: DataTypes.STRING,
+      },
+      publisher: {
+        type: DataTypes.STRING,
+      },
+      averageRating: {
+        type: DataTypes.FLOAT,
+      },
+      categories: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
       },
       description: {
         type: DataTypes.TEXT,

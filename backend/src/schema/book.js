@@ -3,23 +3,23 @@ import {gql} from 'apollo-server-express'
 export default gql`
   extend type Query {
     books: [Book!]
-    book(id: ID!): Book
-    googleBook(googleBooksId: String!): GoogleBook
+    book(googleBooksId: ID!): Book
+    googleBook(googleBooksId: String!): Book
     searchBook(search: String!, limit: Int, offset: Int): [Book!]
   }
 
   extend type Mutation {
     createBook(
+      googleBooksId: ID!
       title: String!
       description: String
-      googleBooksId: String!
       authors: [String!]
       thumbnail: String!
       pageCount: Int!
       publishDate: String
     ): Book!
     updateBook(
-      id: ID!
+      googleBooksId: ID!
       title: String
       description: String
       authors: [String]
@@ -30,16 +30,18 @@ export default gql`
   }
 
   type Book {
-    id: ID!
-    googleBooksId: String!
+    googleBooksId: ID!
     title: String!
     description: String
-    authors: [Author!]
+    authors: [String!]
     reading: [Reading!]
     bookshelves: [BookShelf!]
     thumbnail: String
     pageCount: Int!
     publishDate: String
+    publisher: String
+    averageRating: Float
+    categories: [String!]
     createdAt: DateTime
     updatedAt: DateTime
   }
@@ -52,8 +54,5 @@ export default gql`
     thumbnail: String
     pageCount: Int!
     publishDate: String
-    publisher: String
-    averageRating: Float
-    categories: [String!]
   }
 `

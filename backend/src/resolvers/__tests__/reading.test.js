@@ -11,7 +11,7 @@ let testReading
 beforeEach(async () => {
   testReading = await models.Reading.create({
     progress: 0.5,
-    bookId: 1,
+    bookGoogleBooksId: 's1gVAAAAYAAJ',
     userId: validUser.id,
   })
 })
@@ -19,23 +19,30 @@ beforeEach(async () => {
 test('reading can create readings', async () => {
   const newReading = {
     progress: 0.3,
-    bookId: 1,
+    googleBooksId: 's1gVAAAAYAAJ',
   }
 
   const createdReading = await reading.Mutation.createReading(
     parent,
-    {progress: newReading.progress, bookId: newReading.bookId},
+    {
+      progress: newReading.progress,
+      googleBooksId: newReading.googleBooksId,
+    },
     context,
   )
 
   expect(createdReading.progress).toBe(newReading.progress)
-  expect(createdReading.bookId).toBe(newReading.bookId)
+  expect(createdReading.bookGoogleBooksId).toBe(newReading.googleBooksId)
   expect(createdReading.userId).toBe(validUser.id)
 })
 
 test('createReading returns error for invalid bookId', async () => {
   await expect(
-    reading.Mutation.createReading(parent, {progress: 0.3, bookId: 2}, context),
+    reading.Mutation.createReading(
+      parent,
+      {progress: 0.3, googleBooksId: 's1gVAAAAYAab'},
+      context,
+    ),
   ).rejects.toThrow(/no book/i)
 })
 
@@ -43,7 +50,7 @@ test('createReading rejects negative progress', async () => {
   await expect(
     reading.Mutation.createReading(
       parent,
-      {progress: -0.5, bookId: 1},
+      {progress: -0.5, googleBooksId: 's1gVAAAAYAAJ'},
       context,
     ),
   ).rejects.toThrow(/cannot be negative/i)
@@ -52,7 +59,7 @@ test('createReading rejects negative progress', async () => {
 test('reading can return book details', async () => {
   const readingBook = await reading.Reading.book(testReading, {}, context)
 
-  expect(readingBook.id).toBe(testReading.bookId)
+  expect(readingBook.googleBooksId).toBe(testReading.bookGoogleBooksId)
   // This will only change if seed data changes
   expect(readingBook.title).toMatchInlineSnapshot(`"Pride and Prejudice"`)
 })
@@ -71,7 +78,7 @@ test('reading can update reading', async () => {
   )
 
   expect(updatedReading.progress).toBe(0.3)
-  expect(updatedReading.bookId).toBe(testReading.bookId)
+  expect(updatedReading.bookGoogleBooksId).toBe(testReading.bookGoogleBooksId)
   expect(updatedReading.userId).toBe(1)
 })
 
@@ -130,7 +137,7 @@ test('reading query throws error for invalid reading id', async () => {
 test('bookReading query returns reading', async () => {
   const readings = await reading.Query.bookReadings(
     parent,
-    {bookId: testReading.bookId},
+    {googleBooksId: testReading.bookGoogleBooksId},
     context,
   )
 
@@ -141,6 +148,10 @@ test('bookReading query returns reading', async () => {
 
 test('bookReading query throws error for invalid book', async () => {
   await expect(
-    reading.Query.bookReadings(parent, {bookId: 100}, context),
+    reading.Query.bookReadings(
+      parent,
+      {googleBooksId: 's1gVAAAAYAab'},
+      context,
+    ),
   ).rejects.toThrow(/no book/i)
 })

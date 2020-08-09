@@ -5,7 +5,7 @@
 import api, {loginUser, authRequest, expectedErrorRequest} from '../../test/api'
 import {buildReading} from '../../test/generate'
 
-const validBookId = 1
+const validBookId = 's1gVAAAAYAAJ'
 let loginCookie
 
 beforeAll(async () => {
@@ -85,7 +85,7 @@ test('reading returns data and nested data on user and book', async () => {
         createdAt
         updatedAt
         book {
-            id
+            googleBooksId
             title
         }
         user {
@@ -94,18 +94,16 @@ test('reading returns data and nested data on user and book', async () => {
   `,
   )
 
-  expect(createdReading.book.id).toBe(validBookId.toString())
+  expect(createdReading.book.googleBooksId).toBe(validBookId)
   expect(createdReading.user.email).toBe('gkirkley@readingly.com')
 })
 
-test('reading routes require user to be authenticated', async () => {
-  let error
-
+test('create reading route requires user to be authenticated', async () => {
   const reading = await buildReading()
 
   const createdReading = await createReading(reading, 'id progress')
 
-  error = await expectedErrorRequest(
+  const error = await expectedErrorRequest(
     `
             query($id: ID!) {
                 reading(id: $id) {
@@ -118,8 +116,14 @@ test('reading routes require user to be authenticated', async () => {
   )
 
   expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
 
-  error = await expectedErrorRequest(
+test('query readings route requires user to be authenticated', async () => {
+  const reading = await buildReading()
+
+  const createdReading = await createReading(reading, 'id progress')
+
+  const error = await expectedErrorRequest(
     `
             query {
                 readings {
@@ -132,36 +136,46 @@ test('reading routes require user to be authenticated', async () => {
   )
 
   expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
 
-  error = await expectedErrorRequest(
+test('book readings route requires user to be authenticated', async () => {
+  const error = await expectedErrorRequest(
     `
-            query($bookId: ID!) {
-                bookReadings(bookId: $bookId) {
+            query($googleBooksId: ID!) {
+                bookReadings(googleBooksId: $googleBooksId) {
                     id
                     progress
                 }
             }
           `,
-    {bookId: validBookId},
+    {googleBooksId: validBookId},
   )
 
   expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
 
-  error = await expectedErrorRequest(
+test('create readng route requires user to be authenticated', async () => {
+  const error = await expectedErrorRequest(
     `
-        mutation($progress: Float!, $bookId: ID!) {
-            createReading(progress: $progress, bookId: $bookId) {
+        mutation($progress: Float!, $googleBooksId: ID!) {
+            createReading(progress: $progress, googleBooksId: $googleBooksId) {
                 id
                 progress
             }
         }
           `,
-    {progress: 0.3, bookId: validBookId},
+    {progress: 0.3, googleBooksId: validBookId},
   )
 
   expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
 
-  error = await expectedErrorRequest(
+test('update reading route requires user to be authenticated', async () => {
+  const reading = await buildReading()
+
+  const createdReading = await createReading(reading, 'id progress')
+
+  const error = await expectedErrorRequest(
     `
         mutation($progress: Float!, $id: ID!) {
             updateReading(progress: $progress, id: $id) {
@@ -174,8 +188,14 @@ test('reading routes require user to be authenticated', async () => {
   )
 
   expect(error.errors[0].message).toMatchInlineSnapshot(`"Not Authorised!"`)
+})
 
-  error = await expectedErrorRequest(
+test('delete reading route requires user to be authenticated', async () => {
+  const reading = await buildReading()
+
+  const createdReading = await createReading(reading, 'id progress')
+
+  const error = await expectedErrorRequest(
     `
         mutation($id: ID!) {
             deleteReading(id: $id) {
@@ -237,13 +257,13 @@ async function createReading(reading, returnValues) {
     data: {createReading},
   } = await authRequest(
     `
-        mutation($progress: Float!, $bookId: ID!) {
-            createReading(progress: $progress, bookId: $bookId) {
+        mutation($progress: Float!, $googleBooksId: ID!) {
+            createReading(progress: $progress, googleBooksId: $googleBooksId) {
                 ${returnValues}
             }
         }
     `,
-    {progress: reading.progress, bookId: validBookId},
+    {progress: reading.progress, googleBooksId: validBookId},
     loginCookie,
   )
 

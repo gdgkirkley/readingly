@@ -66,7 +66,7 @@ test('addBook adds a book to a bookshelf', async () => {
     data: {addBook},
   } = await authRequest(
     `
-            mutation($googleBookId: String!, $bookshelfId: ID!) {
+            mutation($googleBookId: ID!, $bookshelfId: ID!) {
                 addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
                     title
                     books {
@@ -109,7 +109,7 @@ test('addBook does not create a book if it exists', async () => {
       mutation(
         $title: String!,
         $description: String,
-        $googleBooksId: String!,
+        $googleBooksId: ID!,
         $authors: [String!],
         $thumbnail: String!,
         $pageCount: Int!,
@@ -124,7 +124,7 @@ test('addBook does not create a book if it exists', async () => {
           pageCount: $pageCount,
           publishDate: $publishDate
         ) {
-          id
+          googleBooksId
           title
         }
       }
@@ -137,11 +137,11 @@ test('addBook does not create a book if it exists', async () => {
     data: {addBook},
   } = await authRequest(
     `
-              mutation($googleBookId: String!, $bookshelfId: ID!) {
+              mutation($googleBookId: ID!, $bookshelfId: ID!) {
                   addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
                       title
                       books {
-                          id
+                          googleBooksId
                           title
                       }
                       bookCount
@@ -157,7 +157,7 @@ test('addBook does not create a book if it exists', async () => {
 
   expect(addBook.bookCount).toBe(1)
   expect(addBook.books[0].title).toBe(book.title)
-  expect(addBook.books[0].id).toBe(bookData.createBook.id)
+  expect(addBook.books[0].googleBooksId).toBe(bookData.createBook.googleBooksId)
 })
 
 test("user cannot add book to another user's bookshelf", async () => {
@@ -184,7 +184,7 @@ test("user cannot add book to another user's bookshelf", async () => {
 
   const error = await expectedErrorRequest(
     `
-            mutation($googleBookId: String!, $bookshelfId: ID!) {
+            mutation($googleBookId: ID!, $bookshelfId: ID!) {
                 addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
                     title
                     books {
@@ -225,7 +225,7 @@ test('addBook handles invalid Google Books id', async () => {
 
   const error = await expectedErrorRequest(
     `
-                mutation($googleBookId: String!, $bookshelfId: ID!) {
+                mutation($googleBookId: ID!, $bookshelfId: ID!) {
                     addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
                         title
                         books {
@@ -453,7 +453,7 @@ test('removeBook removes the book from the list', async () => {
     data: {addBook},
   } = await authRequest(
     `
-            mutation($googleBookId: String!, $bookshelfId: ID!) {
+            mutation($googleBookId: ID!, $bookshelfId: ID!) {
                 addBook(googleBookId: $googleBookId, bookshelfId: $bookshelfId) {
                     title
                     books {
@@ -479,7 +479,7 @@ test('removeBook removes the book from the list', async () => {
     data: {removeBook},
   } = await authRequest(
     `
-    mutation($googleBooksId: String!, $bookshelfId: ID!) {
+    mutation($googleBooksId: ID!, $bookshelfId: ID!) {
       removeBook(googleBooksId: $googleBooksId, bookshelfId: $bookshelfId) {
           title
           books {

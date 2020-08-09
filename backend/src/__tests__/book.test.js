@@ -14,7 +14,6 @@ beforeEach(async () => {
 
 test('books returns an array of books', async () => {
   const expectedResult = {
-    id: '1',
     title: 'Pride and Prejudice',
     description:
       'Austen’s most celebrated novel tells the story of Elizabeth Bennet, a bright, lively young woman with four sisters, and a mother determined to marry them to wealthy men. At a party near the Bennets’ home in the English countryside, Elizabeth meets the wealthy, proud Fitzwilliam Darcy. Elizabeth initially finds Darcy haughty and intolerable, but circumstances continue to unite the pair. Mr. Darcy finds himself captivated by Elizabeth’s wit and candor, while her reservations about his character slowly vanish. The story is as much a social critique as it is a love story, and the prose crackles with Austen’s wry wit.',
@@ -24,7 +23,6 @@ test('books returns an array of books', async () => {
     query: `
       query {
         books {
-          id
           title
           description
         }
@@ -38,7 +36,6 @@ test('books returns an array of books', async () => {
 
 test('book returns a book', async () => {
   const expectedResult = {
-    id: '1',
     title: 'Pride and Prejudice',
     description:
       'Austen’s most celebrated novel tells the story of Elizabeth Bennet, a bright, lively young woman with four sisters, and a mother determined to marry them to wealthy men. At a party near the Bennets’ home in the English countryside, Elizabeth meets the wealthy, proud Fitzwilliam Darcy. Elizabeth initially finds Darcy haughty and intolerable, but circumstances continue to unite the pair. Mr. Darcy finds himself captivated by Elizabeth’s wit and candor, while her reservations about his character slowly vanish. The story is as much a social critique as it is a love story, and the prose crackles with Austen’s wry wit.',
@@ -46,15 +43,14 @@ test('book returns a book', async () => {
 
   const {data: bookData} = await api.post(`${process.env.API_URL}`, {
     query: `
-      query($id: ID!) {
-        book(id: $id) {
-          id
+      query($googleBooksId: ID!) {
+        book(googleBooksId: $googleBooksId) {
           title
           description
         }
       }
     `,
-    variables: {id: 1},
+    variables: {googleBooksId: 's1gVAAAAYAAJ'},
   })
 
   expect(bookData.data.book).toStrictEqual(expectedResult)
@@ -104,9 +100,7 @@ test('user can search and add book', async () => {
                 title
                 description
                 googleBooksId
-                authors {
-                  name
-                }
+                authors
                 thumbnail
                 pageCount
                 publishDate
@@ -122,7 +116,7 @@ test('user can search and add book', async () => {
       mutation(
         $title: String!,
         $description: String,
-        $googleBooksId: String!,
+        $googleBooksId: ID!,
         $authors: [String!],
         $thumbnail: String!,
         $pageCount: Int!,
@@ -137,7 +131,6 @@ test('user can search and add book', async () => {
           pageCount: $pageCount,
           publishDate: $publishDate
         ) {
-          id
           title
         }
       }
@@ -157,7 +150,7 @@ test('user can add book and update book', async () => {
       mutation(
         $title: String!,
         $description: String,
-        $googleBooksId: String!,
+        $googleBooksId: ID!,
         $authors: [String!],
         $thumbnail: String!,
         $pageCount: Int!,
@@ -172,7 +165,7 @@ test('user can add book and update book', async () => {
           pageCount: $pageCount,
           publishDate: $publishDate
         ) {
-          id
+          googleBooksId
           title
         }
       }
@@ -186,20 +179,22 @@ test('user can add book and update book', async () => {
   const {data: updateBookData} = await authRequest(
     `
       mutation(
-        $id: ID!
+        $googleBooksId: ID!
         $description: String,
       ) {
         updateBook(
-          id: $id
+          googleBooksId: $googleBooksId
           description: $description,
         ) {
-          id
           title
           description
         }
       }
   `,
-    {id: bookData.createBook.id, description: newDescription},
+    {
+      googleBooksId: bookData.createBook.googleBooksId,
+      description: newDescription,
+    },
     login,
   )
 
