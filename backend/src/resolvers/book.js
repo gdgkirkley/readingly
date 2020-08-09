@@ -153,6 +153,7 @@ export default {
           userId: me.id,
           bookGoogleBooksId: book.googleBooksId,
         },
+        order: [['createdAt', 'DESC']],
       })
     },
     bookshelves: async (book, args, {me, models}) => {

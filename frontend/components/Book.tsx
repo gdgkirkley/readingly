@@ -105,6 +105,10 @@ const Book = ({ googleBooksId }: Props) => {
       {authors?.length && (
         <p data-testid="book-authors">By {getAuthorString(authors)}</p>
       )}
+      <div
+        dangerouslySetInnerHTML={{ __html: description }}
+        data-testid="book-description"
+      />
       <div>
         <p>
           <strong>{pageCount}</strong> pages | Published{" "}
@@ -150,10 +154,6 @@ const Book = ({ googleBooksId }: Props) => {
           <hr />
         </>
       ) : null}
-      <div
-        dangerouslySetInnerHTML={{ __html: description }}
-        data-testid="book-description"
-      />
       <div>
         <h2>You May Also Like</h2>
         {authors && <BookCategorySearch searchTerm={authors[0]} />}
