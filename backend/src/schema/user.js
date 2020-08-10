@@ -12,7 +12,12 @@ const schema = gql`
     signIn(login: String!, password: String!): User!
     signout: Message!
 
-    updateUser(id: ID, email: String, username: String): User!
+    updateUser(
+      id: ID
+      email: String
+      username: String
+      readingSpeedWordsPerMinute: Int
+    ): User!
   }
 
   type Message {
@@ -23,6 +28,7 @@ const schema = gql`
     id: ID!
     username: String!
     email: String!
+    readingSpeedWordsPerMinute: Int!
     bookshelves: [BookShelf!]
   }
 `

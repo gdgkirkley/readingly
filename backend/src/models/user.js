@@ -1,4 +1,4 @@
-import {Model} from 'sequelize'
+import {Model, DataTypes} from 'sequelize'
 import {getSaltAndHash} from '../utils/auth'
 
 class User extends Model {
@@ -16,7 +16,7 @@ class User extends Model {
     return user
   }
 }
-const user = (sequelize, DataTypes) => {
+const user = sequelize => {
   User.init(
     {
       username: {
@@ -43,6 +43,11 @@ const user = (sequelize, DataTypes) => {
           notEmpty: true,
           len: [7, 42],
         },
+      },
+      readingSpeedWordsPerMinute: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
       },
       salt: {
         type: DataTypes.TEXT,
