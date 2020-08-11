@@ -1,6 +1,4 @@
 import {Model, DataTypes, Sequelize} from 'sequelize'
-import {User} from './user'
-import {Book} from './book'
 
 class BookShelf extends Model {}
 
@@ -30,6 +28,13 @@ const bookshelf = sequelize => {
   BookShelf.associate = model => {
     BookShelf.belongsTo(model.User)
     BookShelf.belongsToMany(model.Book, {through: 'bookshelfbook'})
+    BookShelf.hasOne(model.Goal, {
+      foreignKey: 'goalableId',
+      constraints: false,
+      scope: {
+        goalableType: 'BOOKSHELF',
+      },
+    })
   }
 
   return BookShelf

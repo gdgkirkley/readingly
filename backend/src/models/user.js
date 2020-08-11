@@ -70,6 +70,10 @@ const user = sequelize => {
     user.salt = salt
   })
 
+  User.associate = models => {
+    User.hasMany(models.Goal)
+  }
+
   return User
 }
 

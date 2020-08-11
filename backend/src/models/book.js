@@ -56,6 +56,13 @@ const book = sequelize => {
   Book.associate = models => {
     Book.belongsToMany(models.Author, {through: 'bookauthor'})
     Book.belongsToMany(models.BookShelf, {through: 'bookshelfbook'})
+    Book.hasMany(models.Goal, {
+      foreignKey: 'goalableId',
+      constraints: false,
+      scope: {
+        goalableType: 'BOOK',
+      },
+    })
   }
 
   return Book

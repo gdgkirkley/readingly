@@ -2,7 +2,12 @@
   require('@babel/register')
 
   const {sequelize} = require('./src/models')
-  const {createUsers, createBooks, createBookshelves} = require('./src/seeds')
+  const {
+    createUsers,
+    createBooks,
+    createBookshelves,
+    createGoals,
+  } = require('./src/seeds')
 
   const seed = process.env.SEED_DATABASE || process.env.NODE_ENV === 'test'
 
@@ -15,6 +20,7 @@
     await createUsers()
     await createBooks()
     await createBookshelves()
+    await createGoals()
   }
   require('./src')
 })()
