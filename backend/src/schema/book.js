@@ -41,18 +41,9 @@ export default gql`
     publishDate: String
     publisher: String
     averageRating: Float
+    averageTimeToReadInSeconds: Int!
     categories: [String!]
     createdAt: DateTime
     updatedAt: DateTime
-  }
-
-  type GoogleBook {
-    googleBooksId: String!
-    title: String!
-    description: String
-    authors: [String!]
-    thumbnail: String
-    pageCount: Int!
-    publishDate: String
   }
 `

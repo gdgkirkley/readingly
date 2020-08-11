@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { MY_BOOKSHELF_QUERY, BookShelfData } from "../graphql/bookshelves";
 import BookGallery from "./BookGallery";
 import { formatDate } from "../lib/formatDates";
+import { getReadingTimeString } from "../lib/time";
 
 type Props = {
   title: string;
@@ -26,6 +27,13 @@ const Bookshelf = ({ title }: Props) => {
       <p data-testid="bookshelf-count">
         There {shelf.bookCount == 1 ? "is" : "are"} {shelf.bookCount} book
         {shelf.bookCount == 1 ? null : "s"} on this list
+      </p>
+      <p>
+        It will take about{" "}
+        <strong>
+          {getReadingTimeString(shelf.averageTimeToReadInSeconds)}
+        </strong>{" "}
+        to read all the books on this list.
       </p>
       <BookGallery books={shelf.books} displayRemove={true} bookshelf={shelf} />
       <p>You created this list on {formatDate(shelf.createdAt)}</p>

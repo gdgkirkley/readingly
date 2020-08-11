@@ -1,5 +1,11 @@
 import logger from 'loglevel'
+import {QueryTypes} from 'sequelize'
+import {sequelize} from '../models'
 import {getGoogleBook} from '../utils/googleBooks'
+import {
+  AVERAGE_READING_WORDS_PER_MINUTE,
+  AVERAGE_WORDS_PER_PAGE,
+} from '../utils/constants'
 
 export default {
   Query: {
@@ -31,15 +37,37 @@ export default {
       return await models.User.findByPk(bookshelf.userId)
     },
     books: async (bookshelf, {limit, offset}, {models}) => {
-      const bs = await models.BookShelf.findByPk(bookshelf.id)
-      return await bs.getBooks({
+      return await bookshelf.getBooks({
         limit: limit ? limit : 50,
         offset: offset ? offset : 0,
       })
     },
     bookCount: async (bookshelf, args, {models}) => {
-      const bs = await models.BookShelf.findByPk(bookshelf.id)
-      return await bs.countBooks()
+      return await bookshelf.countBooks()
+    },
+    averageTimeToReadInSeconds: async (bookshelf, args, {models}) => {
+      const [count] = await sequelize.query(
+        `
+        SELECT SUM(books."pageCount") AS totalPageCount
+        FROM books
+        LEFT JOIN bookshelfbook on books."googleBooksId" = bookshelfbook."bookGoogleBooksId"
+        WHERE bookshelfbook."bookshelfId" = '${bookshelf.id}'
+      `,
+        {type: QueryTypes.SELECT},
+      )
+
+      if (!count.totalpagecount) {
+        return 0
+      }
+
+      const pageCount = parseInt(count.totalpagecount)
+
+      const estimatedWords = pageCount * AVERAGE_WORDS_PER_PAGE
+
+      const totalReadingTimeSeconds =
+        estimatedWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
+
+      return totalReadingTimeSeconds
     },
   },
 

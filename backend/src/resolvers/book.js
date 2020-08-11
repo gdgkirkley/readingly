@@ -1,6 +1,10 @@
 import {Op} from 'sequelize'
 import logger from 'loglevel'
 import {getGoogleBooks, getGoogleBook} from '../utils/googleBooks'
+import {
+  AVERAGE_READING_WORDS_PER_MINUTE,
+  AVERAGE_WORDS_PER_PAGE,
+} from '../utils/constants'
 
 export default {
   Query: {
@@ -141,6 +145,16 @@ export default {
     //   const b = await models.Book.findByPk(book.id)
     //   return await b.getAuthors()
     // },
+    averageTimeToReadInSeconds: async (book, args, ctx) => {
+      if (!book.pageCount) return null
+
+      const estimatedWords = book.pageCount * AVERAGE_WORDS_PER_PAGE
+
+      const totalReadingTimeSeconds =
+        estimatedWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
+
+      return totalReadingTimeSeconds
+    },
     reading: async (book, args, {me, models}) => {
       if (!me) {
         return null

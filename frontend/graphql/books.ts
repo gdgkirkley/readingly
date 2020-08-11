@@ -35,6 +35,7 @@ export const GOOGLE_BOOK_QUERY = gql`
       categories
       averageRating
       googleBooksId
+      averageTimeToReadInSeconds
       reading {
         id
         progress
@@ -67,6 +68,7 @@ export interface Book {
   categories: string[];
   publisher: string;
   averageRating: string;
+  averageTimeToReadInSeconds: number;
   createdAt: string;
   updatedAt: string;
 }

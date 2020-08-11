@@ -8,6 +8,7 @@ export const MY_BOOKSHELVES_QUERY = gql`
       title
       createdAt
       bookCount
+      averageTimeToReadInSeconds
       books(limit: 10) {
         googleBooksId
         title
@@ -24,6 +25,7 @@ export const MY_BOOKSHELF_QUERY = gql`
       title
       createdAt
       bookCount
+      averageTimeToReadInSeconds
       books {
         googleBooksId
         title
@@ -85,6 +87,7 @@ export type BookShelf = {
   title: string;
   bookCount: number;
   books?: Book[];
+  averageTimeToReadInSeconds: number;
   createdAt?: string;
   updatedAt?: string;
 };

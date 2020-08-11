@@ -5,6 +5,7 @@ import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
 import Head from "next/head";
+import { getReadingTimeString } from "../lib/time";
 import { formatDate } from "../lib/formatDates";
 import Link from "next/link";
 import UpdateReadingProgress from "./UpdateReadingProgress";
@@ -89,6 +90,7 @@ const Book = ({ googleBooksId }: Props) => {
     publisher,
     bookshelves,
     reading,
+    averageTimeToReadInSeconds,
   } = data.googleBook;
 
   return (
@@ -112,7 +114,9 @@ const Book = ({ googleBooksId }: Props) => {
       <div>
         <p>
           <strong>{pageCount}</strong> pages | Published{" "}
-          <strong>{formatDate(publishDate)}</strong> by {publisher}
+          <strong>{formatDate(publishDate)}</strong> by {publisher} |{" "}
+          <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>{" "}
+          average reading time
         </p>
       </div>
       <AddToBookshelf book={data.googleBook} />

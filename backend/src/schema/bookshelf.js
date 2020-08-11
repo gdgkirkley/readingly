@@ -24,5 +24,6 @@ export default gql`
     user: User!
     books(limit: Int, offset: Int): [Book!]
     bookCount: Int!
+    averageTimeToReadInSeconds: Int!
   }
 `
