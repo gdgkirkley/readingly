@@ -6,11 +6,14 @@ import {BookShelf} from './bookshelf'
   Goal has a polymorphic association so that it can be applied to
   either a Book or BookShelf. This class uses Sequelize features to
   apply that through a consistent API under "goalable".
+
+  To add a new type, it has to be associated in the enum, and in the addHook.
 */
 class Goal extends Model {
   getGoalable(options) {
     if (!this.goalableType) return Promise.resolve(null)
-    const mixinMethodName = `get${uppercaseFirst(this.goalableType)}`
+    const lowerCaseType = this.goalableType.toLowerCase()
+    const mixinMethodName = `get${uppercaseFirst(lowerCaseType)}`
     return this[mixinMethodName](options)
   }
 }
@@ -44,6 +47,8 @@ const goal = sequelize => {
   Goal.addHook('afterFind', findResult => {
     if (!Array.isArray(findResult)) findResult = [findResult]
     for (const instance of findResult) {
+      if (!instance) break
+
       if (instance.goalableType === 'BOOK' && instance.book !== undefined) {
         instance.goalable = instance.book
       } else if (
@@ -52,7 +57,7 @@ const goal = sequelize => {
       ) {
         instance.goalable = instance.bookshelf
       }
-      // To prevent mistakes:
+      // Delete found values to prevent mistakes:
       delete instance.book
       delete instance.dataValues.book
       delete instance.bookshelf

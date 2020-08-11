@@ -1,5 +1,10 @@
 const {sequelize} = require('../src/models')
-const {createUsers, createBooks, createBookshelves} = require('../src/seeds')
+const {
+  createUsers,
+  createBooks,
+  createBookshelves,
+  createGoals,
+} = require('../src/seeds')
 
 async function resetDb() {
   await sequelize.sync({
@@ -9,6 +14,7 @@ async function resetDb() {
   await createBooks()
   await createUsers()
   await createBookshelves()
+  await createGoals()
 }
 
 export {resetDb}

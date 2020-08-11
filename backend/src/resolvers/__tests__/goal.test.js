@@ -1,0 +1,126 @@
+import goal from '../goal'
+import models from '../../models'
+import book from '../book'
+import bookshelf from '../bookshelf'
+
+const parent = {}
+const context = {me: {id: 1}, models}
+
+const prideAndPrejudiceId = 's1gVAAAAYAAJ'
+
+test('goals returns a list of goals', async () => {
+  const goals = await goal.Query.goals(parent, {}, context)
+
+  expect(goals).toHaveLength(2)
+  expect(goals).toEqual(
+    expect.arrayContaining([expect.objectContaining({goalableType: 'BOOK'})]),
+  )
+  expect(goals).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({goalableType: 'BOOKSHELF'}),
+    ]),
+  )
+})
+
+test('goal returns a goal', async () => {
+  const goals = await goal.Query.goals(parent, {}, context)
+
+  const queriedGoal = await goal.Query.goal(parent, {id: goals[0].id}, context)
+
+  expect(queriedGoal).toStrictEqual(goals[0])
+})
+
+test('goal returns an error for no found goal', async () => {
+  await expect(goal.Query.goal(parent, {id: 1235}, context)).rejects.toThrow(
+    /no goal/i,
+  )
+})
+
+test('goal returns goalable', async () => {
+  const goals = await goal.Query.goals(parent, {}, context)
+
+  const goalable = await goal.Goal.goalable(goals[0], {}, context)
+
+  expect(goalable.googleBooksId).toBe(prideAndPrejudiceId)
+  expect(goalable.title).toBe('Pride and Prejudice')
+
+  const goalable2 = await goal.Goal.goalable(goals[1], {}, context)
+
+  expect(goalable2.title).toBe('Favourites')
+})
+
+test('createGoal can create a goal for a book', async () => {
+  const b = await book.Query.book(
+    parent,
+    {googleBooksId: prideAndPrejudiceId},
+    context,
+  )
+
+  const createdGoal = await goal.Mutation.createGoal(
+    parent,
+    {goalDate: '2020-12-31', goalableId: b.googleBooksId},
+    context,
+  )
+
+  expect(createdGoal.goalDate).toMatchInlineSnapshot(`2020-12-31T00:00:00.000Z`)
+  expect(createdGoal.goalableType).toBe('BOOK')
+})
+
+test('createGoal can create a goal for a bookshelf', async () => {
+  const bookshelves = await bookshelf.Query.bookshelves(parent, {}, context)
+
+  const createdGoal = await goal.Mutation.createGoal(
+    parent,
+    {goalDate: '2021-08-15', goalableId: bookshelves[0].id},
+    context,
+  )
+
+  expect(createdGoal.goalDate).toMatchInlineSnapshot(`2021-08-15T00:00:00.000Z`)
+  expect(createdGoal.goalableType).toBe('BOOKSHELF')
+})
+
+test('createGoal returns an error for invalid ID', async () => {
+  await expect(
+    goal.Mutation.createGoal(
+      parent,
+      {goalDate: '2020-08-15', goalableId: '1'},
+      context,
+    ),
+  ).rejects.toThrow(/invalid id/i)
+})
+
+test('updateGoal can update a goal', async () => {
+  const g = await goal.Mutation.updateGoal(
+    parent,
+    {id: 1, goalDate: '2020-10-18'},
+    context,
+  )
+
+  expect(g.goalDate).toMatchInlineSnapshot(`2020-10-18T00:00:00.000Z`)
+
+  const goalTest = await goal.Query.goal(parent, {id: g.id}, context)
+
+  expect(goalTest.goalDate).toStrictEqual(g.goalDate)
+})
+
+test('updateGoal rejects an invalid goal id', async () => {
+  await expect(
+    goal.Mutation.updateGoal(
+      parent,
+      {id: 123, goalDate: '2020-08-15'},
+      context,
+    ),
+  ).rejects.toThrow(/no goal/i)
+})
+
+test('deleteGoal deletes a goal', async () => {
+  const message = await goal.Mutation.deleteGoal(parent, {id: 1}, context)
+
+  expect(message.message).toMatch(/goal deleted/i)
+})
+
+test('deleteGoal rejects invalid goal id', async () => {
+  await expect(
+    goal.Mutation.deleteGoal(parent, {id: 123}, context),
+  ).rejects.toThrow(/no goal/i)
+})

@@ -5,6 +5,7 @@ import bookSchema from './book'
 import bookshelfSchema from './bookshelf'
 import authorSchema from './author'
 import readingSchema from './reading'
+import goalSchema from './goal'
 
 const linkSchema = gql`
   scalar Date
@@ -30,4 +31,5 @@ export default [
   bookshelfSchema,
   authorSchema,
   readingSchema,
+  goalSchema,
 ]
