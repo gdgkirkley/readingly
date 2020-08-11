@@ -59,6 +59,20 @@ export default {
       return await goal.getGoalable()
     },
   },
+
+  Goalable: {
+    __resolveType(obj, context, info) {
+      if (obj.googleBooksId) {
+        return 'Book'
+      }
+
+      if (obj.id) {
+        return 'BookShelf'
+      }
+
+      return null
+    },
+  },
 }
 
 async function getGoalById(id, models) {
