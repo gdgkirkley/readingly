@@ -4,6 +4,7 @@ const {
   createBooks,
   createBookshelves,
   createGoals,
+  createReadings,
 } = require('../src/seeds')
 
 async function resetDb() {
@@ -15,6 +16,7 @@ async function resetDb() {
   await createUsers()
   await createBookshelves()
   await createGoals()
+  await createReadings()
 }
 
 export {resetDb}
