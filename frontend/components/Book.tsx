@@ -10,6 +10,8 @@ import { formatDate } from "../lib/formatDates";
 import Link from "next/link";
 import UpdateReadingProgress from "./UpdateReadingProgress";
 import ReadingCard from "./ReadingCard";
+import Card, { ColorOptions } from "./Card";
+import { Cards } from "./styles/LayoutStyles";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -66,6 +68,16 @@ const BannerTitle = styled.h1`
   }
 `;
 
+const TwoColContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 2.4rem;
+
+  @media (min-width: 1300px) {
+    grid-template-columns: 2fr 1fr;
+  }
+`;
+
 type Props = {
   googleBooksId: string;
 };
@@ -98,33 +110,29 @@ const Book = ({ googleBooksId }: Props) => {
       <Head>
         <title>{title} | Readingly</title>
       </Head>
+      <BannerTitle>{title}</BannerTitle>
+      {authors?.length && (
+        <p data-testid="book-authors">By {getAuthorString(authors)}</p>
+      )}
+      <p>
+        <strong>{pageCount}</strong> pages | Published{" "}
+        <strong>{formatDate(publishDate)}</strong> by {publisher} |{" "}
+        <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>{" "}
+        average reading time
+      </p>
       <Banner background={thumbnail}>
         <BannerContent>
           {thumbnail && <img src={thumbnail} alt={title} />}
         </BannerContent>
       </Banner>
-      <BannerTitle>{title}</BannerTitle>
-      {authors?.length && (
-        <p data-testid="book-authors">By {getAuthorString(authors)}</p>
-      )}
-      <div
-        dangerouslySetInnerHTML={{ __html: description }}
-        data-testid="book-description"
-      />
-      <div>
-        <p>
-          <strong>{pageCount}</strong> pages | Published{" "}
-          <strong>{formatDate(publishDate)}</strong> by {publisher} |{" "}
-          <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>{" "}
-          average reading time
-        </p>
-      </div>
-      <AddToBookshelf book={data.googleBook} />
-      {bookshelves?.length || reading?.length ? (
-        <>
-          <hr />
-          <div>
-            <h3>My Activity</h3>
+      <TwoColContent>
+        <div
+          dangerouslySetInnerHTML={{ __html: description }}
+          data-testid="book-description"
+        />
+        <div>
+          <Card position="sticky">
+            <AddToBookshelf book={data.googleBook} />
             {bookshelves?.length ? (
               <>
                 <p>
@@ -139,6 +147,13 @@ const Book = ({ googleBooksId }: Props) => {
                 </p>
               </>
             ) : null}
+          </Card>
+        </div>
+      </TwoColContent>
+      {bookshelves?.length || reading?.length ? (
+        <>
+          <div>
+            <h2>My Activity</h2>
             {reading?.length ? (
               <>
                 <p>
@@ -155,7 +170,6 @@ const Book = ({ googleBooksId }: Props) => {
             ) : null}
             <UpdateReadingProgress book={data.googleBook} />
           </div>
-          <hr />
         </>
       ) : null}
       <div>
