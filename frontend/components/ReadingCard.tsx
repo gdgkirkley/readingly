@@ -5,8 +5,10 @@ import { formatDate } from "../lib/formatDates";
 import Card from "./Card";
 import { getReadingTimeString } from "../lib/time";
 import OpenBook from "./icons/Book";
+import RemoveButton from "./RemoveButton";
 
 const ReadingCardStyle = styled(Card)`
+  position: relative;
   & svg {
     width: 8rem;
     color: ${(props) => props.theme.purple};
@@ -45,8 +47,14 @@ type Props = {
 };
 
 const ReadingCard = ({ reading, totalPages }: Props) => {
+  const handleRemove = (): void => {};
+
   return (
     <ReadingCardStyle>
+      <RemoveButton
+        onConfirm={handleRemove}
+        itemToRemove={`reading from ${formatDate(reading.createdAt)}`}
+      />
       <OpenBook />
       <h4>{formatDate(reading.createdAt)}</h4>
       <p>

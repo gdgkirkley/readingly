@@ -24,6 +24,17 @@ const AddToBookshelfButton = styled(Button)`
   /* margin: 2rem 0 3rem; */
 `;
 
+const DropButton = styled(Button)`
+  & svg {
+    transition: 0.2s;
+  }
+  &.open {
+    & svg {
+      transform: rotate(-180deg);
+    }
+  }
+`;
+
 const CreateLinkContainer = styled.div`
   margin: 2rem 0 3rem;
 `;
@@ -171,15 +182,16 @@ const AddToBookshelf = ({ book }: Props) => {
         >
           {selected ? `Add to ${selected}` : "Choose a bookshelf:"}
         </AddToBookshelfButton>
-        <Button
+        <DropButton
           themeColor="yellow"
           onClick={toggle}
           aria-haspopup="listbox"
           aria-expanded={open}
+          className={open ? "open" : ""}
         >
           <CaretDown />
           <span className="hidden-text">Open Bookshelf List</span>
-        </Button>
+        </DropButton>
       </ButtonGroup>
       {open ? (
         <ButtonGroupDropdownContainer>

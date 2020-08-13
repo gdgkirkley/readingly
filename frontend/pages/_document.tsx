@@ -20,6 +20,7 @@ export default class MyDocument extends Document {
           <>
             {initialProps.styles}
             {sheet.getStyleElement()}
+            <div id="modal-root"></div>
           </>
         ),
       };

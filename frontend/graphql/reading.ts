@@ -11,6 +11,25 @@ export const ADD_READING_PROGRESS_MUTATION = gql`
   }
 `;
 
+export const UPDATE_READING_PROGRESS_MUTATION = gql`
+  mutation($id: ID!, $progress: Float!) {
+    updateReading(id: $id, progress: $progress) {
+      id
+      progress
+      timeRemainingInSeconds
+      createdAt
+    }
+  }
+`;
+
+export const DELETE_READING_PROGRESS_MUTATION = gql`
+  mutation($id: ID!) {
+    deleteReading(id: $id) {
+      message
+    }
+  }
+`;
+
 export type Reading = {
   progress: number;
   timeRemainingInSeconds: number;

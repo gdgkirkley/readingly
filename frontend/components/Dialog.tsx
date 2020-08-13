@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Button from "./styles/ButtonStyles";
 
@@ -79,7 +80,8 @@ export const InnerDialogContent = styled.div`
   }
 `;
 
-const ESCAPE_KEY_CODE = 27;
+const ESCAPE_KEY_CODE = "Escape";
+const TAB_KEY_CODE = "Tab";
 
 type Props = {
   toggleModal(): void;
@@ -97,37 +99,73 @@ const Dialog: React.FC<Props> = ({
   heading,
   open,
 }) => {
-  const outer = useRef(null);
+  const modalRef = useRef(null);
 
   useEffect(() => {
-    const handleKeyUp = (event) => {
-      if (event.keyCode === ESCAPE_KEY_CODE) {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!open) return;
+
+      if (event.code === ESCAPE_KEY_CODE) {
         toggleModal();
+      } else if (event.code === TAB_KEY_CODE) {
+        // trap focus
+        // get all focusable elements
+        const focusableModalElements = modalRef.current.querySelectorAll(
+          'a[href], button, textarea, input, select, details, [tabindex]:not([tabindex="-1"])'
+        ) as HTMLElement[];
+
+        const isFocusedWithin = [...focusableModalElements].some(
+          (el) => el === document.activeElement
+        );
+
+        const firstElement = focusableModalElements[0];
+
+        const lastElement =
+          focusableModalElements[focusableModalElements.length - 1];
+
+        if (!isFocusedWithin) {
+          firstElement.focus();
+        }
+
+        if (event.shiftKey && document.activeElement === firstElement) {
+          lastElement.focus();
+          event.preventDefault();
+        }
+
+        if (!event.shiftKey && document.activeElement === lastElement) {
+          firstElement.focus();
+          event.preventDefault();
+        }
       }
     };
 
     const handleOutsideClick = (e: MouseEvent) => {
-      if (!open || outer?.current?.contains(e.target)) {
+      if (!open || modalRef?.current?.contains(e.target)) {
         return;
       }
 
       toggleModal();
     };
 
-    window.addEventListener("keydown", handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown);
     document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyUp);
+      window.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [toggleModal]);
 
   if (!open) return null;
 
-  return (
+  return ReactDOM.createPortal(
     <DialogStyle>
-      <DialogContent ref={outer} aria-label={accessibilityLabel} role={role}>
+      <DialogContent
+        ref={modalRef}
+        aria-label={accessibilityLabel}
+        role={role}
+        aria-modal={true}
+      >
         <DialogClose themeColor="purple" onClick={toggleModal}>
           X<span className="hidden-text">Close Dialog</span>
         </DialogClose>
@@ -138,7 +176,8 @@ const Dialog: React.FC<Props> = ({
         )}
         <DialogInner>{children}</DialogInner>
       </DialogContent>
-    </DialogStyle>
+    </DialogStyle>,
+    document.querySelector("#modal-root")
   );
 };
 
