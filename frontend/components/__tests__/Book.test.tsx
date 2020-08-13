@@ -30,20 +30,7 @@ test("<Book /> renders a book", async () => {
       },
       result: {
         data: {
-          googleBook: {
-            title: book.title,
-            thumbnail: book.thumbnail,
-            description: book.description,
-            authors: book.authors,
-            pageCount: book.pageCount,
-            publishDate: book.publishDate,
-            categories: book.categories,
-            averageRating: book.averageRating,
-            publisher: book.publisher,
-            bookshelves: book.bookshelves,
-            reading: book.reading,
-            googleBooksId: book.googleBooksId,
-          },
+          googleBook: book,
         },
       },
     },
@@ -129,8 +116,8 @@ test("<Book /> renders a book", async () => {
   await waitFor(() => {
     const headings = screen.getAllByRole("heading");
     expect(headings[0]).toHaveTextContent(book.title);
-    expect(headings[1]).toHaveTextContent(/my activity/i);
-    expect(headings[2]).toHaveTextContent(/you may also like/i);
+    expect(headings[1]).toHaveTextContent(/my reading/i);
+    expect(headings[2]).toHaveTextContent(/check these out/i);
     expect(headings[3]).toHaveTextContent(book.authors[0]);
     expect(headings[4]).toHaveTextContent(book.categories[0]);
 

@@ -2,6 +2,7 @@ import faker from "faker";
 import { User } from "../graphql/user";
 import { Book } from "../graphql/books";
 import { BookShelf } from "../graphql/bookshelves";
+import { Reading } from "../graphql/reading";
 
 const getEmail = faker.internet.email;
 const getAdmin = faker.random.boolean;
@@ -37,6 +38,7 @@ async function buildBook({ ...overrides } = {}): Promise<Book> {
     publisher: getWord(),
     bookshelves: [],
     reading: [],
+    averageTimeToReadInSeconds: getNumber(),
     ...overrides,
   };
 }
@@ -61,8 +63,21 @@ async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
     createdAt: getDate(),
     bookCount: getNumber(),
     books: [book1, book2, book3],
+    averageTimeToReadInSeconds: getNumber(),
     ...overrides,
   };
 }
 
-export { buildBook, buildUser, buildBookshelf, getUUID };
+async function buildReading({ ...overrides } = {}): Promise<Reading> {
+  return {
+    progress: getNumber(),
+    timeRemainingInSeconds: getNumber(),
+    book: await buildBook(),
+    user: await buildUser(),
+    createdAt: getDate(),
+    updatedAt: getDate(),
+    ...overrides,
+  };
+}
+
+export { buildBook, buildUser, buildBookshelf, buildReading, getUUID };

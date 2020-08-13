@@ -21,13 +21,7 @@ test("<Bookshelf /> renders a bookshelf", async () => {
       },
       result: {
         data: {
-          mybookshelf: {
-            id: bookshelf.id,
-            title: bookshelf.title,
-            createdAt: bookshelf.createdAt,
-            bookCount: bookshelf.bookCount,
-            books: [...bookshelf.books],
-          },
+          mybookshelf: bookshelf,
         },
       },
     },
