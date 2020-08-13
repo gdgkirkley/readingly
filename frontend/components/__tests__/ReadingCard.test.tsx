@@ -2,6 +2,7 @@ import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import ReadingCard from "../ReadingCard";
 import { buildReading } from "../../test/generate";
+import { formatDate } from "../../lib/formatDates";
 
 afterEach(() => {
   cleanup();
@@ -17,9 +18,7 @@ test("<ReadingCard /> renders", async () => {
 
   render(<ReadingCard reading={reading} />);
 
-  expect(screen.getByRole("heading")).toHaveTextContent(
-    today.getDay().toString()
-  );
+  expect(screen.getByRole("heading")).toHaveTextContent(formatDate(today));
   expect(screen.getByText(reading.progress.toString())).toBeInTheDocument();
   expect(screen.getByText("1 hour to go")).toBeInTheDocument();
 });

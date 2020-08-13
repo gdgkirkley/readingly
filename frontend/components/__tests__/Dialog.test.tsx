@@ -40,12 +40,16 @@ test("<Dialog /> renders", () => {
 
   expect(closeButton).toBeInTheDocument();
 
+  userEvent.tab();
+
+  expect(closeButton).toHaveFocus();
+
   userEvent.click(closeButton);
 
   expect(toggleModal).toHaveBeenCalledTimes(1);
 });
 
-test("<Dialog /> renders with content", () => {
+test("<Dialog /> renders with accessible content", () => {
   render(
     <Dialog
       open={true}
@@ -54,9 +58,39 @@ test("<Dialog /> renders with content", () => {
       role="dialog"
     >
       <h1>A heading</h1>
+      <label htmlFor="test">A Test Input</label>
+      <input id="test" name="test" type="text" />
+      <button>Submit</button>
     </Dialog>
   );
 
-  expect(screen.getByRole("heading")).toBeInTheDocument();
-  expect(screen.getByRole("heading")).toHaveTextContent("A heading");
+  const closeButton = screen.getByRole("button", { name: /close/i });
+  const heading = screen.getByRole("heading");
+  const input = screen.getByLabelText(/test/i);
+  const button = screen.getByRole("button", { name: "Submit" });
+
+  const modalRoot = document.querySelector("#modal-root");
+
+  expect(heading).toBeInTheDocument();
+  expect(heading).toHaveTextContent("A heading");
+
+  userEvent.tab({ focusTrap: modalRoot });
+
+  expect(closeButton).toHaveFocus();
+
+  userEvent.tab({ focusTrap: modalRoot });
+
+  expect(input).toHaveFocus();
+
+  userEvent.tab({ focusTrap: modalRoot });
+
+  expect(button).toHaveFocus();
+
+  userEvent.tab({ focusTrap: modalRoot });
+
+  expect(closeButton).toHaveFocus();
+
+  userEvent.tab({ shift: true, focusTrap: modalRoot });
+
+  expect(button).toHaveFocus();
 });

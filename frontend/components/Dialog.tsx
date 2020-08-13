@@ -82,6 +82,8 @@ export const InnerDialogContent = styled.div`
 
 const ESCAPE_KEY_CODE = "Escape";
 const TAB_KEY_CODE = "Tab";
+const FOCUSABLE_QUERY =
+  'a[href], button, textarea, input, select, details, [tabindex]:not([tabindex="-1"])';
 
 type Props = {
   toggleModal(): void;
@@ -111,7 +113,7 @@ const Dialog: React.FC<Props> = ({
         // trap focus
         // get all focusable elements
         const focusableModalElements = modalRef.current.querySelectorAll(
-          'a[href], button, textarea, input, select, details, [tabindex]:not([tabindex="-1"])'
+          FOCUSABLE_QUERY
         ) as HTMLElement[];
 
         const isFocusedWithin = [...focusableModalElements].some(
@@ -158,6 +160,14 @@ const Dialog: React.FC<Props> = ({
 
   if (!open) return null;
 
+  let modalRoot = document.querySelector("#modal-root");
+
+  if (!modalRoot) {
+    modalRoot = document.createElement("div");
+    modalRoot.setAttribute("id", "modal-root");
+    document.body.appendChild(modalRoot);
+  }
+
   return ReactDOM.createPortal(
     <DialogStyle>
       <DialogContent
@@ -177,7 +187,7 @@ const Dialog: React.FC<Props> = ({
         <DialogInner>{children}</DialogInner>
       </DialogContent>
     </DialogStyle>,
-    document.querySelector("#modal-root")
+    modalRoot
   );
 };
 
