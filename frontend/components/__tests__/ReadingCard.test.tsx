@@ -8,6 +8,18 @@ afterEach(() => {
 });
 
 test("<ReadingCard /> renders", async () => {
-  const reading = await buildReading();
+  const today = new Date();
+  const oneHourSeconds = 60 * 60;
+  const reading = await buildReading({
+    createdAt: today,
+    timeRemainingInSeconds: oneHourSeconds,
+  });
+
   render(<ReadingCard reading={reading} />);
+
+  expect(screen.getByRole("heading")).toHaveTextContent(
+    today.getDay().toString()
+  );
+  expect(screen.getByText(reading.progress.toString())).toBeInTheDocument();
+  expect(screen.getByText("1 hour to go")).toBeInTheDocument();
 });

@@ -17,6 +17,7 @@ export default gql`
   type Reading {
     id: ID!
     progress: Float!
+    timeRemainingInSeconds: Int!
     user: User!
     book: Book!
     createdAt: DateTime

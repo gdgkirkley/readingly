@@ -1,3 +1,8 @@
+import {
+  AVERAGE_READING_WORDS_PER_MINUTE,
+  AVERAGE_WORDS_PER_PAGE,
+} from '../utils/constants'
+
 export default {
   Query: {
     readings: async (parent, args, {me, models}) => {
@@ -68,12 +73,25 @@ export default {
 
   Reading: {
     book: async (reading, args, {models}) => {
-      const r = await models.Reading.findByPk(reading.id)
-      return await r.getBook()
+      return await reading.getBook()
     },
 
     user: async (reading, args, ctx) => {
       return await reading.getUser()
+    },
+
+    timeRemainingInSeconds: async (reading, args, {models}) => {
+      if (!reading.progress) return null
+
+      const book = await reading.getBook()
+
+      const estimatedRemainingWords =
+        (book.pageCount - reading.progress) * AVERAGE_WORDS_PER_PAGE
+
+      const totalRemainingTimeSeconds =
+        estimatedRemainingWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
+
+      return totalRemainingTimeSeconds
     },
   },
 }
