@@ -18,6 +18,7 @@ import Button, {
   ButtonGroupDropdown,
 } from "./styles/ButtonStyles";
 import CaretDown from "./icons/CaretDown";
+import CreateBookShelf from "./CreateBookShelf";
 
 const AddToBookshelfButton = styled(Button)`
   /* margin: 2rem 0 3rem; */
@@ -35,6 +36,9 @@ const AddToBookshelf = ({ book }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>(null);
   const [cursor, setCursor] = useState<number>(0);
+
+  const outer = useRef(null);
+
   const me = useUser();
   const { data, error, loading } = useQuery<BookShelfData>(
     MY_BOOKSHELVES_QUERY
@@ -44,6 +48,22 @@ const AddToBookshelf = ({ book }: Props) => {
     addBook,
     { data: dataAdd, error: errorAdd, loading: loadingAdd },
   ] = useMutation(ADD_BOOK_MUTATION);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (outer.current.contains(e.target)) {
+        return;
+      }
+
+      setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   const handleClick = (): void => {
     const shelf = data.mybookshelves.find((shelf) => shelf.title === selected);
@@ -142,7 +162,7 @@ const AddToBookshelf = ({ book }: Props) => {
   }
 
   return (
-    <ButtonGroupRoot>
+    <ButtonGroupRoot ref={outer}>
       <ButtonGroup>
         <AddToBookshelfButton
           themeColor="yellow"

@@ -47,7 +47,7 @@ const BookCategorySearch = ({ searchTerm }: Props) => {
 
   return (
     <Gallery>
-      <h2>{searchTerm}</h2>
+      <h3>{searchTerm}</h3>
       <BookGallery books={data.searchBook} />
       {loading ? <p>Loading more...</p> : null}
       <Action>

@@ -13,6 +13,7 @@ export const ADD_READING_PROGRESS_MUTATION = gql`
 
 export type Reading = {
   progress: number;
+  timeRemainingInSeconds: number;
   book: Book;
   user: User;
   createdAt: string;

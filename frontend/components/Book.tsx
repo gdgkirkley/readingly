@@ -10,7 +10,7 @@ import { formatDate } from "../lib/formatDates";
 import Link from "next/link";
 import UpdateReadingProgress from "./UpdateReadingProgress";
 import ReadingCard from "./ReadingCard";
-import Card, { ColorOptions } from "./Card";
+import Card from "./Card";
 import { Cards } from "./styles/LayoutStyles";
 
 const BookPage = styled.div`
@@ -68,14 +68,27 @@ const BannerTitle = styled.h1`
   }
 `;
 
+const ReadingBlock = styled.div`
+  border-top: 1px dotted ${(props) => props.theme.black};
+  border-bottom: 1px dotted ${(props) => props.theme.black};
+  padding-bottom: 2rem;
+`;
+
 const TwoColContent = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 2.4rem;
+  padding: 2rem 0;
 
   @media (min-width: 1300px) {
     grid-template-columns: 2fr 1fr;
   }
+`;
+
+const MyActivityHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 type Props = {
@@ -151,29 +164,26 @@ const Book = ({ googleBooksId }: Props) => {
         </div>
       </TwoColContent>
       {bookshelves?.length || reading?.length ? (
-        <>
-          <div>
-            <h2>My Activity</h2>
-            {reading?.length ? (
-              <>
-                <p>
-                  Reading:{" "}
-                  {reading.map((read) => (
-                    <ReadingCard
-                      key={read.id}
-                      reading={read}
-                      totalPages={pageCount}
-                    />
-                  ))}
-                </p>
-              </>
-            ) : null}
+        <ReadingBlock>
+          <MyActivityHeader>
+            <h2>My Reading</h2>
             <UpdateReadingProgress book={data.googleBook} />
-          </div>
-        </>
+          </MyActivityHeader>
+          {reading?.length ? (
+            <Cards>
+              {reading.map((read) => (
+                <ReadingCard
+                  key={read.id}
+                  reading={read}
+                  totalPages={pageCount}
+                />
+              ))}
+            </Cards>
+          ) : null}
+        </ReadingBlock>
       ) : null}
       <div>
-        <h2>You May Also Like</h2>
+        <h2>Check These Out</h2>
         {authors && <BookCategorySearch searchTerm={authors[0]} />}
         {categories?.length &&
           categories.map((category) => (

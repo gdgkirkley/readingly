@@ -39,6 +39,7 @@ export const GOOGLE_BOOK_QUERY = gql`
       reading {
         id
         progress
+        timeRemainingInSeconds
         createdAt
       }
       bookshelves {
@@ -76,6 +77,7 @@ export interface Book {
 interface Reading {
   id: string;
   progress: number;
+  timeRemainingInSeconds: number;
   book: Book;
   user: User;
   createdAt: string;

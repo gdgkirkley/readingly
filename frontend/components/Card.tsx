@@ -19,6 +19,7 @@ const Container = styled.div<ContainerProps>`
   border-radius: 1rem;
   margin: 1rem;
   transition: 0.25s;
+  border: 1px solid #ececec;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
 
   &:hover {
@@ -37,11 +38,18 @@ type Props = {
   title?: string;
   color?: ColorOptions;
   position?: string;
+  className?: string;
 };
 
-const Card: React.FC<Props> = ({ title, color, position, children }) => {
+const Card: React.FC<Props> = ({
+  title,
+  color,
+  position,
+  className,
+  children,
+}) => {
   return (
-    <Container color={color} position={position}>
+    <Container color={color} position={position} className={className}>
       {title ? <h2>{title}</h2> : null}
       <div>{children}</div>
     </Container>
