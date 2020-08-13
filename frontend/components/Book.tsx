@@ -176,6 +176,7 @@ const Book = ({ googleBooksId }: Props) => {
                   key={read.id}
                   reading={read}
                   totalPages={pageCount}
+                  googleBooksId={googleBooksId}
                 />
               ))}
             </Cards>

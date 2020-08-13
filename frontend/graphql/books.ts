@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { BookShelf } from "./bookshelves";
-import { User } from "./user";
+import { Reading } from "./reading";
 
 const BOOK_QUERY = gql`
   query {
@@ -70,16 +70,6 @@ export interface Book {
   publisher: string;
   averageRating: string;
   averageTimeToReadInSeconds: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Reading {
-  id: string;
-  progress: number;
-  timeRemainingInSeconds: number;
-  book: Book;
-  user: User;
   createdAt: string;
   updatedAt: string;
 }

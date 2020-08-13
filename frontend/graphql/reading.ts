@@ -31,6 +31,7 @@ export const DELETE_READING_PROGRESS_MUTATION = gql`
 `;
 
 export type Reading = {
+  id: string;
   progress: number;
   timeRemainingInSeconds: number;
   book: Book;

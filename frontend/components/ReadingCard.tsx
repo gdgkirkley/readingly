@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { Reading } from "../graphql/reading";
+import { useMutation } from "@apollo/client";
+import { Reading, DELETE_READING_PROGRESS_MUTATION } from "../graphql/reading";
 import { formatDate } from "../lib/formatDates";
 import Card from "./Card";
 import { getReadingTimeString } from "../lib/time";
 import OpenBook from "./icons/Book";
 import RemoveButton from "./RemoveButton";
+import { toast } from "react-toastify";
+import { GOOGLE_BOOK_QUERY } from "../graphql/books";
 
 const ReadingCardStyle = styled(Card)`
   position: relative;
@@ -44,10 +47,37 @@ const PercentageBar = styled.div<PercentageProps>`
 type Props = {
   reading: Reading;
   totalPages?: number;
+  googleBooksId: string;
 };
 
-const ReadingCard = ({ reading, totalPages }: Props) => {
-  const handleRemove = (): void => {};
+const ReadingCard = ({ reading, totalPages, googleBooksId }: Props) => {
+  const [removeReading, { loading, error }] = useMutation(
+    DELETE_READING_PROGRESS_MUTATION,
+    {
+      onError: () => {
+        toast.error("Unable to delete reading progress");
+      },
+    }
+  );
+
+  const handleRemove = async (): Promise<void> => {
+    await removeReading({
+      variables: {
+        id: reading.id,
+      },
+      refetchQueries: [
+        {
+          query: GOOGLE_BOOK_QUERY,
+          variables: { googleBooksId: googleBooksId },
+        },
+      ],
+      awaitRefetchQueries: true,
+    });
+
+    if (!loading && !error) {
+      toast.success("Reading progress deleted!");
+    }
+  };
 
   return (
     <ReadingCardStyle>
