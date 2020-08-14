@@ -4,16 +4,6 @@ import { useForm } from "react-hook-form";
 import { User } from "../graphql/user";
 import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
 import Button from "./styles/ButtonStyles";
-import ReadingIllustration from "./illustrations/Reading";
-
-const AccountContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1.5fr 1.5fr;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
 
 const InformationContainer = styled.div`
   padding: 1rem;
@@ -35,6 +25,14 @@ const InfoBox = styled.div`
 const InfoHeader = styled.div`
   font-weight: 600;
   font-size: 1.7rem;
+`;
+
+const UpdateInfoForm = styled(FormStyles)`
+  border: none;
+  box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
 `;
 
 type Props = {
@@ -65,7 +63,7 @@ const Account = ({ me }: Props) => {
   };
 
   return (
-    <AccountContainer>
+    <>
       {!edit ? (
         <InformationContainer>
           <InfoBox>
@@ -81,7 +79,7 @@ const Account = ({ me }: Props) => {
           </Button>
         </InformationContainer>
       ) : (
-        <FormStyles aria-label="form" onSubmit={handleSubmit(onSubmit)}>
+        <UpdateInfoForm aria-label="form" onSubmit={handleSubmit(onSubmit)}>
           <InputGroup>
             <label htmlFor="email">Email</label>
             <input
@@ -107,10 +105,9 @@ const Account = ({ me }: Props) => {
             </Button>
             <Button themeColor="purple">Update account</Button>
           </ActionGroup>
-        </FormStyles>
+        </UpdateInfoForm>
       )}
-      <ReadingIllustration />
-    </AccountContainer>
+    </>
   );
 };
 
