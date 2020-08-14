@@ -13,7 +13,7 @@ const MyAccount = () => {
 
   return (
     <div>
-      <h1>My Account</h1>
+      <h1>Welcome{me.username ? `, ${me.username}` : null}!</h1>
       <Account me={me} />
     </div>
   );
