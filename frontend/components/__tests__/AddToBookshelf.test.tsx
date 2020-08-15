@@ -233,3 +233,38 @@ test("<AddtoBookshelf /> handles case when user has no bookshelves", async () =>
     expect(screen.queryByText(/add to bookshelf/i)).toBeFalsy();
   });
 });
+
+test("<AddToBookshelf /> doesn't render when no user", async () => {
+  const book = await buildBook();
+
+  const mocks = [
+    {
+      request: {
+        query: CURRENT_USER_QUERY,
+        variables: {},
+      },
+      error: new Error("Not Authorized!"),
+    },
+    {
+      request: {
+        query: MY_BOOKSHELVES_QUERY,
+        variables: {},
+      },
+      error: new Error("Not Authorized!"),
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <AddToBookshelf book={book} />
+    </MockedProvider>
+  );
+
+  await waitFor(() => {
+    expect(screen.queryByText(/add to bookshelf/i)).not.toBeInTheDocument();
+  });
+
+  // Outside click handler threw a runtime excetion when no user.
+  // This ensures that it doesn't run when the user clicks on the screen.
+  userEvent.click(document.querySelector("body"));
+});
