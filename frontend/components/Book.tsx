@@ -3,15 +3,17 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import Head from "next/head";
-import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
-import BookCategorySearch from "./BookCategorySearch";
-import AddToBookshelf from "./AddToBookshelf";
-import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
-import { formatDate } from "../lib/formatDates";
-import UpdateReadingProgress from "./UpdateReadingProgress";
 import ReadingCard from "./ReadingCard";
 import Card from "./Card";
+import BookCategorySearch from "./BookCategorySearch";
+import AddToBookshelf from "./AddToBookshelf";
+import CreateGoal from "./CreateGoal";
+import UpdateReadingProgress from "./UpdateReadingProgress";
 import { Cards } from "./styles/LayoutStyles";
+import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
+import { formatDate } from "../lib/formatDates";
+import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
+import { GoalType } from "../graphql/goal";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -172,6 +174,7 @@ const Book = ({ googleBooksId }: Props) => {
       <BookBlock>
         <MyActivityHeader>
           <h2>Goal</h2>
+          <CreateGoal goalableId={googleBooksId} goalableType={GoalType.Book} />
         </MyActivityHeader>
         {goal ? (
           <p>

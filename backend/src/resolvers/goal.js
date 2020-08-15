@@ -26,6 +26,16 @@ export default {
         throw new Error(`Goalable ID ${goalableId} is invalid ID`)
       }
 
+      const goalTest = await models.Goal.findOne({
+        where: {
+          goalableId: goalableId,
+        },
+      })
+
+      if (goalTest) {
+        throw new Error(`You already have a goal for ${goalableId}`)
+      }
+
       let goal
 
       if (book) {

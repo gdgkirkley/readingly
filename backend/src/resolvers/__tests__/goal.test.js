@@ -50,6 +50,9 @@ test('goal returns goalable', async () => {
 })
 
 test('createGoal can create a goal for a book', async () => {
+  // delete seed data just for this test
+  await goal.Mutation.deleteGoal(parent, {id: 1}, context)
+
   const b = await book.Query.book(
     parent,
     {googleBooksId: prideAndPrejudiceId},
@@ -67,6 +70,9 @@ test('createGoal can create a goal for a book', async () => {
 })
 
 test('createGoal can create a goal for a bookshelf', async () => {
+  // delete seed data just for this test
+  await goal.Mutation.deleteGoal(parent, {id: 2}, context)
+
   const bookshelves = await bookshelf.Query.bookshelves(parent, {}, context)
 
   const createdGoal = await goal.Mutation.createGoal(
@@ -87,6 +93,19 @@ test('createGoal returns an error for invalid ID', async () => {
       context,
     ),
   ).rejects.toThrow(/invalid id/i)
+})
+
+test('createGoal does not allow multiple goals', async () => {
+  await expect(
+    goal.Mutation.createGoal(
+      parent,
+      {
+        goalDate: '2020-08-15',
+        goalableId: prideAndPrejudiceId,
+      },
+      context,
+    ),
+  ).rejects.toThrow(/you already have a goal/i)
 })
 
 test('updateGoal can update a goal', async () => {

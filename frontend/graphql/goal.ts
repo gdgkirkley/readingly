@@ -1,5 +1,15 @@
+import { gql } from "@apollo/client";
 import { Book } from "./books";
 import { BookShelf } from "./bookshelves";
+
+export const CREATE_GOAL_MUTATION = gql`
+  mutation($goalDate: String!, $goalableId: ID!) {
+    createGoal(goalDate: $goalDate, goalableId: $goalableId) {
+      id
+      goalableType
+    }
+  }
+`;
 
 export type Goal = {
   id: string;
@@ -9,7 +19,7 @@ export type Goal = {
   goalable: Book | BookShelf;
 };
 
-enum GoalType {
+export enum GoalType {
   Book = "BOOK",
   BookShelf = "BOOKSHELF",
 }
