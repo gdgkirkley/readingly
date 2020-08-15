@@ -35,6 +35,7 @@ export default gql`
     description: String
     authors: [String!]
     reading: [Reading!]
+    goal: Goal
     bookshelves: [BookShelf!]
     thumbnail: String
     pageCount: Int!

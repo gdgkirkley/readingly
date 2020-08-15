@@ -12,7 +12,8 @@ test('book returns reading data', async () => {
 
   let bookReading = await book.Book.reading(b, {}, context)
 
-  expect(bookReading).toHaveLength(0)
+  // There is one reading row in seed data
+  expect(bookReading).toHaveLength(1)
 
   const createdReading = await models.Reading.create({
     bookGoogleBooksId: b.googleBooksId,
@@ -22,7 +23,7 @@ test('book returns reading data', async () => {
 
   bookReading = await book.Book.reading(b, {}, context)
 
-  expect(bookReading).toHaveLength(1)
+  expect(bookReading).toHaveLength(2)
   expect(bookReading).toEqual(
     expect.arrayContaining([expect.objectContaining({id: createdReading.id})]),
   )
@@ -65,4 +66,21 @@ test('book returns bookshelf data', async () => {
   expect(bookBookshelves).toEqual(
     expect.arrayContaining([expect.objectContaining({id: bs.id})]),
   )
+})
+
+test('book returns book goal data', async () => {
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
+
+  let goal = await book.Book.goal(b, {}, context)
+
+  expect(goal.goalableType).toBe('BOOK')
+  expect(goal.goalableId).toBe(b.googleBooksId)
+})
+
+test('book goal returns null if no user', async () => {
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
+
+  let goal = await book.Book.goal(b, {}, {models, me: null})
+
+  expect(goal).toBe(null)
 })

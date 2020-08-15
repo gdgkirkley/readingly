@@ -11,9 +11,11 @@ export default {
     books: async (parent, args, {models}) => {
       return await models.Book.findAll()
     },
+
     book: async (parent, {googleBooksId}, {models}) => {
       return await models.Book.findByPk(googleBooksId)
     },
+
     googleBook: async (parent, {googleBooksId}, ctx) => {
       const result = await getGoogleBook(googleBooksId)
       const info = result.volumeInfo
@@ -33,6 +35,7 @@ export default {
       }
       return book
     },
+
     searchBook: async (parent, {search, limit, offset}, {models}) => {
       if (limit && limit > 40) {
         throw new Error('Limit must be less than 40')
@@ -124,6 +127,7 @@ export default {
 
       return await models.Book.findByPk(book.googleBooksId)
     },
+
     updateBook: async (parent, {googleBooksId, ...rest}, {models}) => {
       await models.Book.update(
         {
@@ -155,6 +159,7 @@ export default {
 
       return totalReadingTimeSeconds
     },
+
     reading: async (book, args, {me, models}) => {
       if (!me) {
         return null
@@ -170,6 +175,7 @@ export default {
         order: [['createdAt', 'DESC']],
       })
     },
+
     bookshelves: async (book, args, {me, models}) => {
       if (!me) return null
       if (!book.googleBooksId) return null
@@ -183,6 +189,17 @@ export default {
         ],
         where: {
           userId: me.id,
+        },
+      })
+    },
+
+    goal: async (book, args, {me, models}) => {
+      if (!me) return null
+      if (!book.googleBooksId) return null
+
+      return await models.Goal.findOne({
+        where: {
+          goalableId: book.googleBooksId,
         },
       })
     },

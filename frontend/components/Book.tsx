@@ -163,12 +163,13 @@ const Book = ({ googleBooksId }: Props) => {
           </Card>
         </div>
       </TwoColContent>
-      {bookshelves?.length || reading?.length ? (
+      {reading?.length ? (
         <ReadingBlock>
           <MyActivityHeader>
             <h2>My Reading</h2>
             <UpdateReadingProgress book={data.googleBook} />
           </MyActivityHeader>
+
           {reading?.length ? (
             <Cards>
               {reading.map((read) => (
