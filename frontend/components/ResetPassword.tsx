@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "./styles/ButtonStyles";
-import Dialog, { InnerDialogContent } from "./Dialog";
 import Form, { ActionGroup, InputGroup } from "./styles/FormStyles";
 import { useForm } from "react-hook-form";
 

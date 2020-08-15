@@ -1,6 +1,6 @@
 import {AuthenticationError, UserInputError} from 'apollo-server'
 import logger from 'loglevel'
-import {getUserToken, isPasswordValid} from '../utils/auth'
+import {getUserToken, isPasswordValid, getSaltAndHash} from '../utils/auth'
 
 export default {
   Query: {
@@ -67,6 +67,33 @@ export default {
     signout: async (parent, args, {res}) => {
       res.clearCookie('token')
       return {message: 'Goodbye!'}
+    },
+
+    updatePassword: async (
+      parent,
+      {login, oldPassword, newPassword},
+      {models},
+    ) => {
+      const user = await models.User.findByLogin(login)
+
+      if (!user) {
+        throw new UserInputError(`No user found for ${login}`)
+      }
+
+      const isValid = isPasswordValid(oldPassword, user.salt, user.password)
+
+      if (!isValid) {
+        throw new AuthenticationError('Wrong password')
+      }
+
+      const {salt, hash} = getSaltAndHash(newPassword)
+
+      user.password = hash
+      user.salt = salt
+
+      await user.save()
+
+      return user
     },
 
     updateUser: async (parent, {id, ...rest}, {models}) => {

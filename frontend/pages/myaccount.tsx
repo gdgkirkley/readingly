@@ -22,8 +22,9 @@ const TabsContainer = styled.div`
 `;
 
 const TabButton = styled.button`
+  color: ${(props) => props.theme.black};
   padding: 2rem 2rem;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 1.5rem;
   background: #fff;
   transition: 0.2s linear;
@@ -98,7 +99,7 @@ const MyAccount = () => {
               onClick={() => updateTab(TABS.Password)}
               className={tab === TABS.Password ? "active" : null}
             >
-              Login & Security
+              Reset Password
             </TabButton>
           </TabsContainer>
           {tab === TABS.Account ? <Account me={me} /> : null}

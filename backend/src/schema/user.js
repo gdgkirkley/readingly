@@ -12,6 +12,12 @@ const schema = gql`
     signIn(login: String!, password: String!): User!
     signout: Message!
 
+    updatePassword(
+      login: String!
+      oldPassword: String!
+      newPassword: String!
+    ): User!
+
     updateUser(
       id: ID
       email: String

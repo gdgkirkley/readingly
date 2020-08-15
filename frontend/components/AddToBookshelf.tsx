@@ -62,7 +62,7 @@ const AddToBookshelf = ({ book }: Props) => {
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if (outer.current.contains(e.target)) {
+      if (outer?.current?.contains(e.target)) {
         return;
       }
 
