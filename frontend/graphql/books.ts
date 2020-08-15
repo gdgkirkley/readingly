@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import { BookShelf } from "./bookshelves";
 import { Reading } from "./reading";
+import { Goal } from "./goal";
 
 const BOOK_QUERY = gql`
   query {
@@ -46,6 +47,10 @@ export const GOOGLE_BOOK_QUERY = gql`
         id
         title
       }
+      goal {
+        id
+        goalDate
+      }
     }
   }
 `;
@@ -63,6 +68,7 @@ export interface Book {
   authors: string[];
   reading: Reading[];
   bookshelves: BookShelf[];
+  goal: Goal;
   thumbnail: string;
   pageCount: number;
   publishDate: string;

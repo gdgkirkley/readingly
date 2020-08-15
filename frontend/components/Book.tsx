@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import { useQuery } from "@apollo/client";
+import Head from "next/head";
 import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
-import Head from "next/head";
-import { getReadingTimeString } from "../lib/time";
+import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
 import { formatDate } from "../lib/formatDates";
-import Link from "next/link";
 import UpdateReadingProgress from "./UpdateReadingProgress";
 import ReadingCard from "./ReadingCard";
 import Card from "./Card";
@@ -68,10 +68,14 @@ const BannerTitle = styled.h1`
   }
 `;
 
-const ReadingBlock = styled.div`
-  border-top: 1px dotted ${(props) => props.theme.black};
-  border-bottom: 1px dotted ${(props) => props.theme.black};
+const BookBlock = styled.div`
   padding-bottom: 2rem;
+  border-top: 1px dotted ${(props) => props.theme.black};
+
+  /* This isn't working? */
+  &:last-of-type {
+    border-bottom: 1px dotted ${(props) => props.theme.black};
+  }
 `;
 
 const TwoColContent = styled.div`
@@ -116,6 +120,7 @@ const Book = ({ googleBooksId }: Props) => {
     bookshelves,
     reading,
     averageTimeToReadInSeconds,
+    goal,
   } = data.googleBook;
 
   return (
@@ -163,8 +168,22 @@ const Book = ({ googleBooksId }: Props) => {
           </Card>
         </div>
       </TwoColContent>
-      {reading?.length ? (
-        <ReadingBlock>
+
+      <BookBlock>
+        <MyActivityHeader>
+          <h2>Goal</h2>
+        </MyActivityHeader>
+        {goal ? (
+          <p>
+            My goal is to read {title} by{" "}
+            <strong>{formatDate(goal.goalDate)}</strong>. That's{" "}
+            <strong>{getPeriodFromNow(goal.goalDate)}</strong> from now.
+          </p>
+        ) : null}
+      </BookBlock>
+      {/* If it's added to a bookshelf, or user already has reading history*/}
+      {bookshelves?.length || reading?.length ? (
+        <BookBlock>
           <MyActivityHeader>
             <h2>My Reading</h2>
             <UpdateReadingProgress book={data.googleBook} />
@@ -182,7 +201,7 @@ const Book = ({ googleBooksId }: Props) => {
               ))}
             </Cards>
           ) : null}
-        </ReadingBlock>
+        </BookBlock>
       ) : null}
       <div>
         <h2>Check These Out</h2>

@@ -1,11 +1,13 @@
 const TWO_HOURS = 60 * 2;
 const SECONDS_IN_MINUTE = 60;
 const MINUTES_IN_HOUR = 60;
-const SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
 const HOURS_IN_DAY = 24;
+const SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
+const MILLISECONDS_IN_DAY =
+  1000 * SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY;
 
 export function getReadingTimeString(seconds: number): string {
-  let finalString;
+  let finalString: string;
 
   const days = Math.floor(seconds / (SECONDS_IN_HOUR * HOURS_IN_DAY));
   const hours = Math.floor(
@@ -39,4 +41,17 @@ export function getPercentage(current: number, total: number): number {
 export function round(value: number, precision: number): number {
   var multiplier = Math.pow(10, precision || 0);
   return Math.round(value * multiplier) / multiplier;
+}
+
+export function getPeriodFromNow(date: Date | string): string {
+  let today = new Date();
+
+  if (typeof date === "string") {
+    date = new Date(date);
+  }
+
+  return (
+    Math.ceil((date.getTime() - today.getTime()) / MILLISECONDS_IN_DAY) +
+    " days"
+  );
 }
