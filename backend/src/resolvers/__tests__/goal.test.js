@@ -1,4 +1,4 @@
-import goal from '../goal'
+import goal, {getDaysUntilDate} from '../goal'
 import models from '../../models'
 import book from '../book'
 import bookshelf from '../bookshelf'
@@ -142,4 +142,25 @@ test('deleteGoal rejects invalid goal id', async () => {
   await expect(
     goal.Mutation.deleteGoal(parent, {id: 123}, context),
   ).rejects.toThrow(/no goal/i)
+})
+
+test('reading recommendation returns value for book', async () => {
+  const goalParent = await models.Goal.findByPk(1)
+  const g = await goal.Goal.readingRecommendation(goalParent, {}, context)
+
+  expect(g).toBeGreaterThan(0)
+})
+
+test('reading recommendation returns value for bookshelf', async () => {
+  const goalParent = await models.Goal.findByPk(2)
+  const book = await models.Book.findByPk('s1gVAAAAYAAJ')
+  const bookshelf = await models.BookShelf.findOne({
+    where: {
+      userId: 1,
+    },
+  })
+  await bookshelf.addBook(book)
+  const g = await goal.Goal.readingRecommendation(goalParent, {}, context)
+
+  expect(g).toBeGreaterThan(0)
 })

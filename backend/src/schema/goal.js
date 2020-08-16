@@ -19,6 +19,7 @@ export default gql`
     goalDate: Date!
     goalableId: ID!
     goalableType: String!
+    readingRecommendation: Int
     goalable: Goalable!
   }
 `

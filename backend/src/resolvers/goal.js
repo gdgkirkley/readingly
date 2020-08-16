@@ -1,3 +1,5 @@
+const ONE_DAY = 1000 * 60 * 60 * 24
+
 export default {
   Query: {
     goals: async (parent, args, {models, me}) => {
@@ -68,6 +70,18 @@ export default {
     goalable: async (goal, args, ctx) => {
       return await goal.getGoalable()
     },
+
+    readingRecommendation: async (goal, args, {me, models}) => {
+      const goalable = await goal.getGoalable()
+      const daysUntilGoal = getDaysUntilDate(goal.goalDate)
+
+      if (goal.goalableType === 'BOOK') {
+        return Math.round(goalable.pageCount / daysUntilGoal)
+      } else {
+        const totalPages = await goalable.getTotalPagesOnShelf()
+        return Math.round(totalPages / daysUntilGoal)
+      }
+    },
   },
 
   Goalable: {
@@ -99,4 +113,9 @@ function isUUID(id) {
   const reg = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
   return reg.test(id)
+}
+
+export function getDaysUntilDate(date) {
+  const today = new Date()
+  return Math.ceil(date.getTime() - today.getTime()) / ONE_DAY
 }
