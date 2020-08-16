@@ -24,40 +24,45 @@ type FormInputs = {
 type Props = {
   goalableType: GoalType;
   goalableId: string;
+  bookshelfTitle?: string;
 };
 
-const CreateGoal = ({ goalableType, goalableId }: Props) => {
+const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
   const [open, setOpen] = useState(false);
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const [createGoal, { loading, error }] = useMutation(CREATE_GOAL_MUTATION, {
-    onError: () => {
-      toast.error("There was an error creating goal");
+    onError: (error) => {
+      toast.error(`There was an error creating goal: ${error.message}`);
     },
   });
 
   const toggle = () => setOpen(!open);
 
   const onSubmit = async (data: FormInputs) => {
+    const refetchQuery =
+      goalableType === GoalType.Book
+        ? {
+            query: GOOGLE_BOOK_QUERY,
+            variables: { googleBooksId: goalableId },
+          }
+        : {
+            query: MY_BOOKSHELF_QUERY,
+            variables: { title: bookshelfTitle },
+          };
+
     await createGoal({
       variables: {
         goalDate: data.goalDate,
         goalableId: goalableId,
       },
-      refetchQueries: [
-        {
-          query: GOOGLE_BOOK_QUERY,
-          variables: { googleBooksId: goalableId },
-        },
-        {
-          query: MY_BOOKSHELF_QUERY,
-          variables: { id: goalableId },
-        },
-      ],
+      refetchQueries: [refetchQuery],
+      awaitRefetchQueries: true,
     });
 
     if (!error && !loading) {
       toast.success("Goal created!");
+      setOpen(false);
     }
   };
 

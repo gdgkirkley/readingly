@@ -170,20 +170,24 @@ const Book = ({ googleBooksId }: Props) => {
           </Card>
         </div>
       </TwoColContent>
-
-      <BookBlock>
-        <MyActivityHeader>
-          <h2>Goal</h2>
-          <CreateGoal goalableId={googleBooksId} goalableType={GoalType.Book} />
-        </MyActivityHeader>
-        {goal ? (
-          <p>
-            My goal is to read {title} by{" "}
-            <strong>{formatDate(goal.goalDate)}</strong>. That's{" "}
-            <strong>{getPeriodFromNow(goal.goalDate)}</strong> from now.
-          </p>
-        ) : null}
-      </BookBlock>
+      {bookshelves?.length ? (
+        <BookBlock>
+          <MyActivityHeader>
+            <h2>Goal</h2>
+            <CreateGoal
+              goalableId={googleBooksId}
+              goalableType={GoalType.Book}
+            />
+          </MyActivityHeader>
+          {goal ? (
+            <p>
+              My goal is to read {title} by{" "}
+              <strong>{formatDate(goal.goalDate)}</strong>. That's{" "}
+              <strong>{getPeriodFromNow(goal.goalDate)}</strong> from now.
+            </p>
+          ) : null}
+        </BookBlock>
+      ) : null}
       {/* If it's added to a bookshelf, or user already has reading history*/}
       {bookshelves?.length || reading?.length ? (
         <BookBlock>
