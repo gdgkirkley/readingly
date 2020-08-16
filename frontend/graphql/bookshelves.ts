@@ -1,14 +1,13 @@
 import { gql } from "@apollo/client";
 import { Book } from "./books";
+import { Goal } from "./goal";
 
 export const MY_BOOKSHELVES_QUERY = gql`
   query {
     mybookshelves {
       id
       title
-      createdAt
       bookCount
-      averageTimeToReadInSeconds
       books(limit: 10) {
         googleBooksId
         title
@@ -26,6 +25,10 @@ export const MY_BOOKSHELF_QUERY = gql`
       createdAt
       bookCount
       averageTimeToReadInSeconds
+      goal {
+        id
+        goalDate
+      }
       books {
         googleBooksId
         title
@@ -88,6 +91,7 @@ export type BookShelf = {
   bookCount: number;
   books?: Book[];
   averageTimeToReadInSeconds: number;
+  goal: Goal;
   createdAt?: string;
   updatedAt?: string;
 };
