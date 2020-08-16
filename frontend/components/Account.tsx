@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { User } from "../graphql/user";
+import {
+  User,
+  UPDATE_USER_MUTATION,
+  CURRENT_USER_QUERY,
+} from "../graphql/user";
 import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
 import Button from "./styles/ButtonStyles";
+import { toast } from "react-toastify";
 
 const InformationContainer = styled.div`
   padding: 1rem;
@@ -45,16 +51,34 @@ type FormInputs = {
 };
 
 const Account = ({ me }: Props) => {
+  const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
+    onError: (error) => {
+      toast.error(`Unable to update: ${error.message}`);
+    },
+  });
   const [edit, setEdit] = useState(false);
-  const { register, handleSubmit, errors } = useForm<FormInputs>({
+  const { register, handleSubmit, errors, reset } = useForm<FormInputs>({
     defaultValues: {
       email: me.email,
       username: me.username,
     },
   });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = async (data: FormInputs) => {
+    await updateUser({
+      variables: {
+        id: me.id,
+        ...data,
+      },
+      refetchQueries: [{ query: CURRENT_USER_QUERY }],
+      awaitRefetchQueries: true,
+    });
+
+    if (!error && !loading) {
+      toast.success("Your information has been updated!");
+      setEdit(false);
+      reset({ ...data });
+    }
   };
 
   const toggleEdit = (e) => {

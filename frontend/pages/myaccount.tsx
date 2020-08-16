@@ -103,7 +103,7 @@ const MyAccount = () => {
             </TabButton>
           </TabsContainer>
           {tab === TABS.Account ? <Account me={me} /> : null}
-          {tab === TABS.Password ? <ResetPassword /> : null}
+          {tab === TABS.Password ? <ResetPassword me={me} /> : null}
         </div>
         <ReadingIllustration />
       </AccountContainer>

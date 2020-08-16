@@ -41,7 +41,6 @@ const user = sequelize => {
         allowNull: false,
         validate: {
           notEmpty: true,
-          len: [7, 42],
         },
       },
       readingSpeedWordsPerMinute: {

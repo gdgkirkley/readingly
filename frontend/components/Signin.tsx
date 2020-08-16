@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import StyledForm, { InputGroup, ActionGroup } from "./styles/FormStyles";
 import Button from "./styles/ButtonStyles";
 import { SIGN_IN_USER_MUTATION, CURRENT_USER_QUERY } from "../graphql/user";
+import { toast } from "react-toastify";
 
 type FormInputs = {
   email: string;
@@ -12,7 +13,14 @@ type FormInputs = {
 };
 
 const Signin = () => {
-  const [signIn, { data, error, loading }] = useMutation(SIGN_IN_USER_MUTATION);
+  const [signIn, { data, error, loading }] = useMutation(
+    SIGN_IN_USER_MUTATION,
+    {
+      onError: (error) => {
+        toast.error(`${error.message}`);
+      },
+    }
+  );
   const { register, handleSubmit, errors, formState } = useForm<FormInputs>();
 
   const onSubmit = (data: FormInputs) => {

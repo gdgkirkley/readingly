@@ -19,7 +19,7 @@ const schema = gql`
     ): User!
 
     updateUser(
-      id: ID
+      id: ID!
       email: String
       username: String
       readingSpeedWordsPerMinute: Int
