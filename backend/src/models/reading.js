@@ -16,6 +16,9 @@ const reading = sequelize => {
         allowNull: false,
         defaultValue: 0,
         type: DataTypes.FLOAT,
+        validate: {
+          min: 0,
+        },
       },
     },
     {

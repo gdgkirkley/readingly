@@ -3,13 +3,15 @@ import {getSaltAndHash} from '../utils/auth'
 
 class User extends Model {
   static async findByLogin(login) {
+    const lowerLogin = login.toLowerCase()
+
     let user = await User.findOne({
       where: {username: login},
     })
 
     if (!user) {
       user = await User.findOne({
-        where: {email: login},
+        where: {email: lowerLogin},
       })
     }
 
@@ -21,7 +23,9 @@ const user = sequelize => {
     {
       username: {
         type: DataTypes.STRING,
-        unique: true,
+        unique: {
+          msg: 'That username is already taken!',
+        },
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -29,7 +33,9 @@ const user = sequelize => {
       },
       email: {
         type: DataTypes.STRING,
-        unique: true,
+        unique: {
+          msg: 'That email is already taken!',
+        },
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -62,6 +68,12 @@ const user = sequelize => {
       modelName: 'user',
     },
   )
+
+  User.beforeValidate(user => {
+    if (typeof user.email === 'string') {
+      user.email = user.email.toLowerCase()
+    }
+  })
 
   User.beforeCreate(async user => {
     const {salt, hash} = getSaltAndHash(user.password)

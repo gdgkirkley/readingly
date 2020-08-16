@@ -6,10 +6,11 @@ import RelaxingIllustration from "./illustrations/RelaxingIllustration";
 const Banner = styled.div`
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
   width: 100%;
-  background: ${(props) => props.theme.yellow};
   padding: 2rem;
-  margin: 2rem 0rem;
+  margin-bottom: 4rem;
+  height: 50vh;
 `;
 
 const HomeBanner = () => {
@@ -21,9 +22,9 @@ const HomeBanner = () => {
     <Banner>
       <div>
         <h1>Welcome to Readingly</h1>
-        <h3>Your reading companion</h3>
+        <h3>A better reading tracker.</h3>
       </div>
-      <RelaxingIllustration width={400} />
+      <RelaxingIllustration width={500} />
     </Banner>
   );
 };

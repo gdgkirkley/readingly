@@ -2,7 +2,7 @@ import models from '../models'
 
 async function createReadings() {
   await models.Reading.create({
-    progress: 0.3,
+    progress: 30,
     bookGoogleBooksId: 's1gVAAAAYAAJ',
     userId: 1,
   })
