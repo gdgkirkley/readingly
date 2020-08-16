@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import Meta from "./Meta";
 import Header from "./Header";
 import Footer from "./Footer";
+import HomeBanner from "./HomeBanner";
 
 export const theme = {
   black: "#393939",
@@ -103,6 +104,7 @@ const Page: React.FC = (props) => {
       />
       <StyledPage>
         <Header />
+        <HomeBanner />
         <Inner>{props.children}</Inner>
         <Footer />
       </StyledPage>

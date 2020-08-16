@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import BookCategorySearch from "../components/BookCategorySearch";
 import SearchBar, { SearchInputs } from "../components/SearchBar";
+import HomeBanner from "../components/HomeBanner";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
