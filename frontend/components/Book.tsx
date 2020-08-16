@@ -171,10 +171,10 @@ const Book = ({ googleBooksId }: Props) => {
           </Card>
         </div>
       </TwoColContent>
-      {bookshelves?.length ? (
+      {bookshelves?.length || goal.goalDate ? (
         <BookBlock>
           <MyActivityHeader>
-            <h2>Goal</h2>
+            <h2>My Goal</h2>
             {goal ? (
               <UpdateGoal
                 goalableId={googleBooksId}

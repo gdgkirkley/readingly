@@ -56,3 +56,7 @@ export type User = {
   username: string;
   bookshelves?: BookShelf[];
 };
+
+export type UserData = {
+  me: User;
+};

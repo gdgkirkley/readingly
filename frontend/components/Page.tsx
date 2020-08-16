@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useRouter } from "next/router";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { ToastContainer } from "react-toastify";
 import Meta from "./Meta";
@@ -89,6 +90,8 @@ const Inner = styled.main`
 `;
 
 const Page: React.FC = (props) => {
+  const router = useRouter();
+
   return (
     <ThemeProvider theme={theme}>
       <Meta />
@@ -104,7 +107,7 @@ const Page: React.FC = (props) => {
       />
       <StyledPage>
         <Header />
-        <HomeBanner />
+        {router.pathname === "/" ? <HomeBanner /> : null}
         <Inner>{props.children}</Inner>
         <Footer />
       </StyledPage>

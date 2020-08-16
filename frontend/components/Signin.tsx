@@ -43,7 +43,10 @@ const Signin = () => {
           placeholder="Email"
           name="email"
           id="email"
-          ref={register({ required: true, pattern: /^\S+@\S+$/i })}
+          ref={register({
+            required: true,
+            pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          })}
           autoFocus
         />
         {errors.email?.type === "required" && (
@@ -53,7 +56,7 @@ const Signin = () => {
         )}
         {errors.email?.type === "pattern" && (
           <p className="error-message" data-testid="validation-error">
-            Email must be an email
+            Must be an email
           </p>
         )}
       </InputGroup>

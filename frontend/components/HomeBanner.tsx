@@ -1,7 +1,9 @@
 import React from "react";
-import { useRouter } from "next/router";
 import styled from "styled-components";
+import Link from "next/link";
+import { useUser } from "../hooks/useUser";
 import RelaxingIllustration from "./illustrations/RelaxingIllustration";
+import Button from "./styles/ButtonStyles";
 
 const Banner = styled.div`
   display: flex;
@@ -13,17 +15,29 @@ const Banner = styled.div`
   height: 50vh;
 `;
 
-const HomeBanner = () => {
-  const router = useRouter();
+const BannerTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
 
-  if (router.pathname !== "/") return null;
+const HomeBanner = () => {
+  const me = useUser();
 
   return (
     <Banner>
-      <div>
+      <BannerTitle>
         <h1>Welcome to Readingly</h1>
         <h3>A better reading tracker.</h3>
-      </div>
+        {!me ? (
+          <Link href="/signup" passHref={true}>
+            <Button as="a" themeColor="purple">
+              Create an account
+            </Button>
+          </Link>
+        ) : null}
+      </BannerTitle>
       <RelaxingIllustration width={500} />
     </Banner>
   );
