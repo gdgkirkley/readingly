@@ -200,6 +200,7 @@ export default {
       return await models.Goal.findOne({
         where: {
           goalableId: book.googleBooksId,
+          userId: me.id,
         },
       })
     },

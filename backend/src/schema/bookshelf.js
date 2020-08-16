@@ -20,10 +20,12 @@ export default gql`
   type BookShelf {
     id: ID!
     title: String!
-    createdAt: DateTime!
     user: User!
     books(limit: Int, offset: Int): [Book!]
     bookCount: Int!
     averageTimeToReadInSeconds: Int!
+    goal: Goal
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `

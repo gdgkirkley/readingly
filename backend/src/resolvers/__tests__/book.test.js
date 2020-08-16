@@ -77,6 +77,14 @@ test('book returns book goal data', async () => {
   expect(goal.goalableId).toBe(b.googleBooksId)
 })
 
+test("book does not return another user's book goal data", async () => {
+  const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
+
+  let goal = await book.Book.goal(b, {}, {me: {id: 2}, models})
+
+  expect(goal).toBe(null)
+})
+
 test('book goal returns null if no user', async () => {
   const b = await book.Query.book(parent, {googleBooksId: validBookId}, context)
 

@@ -32,45 +32,6 @@ export default {
     },
   },
 
-  BookShelf: {
-    user: async (bookshelf, args, {models}) => {
-      return await models.User.findByPk(bookshelf.userId)
-    },
-    books: async (bookshelf, {limit, offset}, {models}) => {
-      return await bookshelf.getBooks({
-        limit: limit ? limit : 50,
-        offset: offset ? offset : 0,
-      })
-    },
-    bookCount: async (bookshelf, args, {models}) => {
-      return await bookshelf.countBooks()
-    },
-    averageTimeToReadInSeconds: async (bookshelf, args, {models}) => {
-      const [count] = await sequelize.query(
-        `
-        SELECT SUM(books."pageCount") AS totalPageCount
-        FROM books
-        LEFT JOIN bookshelfbook on books."googleBooksId" = bookshelfbook."bookGoogleBooksId"
-        WHERE bookshelfbook."bookshelfId" = '${bookshelf.id}'
-      `,
-        {type: QueryTypes.SELECT},
-      )
-
-      if (!count.totalpagecount) {
-        return 0
-      }
-
-      const pageCount = parseInt(count.totalpagecount)
-
-      const estimatedWords = pageCount * AVERAGE_WORDS_PER_PAGE
-
-      const totalReadingTimeSeconds =
-        estimatedWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
-
-      return totalReadingTimeSeconds
-    },
-  },
-
   Mutation: {
     createBookshelf: async (parent, {title}, {me, models}) => {
       return await models.BookShelf.create({title, userId: me.id})
@@ -171,6 +132,59 @@ export default {
       }
 
       return bookshelf
+    },
+  },
+
+  BookShelf: {
+    user: async (bookshelf, args, {models}) => {
+      return await models.User.findByPk(bookshelf.userId)
+    },
+
+    books: async (bookshelf, {limit, offset}, {models}) => {
+      return await bookshelf.getBooks({
+        limit: limit ? limit : 50,
+        offset: offset ? offset : 0,
+      })
+    },
+
+    bookCount: async (bookshelf, args, {models}) => {
+      return await bookshelf.countBooks()
+    },
+
+    averageTimeToReadInSeconds: async (bookshelf, args, {models}) => {
+      const [count] = await sequelize.query(
+        `
+        SELECT SUM(books."pageCount") AS totalPageCount
+        FROM books
+        LEFT JOIN bookshelfbook on books."googleBooksId" = bookshelfbook."bookGoogleBooksId"
+        WHERE bookshelfbook."bookshelfId" = '${bookshelf.id}'
+      `,
+        {type: QueryTypes.SELECT},
+      )
+
+      if (!count.totalpagecount) {
+        return 0
+      }
+
+      const pageCount = parseInt(count.totalpagecount)
+
+      const estimatedWords = pageCount * AVERAGE_WORDS_PER_PAGE
+
+      const totalReadingTimeSeconds =
+        estimatedWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
+
+      return totalReadingTimeSeconds
+    },
+
+    goal: async (bookshelf, args, {models, me}) => {
+      if (!me) return null
+
+      return await models.Goal.findOne({
+        where: {
+          goalableId: bookshelf.id,
+          userId: me.id,
+        },
+      })
     },
   },
 }
