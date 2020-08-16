@@ -1,10 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
-import toast from "react-toastify";
+import { toast } from "react-toastify";
 import Button from "./styles/ButtonStyles";
 import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
+import { SIGN_UP_USER_MUTATION, CURRENT_USER_QUERY } from "../graphql/user";
 
 type FormInputs = {
   email: string;
@@ -14,10 +14,28 @@ type FormInputs = {
 };
 
 const Signup = () => {
+  const [signUp, { loading, error }] = useMutation(SIGN_UP_USER_MUTATION, {
+    onError: (error) => {
+      toast.error(`Unable to sign up: ${error.message}`);
+    },
+  });
+
   const { register, errors, getValues, handleSubmit } = useForm<FormInputs>();
 
-  const onSubmit = (data: FormInputs): void => {
-    console.log(data);
+  const onSubmit = async (data: FormInputs) => {
+    await signUp({
+      variables: {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      },
+      refetchQueries: [{ query: CURRENT_USER_QUERY }],
+      awaitRefetchQueries: true,
+    });
+
+    if (!loading && !error) {
+      toast.success(`Welcome to Readingly!`);
+    }
   };
 
   return (

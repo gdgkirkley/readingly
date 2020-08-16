@@ -21,7 +21,7 @@ const Signin = () => {
       },
     }
   );
-  const { register, handleSubmit, errors, formState } = useForm<FormInputs>();
+  const { register, handleSubmit, errors } = useForm<FormInputs>();
 
   const onSubmit = (data: FormInputs) => {
     signIn({
