@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import Button from "./styles/ButtonStyles";
@@ -53,7 +53,7 @@ const ResetPassword = ({ me }: Props) => {
     <PasswordForm role="form" onSubmit={handleSubmit(onSubmit)}>
       <h2>Reset Password</h2>
       <InputGroup>
-        <label htmlFor="password">Old Password</label>
+        <label htmlFor="old_password">Old Password</label>
         <input
           id="old_password"
           name="old_password"

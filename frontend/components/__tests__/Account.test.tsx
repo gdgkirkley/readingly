@@ -1,19 +1,48 @@
 import React from "react";
-import { render, cleanup, screen, waitFor } from "@testing-library/react";
+import { render, cleanup, screen, waitFor, act } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import userEvent from "@testing-library/user-event";
 import Account from "../Account";
+import { UPDATE_USER_MUTATION } from "../../graphql/user";
 import { buildUser } from "../../test/generate";
+import { mockCurrentUserQuery } from "../../test/mocks";
+import { toast } from "react-toastify";
+
+jest.mock("react-toastify");
 
 afterEach(() => {
   cleanup();
+  jest.resetAllMocks();
 });
 
 test("<Account /> displays user information and renders a usable form", async () => {
+  let updateUserQueryCalled = false;
   const user = await buildUser();
+  const newEmail = "test123@test.com";
+  const newUsername = "acooluser";
+
+  const mockedCurrentUser = await mockCurrentUserQuery({ user });
+
+  const mocks = [
+    {
+      request: {
+        query: UPDATE_USER_MUTATION,
+        variables: { id: user.id, username: newUsername, email: newEmail },
+      },
+      result: () => {
+        updateUserQueryCalled = true;
+        return {
+          data: {
+            id: user.id,
+          },
+        };
+      },
+    },
+    mockedCurrentUser,
+  ];
 
   render(
-    <MockedProvider>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <Account me={user} />
     </MockedProvider>
   );
@@ -28,6 +57,7 @@ test("<Account /> displays user information and renders a usable form", async ()
   const form = await screen.findByRole("form");
   const email = screen.getByLabelText(/email/i);
   const username = screen.getByLabelText(/username/i);
+  const updateButton = screen.getByRole("button", { name: /update/i });
 
   expect(form).toHaveFormValues({
     email: user.email,
@@ -36,11 +66,20 @@ test("<Account /> displays user information and renders a usable form", async ()
 
   userEvent.clear(email);
   userEvent.clear(username);
-  await userEvent.type(email, "test123");
-  await userEvent.type(username, "acooluser");
+  await userEvent.type(email, newEmail);
+  await userEvent.type(username, newUsername);
 
   expect(form).toHaveFormValues({
-    email: "test123",
-    username: "acooluser",
+    email: newEmail,
+    username: newUsername,
+  });
+
+  act(() => {
+    userEvent.click(updateButton);
+  });
+
+  await waitFor(() => {
+    expect(updateUserQueryCalled).toBeTruthy();
+    expect(toast.success).toHaveBeenCalledTimes(1);
   });
 });
