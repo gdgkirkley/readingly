@@ -7,8 +7,6 @@ Todo:
 	- it should reset after choosing a shelf
 	- clicking on an item for a second time should deselect it
  - Add a login to add to bookshelf link on Book page
- - When user logs in, redirect to homepage
- - Add sign up page
  - Add forgot password when not signed in
  - Add interaction between reading progress and goal
  - Add recommended pages to read
@@ -21,8 +19,10 @@ After first release:
  - Add search to nav bar
  - Refactoring of whole project
 
-Complete: 
+Complete:
 X  Wire up the account resolvers on the frontend
 X  Add goals to the application
 X  Add the cat svg animation to the 404 page
 X  Add banner to home page
+X  When user logs in, redirect to homepage
+X  Add sign up page

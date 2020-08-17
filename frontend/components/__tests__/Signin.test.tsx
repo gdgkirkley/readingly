@@ -2,6 +2,7 @@ import React from "react";
 import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import MockRouter, { mockRouter } from "../../test/mockRouter";
 import Signin from "../Signin";
 import { SIGN_IN_USER_MUTATION, CURRENT_USER_QUERY } from "../../graphql/user";
 import { buildUser } from "../../test/generate";
@@ -43,7 +44,9 @@ test("<Signin /> renders a signin form", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Signin />
+      <MockRouter>
+        <Signin />
+      </MockRouter>
     </MockedProvider>
   );
 
@@ -68,7 +71,7 @@ test("<Signin /> renders a signin form", async () => {
   });
 
   errors = screen.getAllByTestId("validation-error");
-  expect(errors[0]).toHaveTextContent(/email must be an email/i);
+  expect(errors[0]).toHaveTextContent(/must be an email/i);
   expect(errors[1]).toHaveTextContent(/password is required/i);
 
   await act(async () => {
@@ -85,5 +88,6 @@ test("<Signin /> renders a signin form", async () => {
 
   await waitFor(() => {
     expect(signInMutationCalled).toBe(true);
+    expect(mockRouter.push).toHaveBeenCalledWith("/");
   });
 });

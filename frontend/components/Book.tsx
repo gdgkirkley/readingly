@@ -171,11 +171,11 @@ const Book = ({ googleBooksId }: Props) => {
           </Card>
         </div>
       </TwoColContent>
-      {bookshelves?.length || goal.goalDate ? (
+      {bookshelves?.length || goal?.goalDate ? (
         <BookBlock>
           <MyActivityHeader>
             <h2>My Goal</h2>
-            {goal ? (
+            {goal?.goalDate ? (
               <UpdateGoal
                 goalableId={googleBooksId}
                 goalableType={GoalType.Book}
@@ -189,7 +189,7 @@ const Book = ({ googleBooksId }: Props) => {
               />
             )}
           </MyActivityHeader>
-          {goal ? (
+          {goal?.goalDate ? (
             <p>
               My goal is to read {title} by{" "}
               <strong>{formatDate(goal.goalDate)}</strong>. That's{" "}

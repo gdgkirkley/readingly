@@ -116,10 +116,11 @@ test("<Book /> renders a book", async () => {
   await waitFor(() => {
     const headings = screen.getAllByRole("heading");
     expect(headings[0]).toHaveTextContent(book.title);
-    expect(headings[1]).toHaveTextContent(/my reading/i);
-    expect(headings[2]).toHaveTextContent(/check these out/i);
-    expect(headings[3]).toHaveTextContent(book.authors[0]);
-    expect(headings[4]).toHaveTextContent(book.categories[0]);
+    expect(headings[1]).toHaveTextContent(/my goal/i);
+    expect(headings[2]).toHaveTextContent(/my reading/i);
+    expect(headings[3]).toHaveTextContent(/check these out/i);
+    expect(headings[4]).toHaveTextContent(book.authors[0]);
+    expect(headings[5]).toHaveTextContent(book.categories[0]);
 
     const images = screen.getAllByRole("img");
 

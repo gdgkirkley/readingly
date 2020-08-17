@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ type FormInputs = {
 };
 
 const Signup = () => {
+  const router = useRouter();
   const [signUp, { loading, error }] = useMutation(SIGN_UP_USER_MUTATION, {
     onError: (error) => {
       toast.error(`Unable to sign up: ${error.message}`);
@@ -35,6 +37,7 @@ const Signup = () => {
 
     if (!loading && !error) {
       toast.success(`Welcome to Readingly!`);
+      router.push("/myaccount");
     }
   };
 
@@ -54,7 +57,7 @@ const Signup = () => {
         />
         {errors?.email?.type === "required" && (
           <p className="error-message" data-testid="validation-error">
-            This field is required.
+            Email is required.
           </p>
         )}
         {errors?.email?.type === "pattern" && (
@@ -74,7 +77,7 @@ const Signup = () => {
         />
         {errors?.username?.type === "required" && (
           <p className="error-message" data-testid="validation-error">
-            This field is required.
+            Username is required.
           </p>
         )}
       </InputGroup>
@@ -89,7 +92,7 @@ const Signup = () => {
         />
         {errors?.password?.type === "required" && (
           <p className="error-message" data-testid="validation-error">
-            This field is required.
+            Password is required.
           </p>
         )}
       </InputGroup>
@@ -110,7 +113,7 @@ const Signup = () => {
         />
         {errors?.confirm_password?.type === "required" && (
           <p className="error-message" data-testid="validation-error">
-            This field is required.
+            Must confirm password
           </p>
         )}
         {errors?.confirm_password?.type === "validate" && (

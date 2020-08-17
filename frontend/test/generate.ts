@@ -3,6 +3,7 @@ import { User } from "../graphql/user";
 import { Book } from "../graphql/books";
 import { BookShelf } from "../graphql/bookshelves";
 import { Reading } from "../graphql/reading";
+import { Goal, GoalType } from "../graphql/goal";
 
 const getEmail = faker.internet.email;
 const getAdmin = faker.random.boolean;
@@ -22,7 +23,12 @@ const getDate = faker.date.future;
 const getWord = faker.lorem.word;
 const getSentence = faker.lorem.sentence;
 
+const getDateString = () => {
+  return getDate().toString();
+};
+
 async function buildBook({ ...overrides } = {}): Promise<Book> {
+  const goal = await buildGoal();
   return {
     title: getWord(),
     googleBooksId: getUUID(),
@@ -32,20 +38,21 @@ async function buildBook({ ...overrides } = {}): Promise<Book> {
     pageCount: getNumber(),
     publishDate: getSentence(),
     categories: [`${getWord()}`],
-    createdAt: getDate(),
-    updatedAt: getDate(),
-    averageRating: getNumber(),
+    createdAt: getDateString(),
+    updatedAt: getDateString(),
+    averageRating: getNumber().toString(),
     publisher: getWord(),
     bookshelves: [],
     reading: [],
     averageTimeToReadInSeconds: getNumber(),
+    goal: goal,
     ...overrides,
   };
 }
 
 async function buildUser({ ...overrides } = {}): Promise<User> {
   return {
-    id: getId(),
+    id: getId().toString(),
     username: getUserName(),
     email: getEmail(),
     ...overrides,
@@ -56,28 +63,52 @@ async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
   const book1 = await buildBook();
   const book2 = await buildBook();
   const book3 = await buildBook();
+  const goal = await buildGoal();
 
   return {
-    id: getId(),
+    id: getId().toString(),
     title: getWord(),
-    createdAt: getDate(),
+    createdAt: getDate().toString(),
     bookCount: getNumber(),
     books: [book1, book2, book3],
     averageTimeToReadInSeconds: getNumber(),
+    goal: goal,
     ...overrides,
   };
 }
 
 async function buildReading({ ...overrides } = {}): Promise<Reading> {
+  const user = await buildUser();
+  const book = await buildBook();
   return {
+    id: getId().toString(),
     progress: getNumber(),
     timeRemainingInSeconds: getNumber(),
-    book: await buildBook(),
-    user: await buildUser(),
-    createdAt: getDate(),
-    updatedAt: getDate(),
+    book,
+    user,
+    createdAt: getDateString(),
+    updatedAt: getDateString(),
     ...overrides,
   };
 }
 
-export { buildBook, buildUser, buildBookshelf, buildReading, getUUID };
+async function buildGoal({ ...overrides } = {}): Promise<Goal> {
+  // const book = await buildBook();
+  return {
+    id: getId().toString(),
+    goalDate: getDateString(),
+    goalable: null,
+    goalableId: getUUID(),
+    goalableType: GoalType.Book,
+    ...overrides,
+  };
+}
+
+export {
+  buildBook,
+  buildUser,
+  buildBookshelf,
+  buildReading,
+  buildGoal,
+  getUUID,
+};

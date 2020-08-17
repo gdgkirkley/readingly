@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
@@ -13,18 +14,16 @@ type FormInputs = {
 };
 
 const Signin = () => {
-  const [signIn, { data, error, loading }] = useMutation(
-    SIGN_IN_USER_MUTATION,
-    {
-      onError: (error) => {
-        toast.error(`${error.message}`);
-      },
-    }
-  );
+  const router = useRouter();
+  const [signIn, { error, loading }] = useMutation(SIGN_IN_USER_MUTATION, {
+    onError: (error) => {
+      toast.error(`${error.message}`);
+    },
+  });
   const { register, handleSubmit, errors } = useForm<FormInputs>();
 
-  const onSubmit = (data: FormInputs) => {
-    signIn({
+  const onSubmit = async (data: FormInputs) => {
+    await signIn({
       variables: {
         login: data.email,
         password: data.password,
@@ -32,6 +31,10 @@ const Signin = () => {
       refetchQueries: [{ query: CURRENT_USER_QUERY }],
       awaitRefetchQueries: true,
     });
+
+    if (!error && !loading) {
+      router.push("/");
+    }
   };
 
   return (

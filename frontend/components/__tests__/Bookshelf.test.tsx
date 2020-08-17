@@ -36,10 +36,12 @@ test("<Bookshelf /> renders a bookshelf", async () => {
   expect(screen.getByText("Loading...")).toBeInTheDocument();
 
   await waitFor(() => {
-    expect(screen.getByRole("heading")).toHaveTextContent(bookshelf.title);
+    expect(screen.getAllByRole("heading")[0]).toHaveTextContent(
+      bookshelf.title
+    );
     expect(
       screen.getByTestId("bookshelf-count").textContent
-    ).toMatchInlineSnapshot(`"There are 3 books on this list"`);
+    ).toMatchInlineSnapshot(`"There are 3 books on this list."`);
 
     expect(screen.getByTestId("cards")).toBeInTheDocument();
 
