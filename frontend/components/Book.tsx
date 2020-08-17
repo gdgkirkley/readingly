@@ -10,11 +10,13 @@ import AddToBookshelf from "./AddToBookshelf";
 import CreateGoal from "./CreateGoal";
 import UpdateReadingProgress from "./UpdateReadingProgress";
 import { Cards } from "./styles/LayoutStyles";
+import Button from "./styles/ButtonStyles";
 import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import { formatDate } from "../lib/formatDates";
 import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
 import { GoalType } from "../graphql/goal";
 import UpdateGoal from "./UpdateGoal";
+import { useUser } from "../hooks/useUser";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -103,6 +105,7 @@ type Props = {
 };
 
 const Book = ({ googleBooksId }: Props) => {
+  const me = useUser();
   const { data, loading, error } = useQuery<BookData>(GOOGLE_BOOK_QUERY, {
     variables: { googleBooksId: googleBooksId },
   });
@@ -153,21 +156,29 @@ const Book = ({ googleBooksId }: Props) => {
         />
         <div>
           <Card position="sticky">
-            <AddToBookshelf book={data.googleBook} />
-            {bookshelves?.length ? (
+            {me ? (
               <>
-                <p>
-                  Bookshelves:{" "}
-                  {bookshelves.map((shelf) => (
-                    <span key={shelf.id}>
-                      <Link href={`/shelf/${encodeURI(shelf.title)}`}>
-                        {shelf.title}
-                      </Link>
-                    </span>
-                  ))}
-                </p>
+                <AddToBookshelf book={data.googleBook} />
+                {bookshelves?.length ? (
+                  <p>
+                    Bookshelves:{" "}
+                    {bookshelves.map((shelf) => (
+                      <span key={shelf.id}>
+                        <Link href={`/shelf/${encodeURI(shelf.title)}`}>
+                          {shelf.title}
+                        </Link>
+                      </span>
+                    ))}
+                  </p>
+                ) : null}
               </>
-            ) : null}
+            ) : (
+              <Link href="/signin" passHref={true}>
+                <Button as="a" themeColor="yellow">
+                  Sign in to add this book!
+                </Button>
+              </Link>
+            )}
           </Card>
         </div>
       </TwoColContent>
