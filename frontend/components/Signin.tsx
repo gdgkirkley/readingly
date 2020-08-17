@@ -16,6 +16,10 @@ type FormInputs = {
 const Signin = () => {
   const router = useRouter();
   const [signIn, { error, loading }] = useMutation(SIGN_IN_USER_MUTATION, {
+    onCompleted: () => {
+      router.push("/");
+      toast.success("Welcome back!");
+    },
     onError: (error) => {
       toast.error(`${error.message}`);
     },
@@ -31,10 +35,6 @@ const Signin = () => {
       refetchQueries: [{ query: CURRENT_USER_QUERY }],
       awaitRefetchQueries: true,
     });
-
-    if (!error && !loading) {
-      router.push("/");
-    }
   };
 
   return (

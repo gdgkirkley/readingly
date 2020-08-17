@@ -6,9 +6,13 @@ import MockRouter, { mockRouter } from "../../test/mockRouter";
 import Signin from "../Signin";
 import { SIGN_IN_USER_MUTATION, CURRENT_USER_QUERY } from "../../graphql/user";
 import { buildUser } from "../../test/generate";
+import { toast } from "react-toastify";
+
+jest.mock("react-toastify");
 
 afterEach(() => {
   cleanup();
+  jest.resetAllMocks();
 });
 
 test("<Signin /> renders a signin form", async () => {
@@ -89,5 +93,63 @@ test("<Signin /> renders a signin form", async () => {
   await waitFor(() => {
     expect(signInMutationCalled).toBe(true);
     expect(mockRouter.push).toHaveBeenCalledWith("/");
+    expect(toast.success).toHaveBeenCalledTimes(1);
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+});
+
+test("<Signin /> handles error", async () => {
+  const errorMessage = "Bad request";
+  const user = await buildUser();
+
+  const mocks = [
+    {
+      request: {
+        query: SIGN_IN_USER_MUTATION,
+        variables: { login: user.email, password: "test123" },
+      },
+      error: new Error(errorMessage),
+    },
+    {
+      request: {
+        query: CURRENT_USER_QUERY,
+      },
+      result: {
+        data: {
+          me: { id: user.id, email: user.email, username: user.username },
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MockRouter>
+        <Signin />
+      </MockRouter>
+    </MockedProvider>
+  );
+
+  const email = screen.getByLabelText(/email/i);
+  const password = screen.getByLabelText(/password/i);
+
+  const button = screen.getByRole("button");
+
+  await act(async () => {
+    await userEvent.type(email, user.email);
+    await userEvent.type(password, "test123");
+  });
+
+  expect(screen.queryAllByTestId("validation-error")).toHaveLength(0);
+
+  act(() => {
+    userEvent.click(button);
+  });
+
+  await waitFor(() => {
+    expect(mockRouter.push).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledTimes(1);
+    expect(toast.error).toHaveBeenCalledWith(errorMessage);
   });
 });

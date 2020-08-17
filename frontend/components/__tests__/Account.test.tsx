@@ -18,6 +18,9 @@ test("<Account /> displays user information and renders a usable form", async ()
     </MockedProvider>
   );
 
+  expect(screen.getByText(user.email)).toBeInTheDocument();
+  expect(screen.getByText(user.username)).toBeInTheDocument();
+
   const editInfoButton = screen.getByRole("button");
 
   userEvent.click(editInfoButton);

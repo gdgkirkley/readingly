@@ -17,6 +17,10 @@ type FormInputs = {
 const Signup = () => {
   const router = useRouter();
   const [signUp, { loading, error }] = useMutation(SIGN_UP_USER_MUTATION, {
+    onCompleted: () => {
+      toast.success(`Welcome to Readingly!`);
+      router.push("/myaccount");
+    },
     onError: (error) => {
       toast.error(`Unable to sign up: ${error.message}`);
     },
@@ -34,11 +38,6 @@ const Signup = () => {
       refetchQueries: [{ query: CURRENT_USER_QUERY }],
       awaitRefetchQueries: true,
     });
-
-    if (!loading && !error) {
-      toast.success(`Welcome to Readingly!`);
-      router.push("/myaccount");
-    }
   };
 
   return (
