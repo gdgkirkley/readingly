@@ -10,13 +10,13 @@
     createReadings,
   } = require('./src/seeds')
 
-  const seed = process.env.SEED_DATABASE || process.env.NODE_ENV === 'test'
-
-  await sequelize.sync({
-    force: seed,
-  })
+  const seed = process.env.NODE_ENV !== 'test'
 
   if (seed) {
+    await sequelize.sync({
+      force: true,
+    })
+
     console.log('Seeding database')
     await createUsers()
     await createBooks()
