@@ -19,6 +19,8 @@ export default {
     googleBook: async (parent, {googleBooksId}, ctx) => {
       const result = await getGoogleBook(googleBooksId)
       const info = result.volumeInfo
+
+      const thumbnailImage = info.imageLinks?.thumbnail.replace('http', 'https')
       const book = {
         title: info.title,
         description: info.description,
@@ -27,9 +29,7 @@ export default {
         googleBooksId: result.id,
         publisher: info.publisher,
         averageRating: info.averageRating,
-        thumbnail: info.imageLinks?.thumbnail
-          ? info.imageLinks.thumbnail
-          : null,
+        thumbnail: info.imageLinks?.thumbnail ? thumbnailImage : null,
         pageCount: info.pageCount,
         categories: info.categories,
       }
@@ -78,6 +78,10 @@ export default {
         const bookResults = await Promise.all(
           results.items.map(async result => {
             const info = result.volumeInfo
+            const thumbnailImage = info.imageLinks?.thumbnail.replace(
+              'http',
+              'https',
+            )
             const book = {
               title: info.title,
               description: info.description,
@@ -85,9 +89,7 @@ export default {
               publisher: info.publisher,
               averageRating: info.averageRating,
               googleBooksId: result.id,
-              thumbnail: info.imageLinks?.thumbnail
-                ? info.imageLinks.thumbnail
-                : null,
+              thumbnail: info.imageLinks?.thumbnail ? thumbnailImage : null,
               pageCount: info.pageCount,
             }
             return book
