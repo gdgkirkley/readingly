@@ -83,7 +83,7 @@ export default {
           description: info.description,
           publishDate: info.publishedDate,
           googleBooksId: googleBook.id,
-          thumbnail: info.imageLinks.thumbnail,
+          thumbnail: info.imageLinks.thumbnail.replace('http', 'https'),
           pageCount: info.pageCount,
         })
 

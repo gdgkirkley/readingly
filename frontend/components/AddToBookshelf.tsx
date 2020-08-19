@@ -185,7 +185,11 @@ const AddToBookshelf = ({ book }: Props) => {
           onClick={handleClick}
           disabled={!selected}
         >
-          {selected ? `Add to ${selected}` : "Choose a bookshelf:"}
+          {selected
+            ? `Add to ${
+                selected.length > 18 ? `${selected.substr(0, 15)}...` : selected
+              }`
+            : "Choose a bookshelf:"}
         </AddToBookshelfButton>
         <DropButton
           themeColor="yellow"

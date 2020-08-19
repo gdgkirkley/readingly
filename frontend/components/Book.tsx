@@ -27,20 +27,13 @@ const BookInfo = styled.div`
   justify-content: flex-start;
   margin: 2rem 0;
 
-  & br {
-    display: none;
-  }
-
   & span {
     margin: 0 1rem;
-    &:after {
-      margin-left: 1rem;
-      content: "|";
-    }
+    padding-right: 2rem;
+    border-right: 1px dotted ${(props) => props.theme.black};
+    min-width: 15%;
     &:last-of-type {
-      &:after {
-        content: "";
-      }
+      border: none;
     }
   }
 
@@ -180,14 +173,18 @@ const Book = ({ googleBooksId }: Props) => {
       )}
       <BookInfo>
         <span>
-          <strong>{pageCount}</strong> pages{" "}
-        </span>{" "}
-        <span>
-          Published <strong>{formatDate(publishDate)}</strong>
-          <br /> by {publisher}
+          <strong>{pageCount}</strong> pages
+          <br />
+          Approx. <strong>{(pageCount * 250).toLocaleString()}</strong> words
         </span>
         <span>
-          <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>{" "}
+          <strong>{formatDate(publishDate)}</strong>
+          <br />
+          Published by {publisher}
+        </span>
+        <span>
+          <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>
+          <br />
           average reading time
         </span>
       </BookInfo>

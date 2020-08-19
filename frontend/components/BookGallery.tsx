@@ -10,7 +10,7 @@ const BookCards = styled.div`
   flex: 0 1 156px;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   justify-self: center;
   width: 100%;
 
@@ -21,6 +21,13 @@ const BookCards = styled.div`
 
 const BookCardContainer = styled.div`
   position: relative;
+  margin: 0 2rem;
+  margin-left: 0;
+
+  @media (max-width: 1300px) {
+    margin: 2rem;
+    margin-left: 0;
+  }
 `;
 
 const RemoveBookButton = styled(RemoveBook)`
