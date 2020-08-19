@@ -18,7 +18,7 @@ export default {
     dialect: 'postgres',
   },
   production: {
-    database: process.env.DATABASE_URL,
+    use_env_variable: process.env.DATABASE_URL,
     dialect: 'postgres',
     protocol: 'postgres',
     dialectOptions: {
