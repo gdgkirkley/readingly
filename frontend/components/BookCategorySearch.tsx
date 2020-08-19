@@ -20,7 +20,6 @@ type Props = {
 };
 
 const BookCategorySearch = ({ searchTerm }: Props) => {
-  console.log(`Re-rendering ${searchTerm}`);
   const { data, loading, error, fetchMore } = useQuery<BookData>(BOOK_SEARCH, {
     variables: { search: searchTerm, offset: 0, limit: 16 },
     fetchPolicy: "cache-first",
