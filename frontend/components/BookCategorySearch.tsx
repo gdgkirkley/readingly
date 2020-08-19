@@ -20,9 +20,10 @@ type Props = {
 };
 
 const BookCategorySearch = ({ searchTerm }: Props) => {
+  console.log(`Re-rendering ${searchTerm}`);
   const { data, loading, error, fetchMore } = useQuery<BookData>(BOOK_SEARCH, {
     variables: { search: searchTerm, offset: 0, limit: 16 },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     notifyOnNetworkStatusChange: true,
   });
 
@@ -32,7 +33,6 @@ const BookCategorySearch = ({ searchTerm }: Props) => {
         offset: data.searchBook.length,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        console.log(fetchMoreResult);
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
           searchBook: [...prev.searchBook, ...fetchMoreResult.searchBook],
