@@ -8,8 +8,10 @@ const SearchFormStyles = styled(FormStyles)`
   max-width: 100%;
   box-shadow: none;
   padding: 0;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   @media (max-width: 768px) {
     margin-bottom: 4rem;
@@ -51,7 +53,7 @@ const Bar = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 350px;
+    width: 335px;
 
     & input {
       width: 275px;

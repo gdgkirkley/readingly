@@ -22,6 +22,12 @@ const BookPage = styled.div`
   font-size: 1.7rem;
 `;
 
+const BookBlock = styled.div`
+  padding-bottom: 2rem;
+  border-bottom: 1px dotted ${(props) => props.theme.black};
+  margin-bottom: 2rem;
+`;
+
 const BookInfo = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -33,7 +39,7 @@ const BookInfo = styled.div`
     border-right: 1px dotted ${(props) => props.theme.black};
     min-width: 15%;
     &:last-of-type {
-      border: none;
+      border-right: none;
     }
   }
 
@@ -47,10 +53,8 @@ const BookInfo = styled.div`
 
     & span {
       border-bottom: 1px dotted ${(props) => props.theme.black};
+      border-right: none;
       margin: 1rem 0;
-      &:after {
-        content: "";
-      }
     }
   }
 `;
@@ -106,16 +110,6 @@ const BannerTitle = styled.h1`
   }
 `;
 
-const BookBlock = styled.div`
-  padding-bottom: 2rem;
-  border-top: 1px dotted ${(props) => props.theme.black};
-
-  /* This isn't working? */
-  &:last-of-type {
-    border-bottom: 1px dotted ${(props) => props.theme.black};
-  }
-`;
-
 const TwoColContent = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -131,6 +125,27 @@ const MyActivityHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const MobileDescription = styled.div`
+  display: block;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const Description = styled.div`
+  display: block;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 type Props = {
@@ -194,7 +209,7 @@ const Book = ({ googleBooksId }: Props) => {
         </BannerContent>
       </Banner>
       <TwoColContent>
-        <div
+        <Description
           dangerouslySetInnerHTML={{ __html: description }}
           data-testid="book-description"
         />
@@ -277,6 +292,10 @@ const Book = ({ googleBooksId }: Props) => {
           ) : null}
         </BookBlock>
       ) : null}
+      <MobileDescription
+        dangerouslySetInnerHTML={{ __html: description }}
+        data-testid="book-description"
+      />
       <div>
         <h2>Check These Out</h2>
         {authors && <BookCategorySearch searchTerm={authors[0]} />}

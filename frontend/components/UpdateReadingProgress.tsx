@@ -40,7 +40,7 @@ const UpdateReadingProgress = ({ book }: Props) => {
     ADD_READING_PROGRESS_MUTATION
   );
 
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit, errors } = useForm<FormData>();
 
   const toggle = () => setOpen(!open);
 
@@ -84,10 +84,25 @@ const UpdateReadingProgress = ({ book }: Props) => {
                 type="number"
                 id="progress"
                 name="progress"
-                ref={register}
+                ref={register({
+                  required: true,
+                  validate: (value) => {
+                    return value < book.pageCount;
+                  },
+                })}
                 autoFocus
               />
               <strong>out of {book.pageCount} pages</strong>
+              {errors?.progress?.type === "required" && (
+                <p className="error-message" data-testid="validation-error">
+                  Page count is required.
+                </p>
+              )}
+              {errors?.progress?.type === "validate" && (
+                <p className="error-message" data-testid="validation-error">
+                  Page count can't be more than the total pages!
+                </p>
+              )}
             </InputGroup>
             <ActionGroup justifyContent="center">
               <Button themeColor="purple" disabled={loading}>

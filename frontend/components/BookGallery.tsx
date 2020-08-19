@@ -7,7 +7,7 @@ import { BookShelf } from "../graphql/bookshelves";
 
 const BookCards = styled.div`
   display: flex;
-  flex: 0 1 156px;
+  flex: 1 0 auto;
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
