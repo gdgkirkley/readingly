@@ -13,6 +13,10 @@ const Banner = styled.div`
   padding: 2rem;
   margin-bottom: 4rem;
   height: 50vh;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
 `;
 
 const BannerTitle = styled.div`

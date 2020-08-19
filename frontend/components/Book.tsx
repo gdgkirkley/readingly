@@ -22,6 +22,46 @@ const BookPage = styled.div`
   font-size: 1.7rem;
 `;
 
+const BookInfo = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin: 2rem 0;
+
+  & br {
+    display: none;
+  }
+
+  & span {
+    margin: 0 1rem;
+    &:after {
+      margin-left: 1rem;
+      content: "|";
+    }
+    &:last-of-type {
+      &:after {
+        content: "";
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    font-size: 1em;
+
+    & br {
+      display: block;
+    }
+
+    & span {
+      border-bottom: 1px dotted ${(props) => props.theme.black};
+      margin: 1rem 0;
+      &:after {
+        content: "";
+      }
+    }
+  }
+`;
+
 const Banner = styled.div<{ background: string }>`
   position: relative;
   padding: 2rem 5rem;
@@ -138,12 +178,19 @@ const Book = ({ googleBooksId }: Props) => {
       {authors?.length && (
         <p data-testid="book-authors">By {getAuthorString(authors)}</p>
       )}
-      <p>
-        <strong>{pageCount}</strong> pages | Published{" "}
-        <strong>{formatDate(publishDate)}</strong> by {publisher} |{" "}
-        <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>{" "}
-        average reading time
-      </p>
+      <BookInfo>
+        <span>
+          <strong>{pageCount}</strong> pages{" "}
+        </span>{" "}
+        <span>
+          Published <strong>{formatDate(publishDate)}</strong>
+          <br /> by {publisher}
+        </span>
+        <span>
+          <strong>{getReadingTimeString(averageTimeToReadInSeconds)}</strong>{" "}
+          average reading time
+        </span>
+      </BookInfo>
       <Banner background={thumbnail}>
         <BannerContent>
           {thumbnail && <img src={thumbnail} alt={title} />}

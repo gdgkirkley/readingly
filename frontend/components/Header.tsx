@@ -43,13 +43,13 @@ const Header = () => {
   const { width } = useWindowSize();
 
   useEffect(() => {
-    if (width !== undefined && width > 768) {
+    if (width !== undefined && width > 1300) {
       setOpen(false);
     }
   }, [width]);
 
   const handleMenuButtonClick = (): void => {
-    if (width && width !== undefined && width > 768) {
+    if (width && width !== undefined && width > 1300) {
       return;
     }
 
@@ -65,10 +65,10 @@ const Header = () => {
           </a>
         </Link>
       </Logo>
-      {width < 768 ? (
+      {width < 1300 ? (
         <Hamburger toggled={open} toggle={handleMenuButtonClick} />
       ) : null}
-      {width < 768 ? (
+      {width < 1300 ? (
         open ? (
           <Menu onClick={handleMenuButtonClick} />
         ) : null
