@@ -9,6 +9,7 @@ type ContainerProps = {
 
 const Card = styled.a`
   text-align: center;
+  margin: 2rem;
 `;
 
 const ImageContainer = styled.div<ContainerProps>`
@@ -16,6 +17,7 @@ const ImageContainer = styled.div<ContainerProps>`
   height: auto;
   display: flex;
   justify-content: center;
+  width: 120px;
 
   & img {
     object-fit: cover;
@@ -23,6 +25,7 @@ const ImageContainer = styled.div<ContainerProps>`
     border-radius: 5px;
     box-shadow: 0 2px 2px -1px #a3a3a3;
     transition: box-shadow 0.2s, transform 0.2s;
+    width: 156px;
   }
 
   &:hover {
@@ -33,7 +36,10 @@ const ImageContainer = styled.div<ContainerProps>`
   }
 
   @media (max-width: 1300px) {
-    width: 156px;
+    width: 120px;
+    & img {
+      width: 120px;
+    }
   }
 `;
 

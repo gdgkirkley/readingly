@@ -7,9 +7,7 @@ import SearchBar, { SearchInputs } from "../components/SearchBar";
 import BookGallery from "../components/BookGallery";
 import Button from "../components/styles/ButtonStyles";
 
-const StyledSearchPage = styled.div`
-  width: ${(props) => props.theme.maxWidth};
-`;
+const StyledSearchPage = styled.div``;
 
 const Action = styled.div`
   display: flex;

@@ -91,12 +91,16 @@ export const ButtonGroupRoot = styled.div`
   position: relative;
 `;
 
-export const ButtonGroupDropdownContainer = styled.div`
+type Props = {
+  width?: number;
+};
+
+export const ButtonGroupDropdownContainer = styled.div<Props>`
   position: absolute;
   top: 0px;
   left: 0px;
   transform: translate(0px, 75px);
-  min-width: 236px;
+  min-width: ${(props) => (props.width ? props.width : "262")}px;
   max-height: 300px;
   overflow-y: auto;
   will-change: transform;

@@ -14,6 +14,7 @@ const AccountContainer = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    grid-gap: 2rem;
   }
 `;
 

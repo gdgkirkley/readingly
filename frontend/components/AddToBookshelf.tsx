@@ -18,7 +18,6 @@ import Button, {
   ButtonGroupDropdown,
 } from "./styles/ButtonStyles";
 import CaretDown from "./icons/CaretDown";
-import CreateBookShelf from "./CreateBookShelf";
 
 const AddToBookshelfButton = styled(Button)`
   /* margin: 2rem 0 3rem; */
@@ -99,6 +98,12 @@ const AddToBookshelf = ({ book }: Props) => {
 
     toast.success(`${book.title} added to ${shelf.title}!`);
     toggle();
+  };
+
+  const getElementWidth = (): number => {
+    if (outer?.current) {
+      return outer.current.clientWidth;
+    }
   };
 
   const toggle = () => {
@@ -194,7 +199,7 @@ const AddToBookshelf = ({ book }: Props) => {
         </DropButton>
       </ButtonGroup>
       {open ? (
-        <ButtonGroupDropdownContainer>
+        <ButtonGroupDropdownContainer width={getElementWidth()}>
           <ButtonGroupDropdown>
             <ul role="listbox" tabIndex={-1} aria-activedescendant={selected}>
               {data.mybookshelves.map((shelf, index) => (

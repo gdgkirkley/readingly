@@ -208,13 +208,15 @@ const Book = ({ googleBooksId }: Props) => {
                 <AddToBookshelf book={data.googleBook} />
                 {bookshelves?.length ? (
                   <p>
-                    Bookshelves:{" "}
-                    {bookshelves.map((shelf) => (
-                      <span key={shelf.id}>
-                        <Link href={`/shelf/${encodeURI(shelf.title)}`}>
-                          {shelf.title}
-                        </Link>
-                      </span>
+                    On My Shelves:{" "}
+                    {bookshelves.map((shelf, index) => (
+                      <>
+                        <div key={shelf.id}>
+                          <Link href={`/shelf/${encodeURI(shelf.title)}`}>
+                            {shelf.title}
+                          </Link>
+                        </div>
+                      </>
                     ))}
                   </p>
                 ) : null}

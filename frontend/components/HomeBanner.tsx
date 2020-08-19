@@ -11,11 +11,21 @@ const Banner = styled.div`
   align-items: center;
   width: 100%;
   padding: 2rem;
-  margin-bottom: 4rem;
   height: 50vh;
+  overflow: hidden;
+
+  & svg {
+    width: 400px;
+    height: auto;
+  }
 
   @media (max-width: 768px) {
     flex-direction: column-reverse;
+    margin-bottom: 2rem;
+
+    & svg {
+      min-height: 200px;
+    }
   }
 `;
 
@@ -42,7 +52,7 @@ const HomeBanner = () => {
           </Link>
         ) : null}
       </BannerTitle>
-      <RelaxingIllustration width={500} />
+      <RelaxingIllustration />
     </Banner>
   );
 };

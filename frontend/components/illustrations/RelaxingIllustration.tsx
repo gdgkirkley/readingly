@@ -1,6 +1,10 @@
 import React from "react";
 
-const RelaxingIllustration = ({ width }) => {
+type Props = {
+  width?: string | number;
+};
+
+const RelaxingIllustration = ({ width }: Props = { width: "100%" }) => {
   return (
     <svg
       id="2cf41747-0c0c-4d70-aad4-093c093adad4"

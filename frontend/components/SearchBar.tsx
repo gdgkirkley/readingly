@@ -10,6 +10,10 @@ const SearchFormStyles = styled(FormStyles)`
   padding: 0;
   display: grid;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 4rem;
+  }
 `;
 
 const SearchButton = styled(ActionGroup)`
@@ -87,7 +91,7 @@ const SearchBar = ({ handleSearch, defaultValue }: Props) => {
           type="text"
           id="search"
           name="search"
-          placeholder="Search a book..."
+          placeholder="Search for a book..."
           aria-label="Search books"
           ref={register}
           autoComplete="off"
