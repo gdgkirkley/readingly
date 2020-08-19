@@ -82,7 +82,7 @@ const permissions = shield(
     },
   },
   {
-    debug: process.env.NODE_ENV === 'production' ? false : true,
+    debug: true,
   },
 )
 
