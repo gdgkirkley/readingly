@@ -7,6 +7,7 @@ module.exports = {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
       },
       goalDate: {
         type: Sequelize.DataTypes.DATE,

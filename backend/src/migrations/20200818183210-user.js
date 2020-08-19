@@ -7,7 +7,7 @@ export default {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        defaultValue: Sequelize.DataTypes.INTEGER,
+        autoIncrement: true,
       },
       username: {
         type: Sequelize.DataTypes.STRING,
