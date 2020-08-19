@@ -16,7 +16,10 @@ if (process.env.NODE_ENV === 'production') {
     dialect: 'postgres',
     protocol: 'postgres',
     dialectOptions: {
-      ssl: true,
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
     logging: msg =>
       process.env.NODE_ENV === 'production' ? false : logger.debug(msg),
