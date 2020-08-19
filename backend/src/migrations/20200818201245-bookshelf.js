@@ -13,6 +13,17 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
       },
+      userId: {
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'users',
+          },
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         type: Sequelize.DataTypes.DATE,
         defaultValue: Sequelize.fn('NOW'),
