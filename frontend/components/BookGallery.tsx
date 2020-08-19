@@ -9,9 +9,14 @@ const BookCards = styled.div`
   display: flex;
   flex: 0 1 156px;
   flex-wrap: wrap;
-  place-items: center;
+  align-items: center;
+  justify-content: space-between;
   justify-self: center;
   width: 100%;
+
+  @media (max-width: 1300px) {
+    justify-content: center;
+  }
 `;
 
 const BookCardContainer = styled.div`

@@ -48,6 +48,10 @@ const ImageContainer = styled.div`
     border: 1px dotted ${(props) => props.theme.black};
     border-radius: 0.25rem;
   }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const BooksDisplay = styled.div`

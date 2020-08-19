@@ -21,7 +21,7 @@ type Props = {
 
 const BookCategorySearch = ({ searchTerm }: Props) => {
   const { data, loading, error, fetchMore } = useQuery<BookData>(BOOK_SEARCH, {
-    variables: { search: searchTerm, offset: 0, limit: 21 },
+    variables: { search: searchTerm, offset: 0, limit: 16 },
     fetchPolicy: "cache-and-network",
     notifyOnNetworkStatusChange: true,
   });

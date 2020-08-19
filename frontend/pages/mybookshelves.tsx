@@ -15,6 +15,17 @@ const BookshelfHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+const BookshelfHeaderTitle = styled.div`
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
+  }
 `;
 
 const MyBookshelves = () => {
@@ -31,13 +42,13 @@ const MyBookshelves = () => {
   return (
     <BookShelfPage>
       <BookshelfHeader>
-        <div>
+        <BookshelfHeaderTitle>
           <h1>My Bookshelves</h1>
           <div>
             You have {mybookshelves.length || "no"} bookshel
             {mybookshelves.length === 1 ? "f" : "ves"}
           </div>
-        </div>
+        </BookshelfHeaderTitle>
         <div>
           <CreateBookShelf />
         </div>
