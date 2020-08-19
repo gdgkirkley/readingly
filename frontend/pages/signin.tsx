@@ -11,6 +11,10 @@ export const StyledAuthPage = styled.div`
   height: 100%;
   width: 100%;
   grid-template-columns: 3fr 2fr;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const FormBlock = styled.div`
@@ -30,6 +34,10 @@ export const GoToBlock = styled.div`
   height: 100%;
   border: 1px dotted ${(props) => props.theme.purple};
   border-radius: 0.25rem;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 const SignInPage = () => {

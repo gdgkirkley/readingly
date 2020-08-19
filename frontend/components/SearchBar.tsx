@@ -26,7 +26,7 @@ const Bar = styled.div`
   border-radius: 1rem;
   border: 1px solid #e2e8f0;
   display: flex;
-  padding: 0px 10px;
+  padding: 0 1rem;
 
   & svg {
     width: 16px;

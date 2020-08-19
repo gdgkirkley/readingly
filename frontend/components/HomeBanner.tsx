@@ -11,7 +11,7 @@ const Banner = styled.div`
   align-items: center;
   width: 100%;
   padding: 2rem;
-  height: 50vh;
+  min-height: 50vh;
   overflow: hidden;
 
   & svg {
@@ -25,6 +25,7 @@ const Banner = styled.div`
 
     & svg {
       min-height: 200px;
+      width: 300px;
     }
   }
 `;
