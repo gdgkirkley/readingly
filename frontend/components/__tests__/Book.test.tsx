@@ -131,8 +131,8 @@ test("<Book /> renders a book", async () => {
   await waitFor(() => {
     const headings = screen.getAllByRole("heading");
     expect(headings[0]).toHaveTextContent(book.title);
-    expect(headings[1]).toHaveTextContent(/my goal/i);
-    expect(headings[2]).toHaveTextContent(/my reading/i);
+    expect(headings[1]).toHaveTextContent(/goal/i);
+    expect(headings[2]).toHaveTextContent(/reading/i);
     expect(headings[3]).toHaveTextContent(/check these out/i);
     expect(headings[4]).toHaveTextContent(book.authors[0]);
     expect(headings[5]).toHaveTextContent(book.categories[0]);
@@ -143,7 +143,7 @@ test("<Book /> renders a book", async () => {
     expect(images[1]).toHaveAttribute("src", book2.thumbnail);
     expect(images[2]).toHaveAttribute("src", book3.thumbnail);
 
-    expect(screen.getByTestId("book-description")).toHaveTextContent(
+    expect(screen.getAllByTestId("book-description")[0]).toHaveTextContent(
       book.description
     );
     const authorRegex = new RegExp(book.authors[0], "i");
