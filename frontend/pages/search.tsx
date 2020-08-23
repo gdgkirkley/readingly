@@ -21,7 +21,7 @@ const SearchPage = () => {
   const [searchBook, { data, loading, fetchMore }] = useLazyQuery<BookData>(
     BOOK_SEARCH,
     {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "cache-first",
       notifyOnNetworkStatusChange: true,
     }
   );
@@ -51,6 +51,9 @@ const SearchPage = () => {
         search: data.search,
       },
     });
+
+    // Push on the search term for go back functionality
+    router.push(`/search?q=${data.search}`);
   };
 
   const handleLoadMore = (): void => {
