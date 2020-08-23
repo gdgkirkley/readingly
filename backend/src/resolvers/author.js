@@ -10,9 +10,11 @@ export default {
 
   Mutation: {
     createAuthor: async (parent, {name}, {models}) => {
-      const author = await models.Author.create({name})
+      if (!name) {
+        throw new Error('Invalid author name')
+      }
 
-      return author
+      return await models.Author.create({name})
     },
   },
 

@@ -23,7 +23,6 @@ async function getGoogleBook(googleBookId) {
     return response.data
   } catch (error) {
     const data = error.response ? error.response.data : error.request
-    logger.error(data.error)
     throw new Error(`Unable to get book: ${data.error.message}`)
   }
 }
