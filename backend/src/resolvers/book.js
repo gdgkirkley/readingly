@@ -41,67 +41,36 @@ export default {
         throw new Error('Limit must be less than 40')
       }
 
-      const books = new Map()
-      const booksToAdd = await models.Book.findAll({
-        where: {
-          [Op.or]: [
-            {
-              title: {
-                [Op.iLike]: `%${search}%`,
-              },
-            },
-            {
-              description: {
-                [Op.iLike]: `%${search}%`,
-              },
-            },
-          ],
-        },
-        order: [['title']],
-        limit: limit ? limit : 16,
-        offset: offset ? offset : 0,
-      })
+      const searchTerm = encodeURI(search)
 
-      booksToAdd.forEach(book => {
-        books.set(book.googleBooksId, book)
-      })
+      const results = await getGoogleBooks(searchTerm, limit, offset)
 
-      if (books.size < 16) {
-        const searchTerm = encodeURI(search)
-
-        const results = await getGoogleBooks(searchTerm, limit, offset)
-
-        if (!results?.items?.length) {
-          return null
-        }
-
-        const bookResults = await Promise.all(
-          results.items.map(async result => {
-            const info = result.volumeInfo
-            const thumbnailImage = info.imageLinks?.thumbnail.replace(
-              'http',
-              'https',
-            )
-            const book = {
-              title: info.title,
-              description: info.description,
-              publishDate: info.publishedDate,
-              publisher: info.publisher,
-              averageRating: info.averageRating,
-              googleBooksId: result.id,
-              thumbnail: info.imageLinks?.thumbnail ? thumbnailImage : null,
-              pageCount: info.pageCount,
-            }
-            return book
-          }),
-        )
-
-        bookResults.forEach(result => {
-          books.set(result.googleBooksId, result)
-        })
+      if (!results?.items?.length) {
+        return null
       }
 
-      return Array.from(books.values())
+      const bookResults = await Promise.all(
+        results.items.map(async result => {
+          const info = result.volumeInfo
+          const thumbnailImage = info.imageLinks?.thumbnail.replace(
+            'http',
+            'https',
+          )
+          const book = {
+            title: info.title,
+            description: info.description,
+            publishDate: info.publishedDate,
+            publisher: info.publisher,
+            averageRating: info.averageRating,
+            googleBooksId: result.id,
+            thumbnail: info.imageLinks?.thumbnail ? thumbnailImage : null,
+            pageCount: info.pageCount,
+          }
+          return book
+        }),
+      )
+
+      return bookResults
     },
   },
 
