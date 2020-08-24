@@ -1,12 +1,13 @@
 import React from "react";
 import { render, cleanup, screen, waitFor, act } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
+import { toast } from "react-toastify";
+import { axe } from "jest-axe";
 import userEvent from "@testing-library/user-event";
 import Account from "../Account";
 import { UPDATE_USER_MUTATION } from "../../graphql/user";
 import { buildUser } from "../../test/generate";
 import { mockCurrentUserQuery } from "../../test/mocks";
-import { toast } from "react-toastify";
 
 jest.mock("react-toastify");
 
@@ -82,4 +83,16 @@ test("<Account /> displays user information and renders a usable form", async ()
     expect(updateUserQueryCalled).toBeTruthy();
     expect(toast.success).toHaveBeenCalledTimes(1);
   });
+});
+
+test("<Account /> is accessible", async () => {
+  const user = await buildUser();
+
+  const { container } = render(
+    <MockedProvider>
+      <Account me={user} />
+    </MockedProvider>
+  );
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
 });
