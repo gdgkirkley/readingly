@@ -21,6 +21,11 @@ import CaretDown from "./icons/CaretDown";
 
 const AddToBookshelfButton = styled(Button)`
   /* margin: 2rem 0 3rem; */
+
+  &:disabled {
+    background-color: #ececec;
+    color: ${(props) => props.theme.black};
+  }
 `;
 
 const DropButton = styled(Button)`
@@ -75,9 +80,9 @@ const AddToBookshelf = ({ book }: Props) => {
     };
   }, []);
 
-  const handleClick = (): void => {
+  const handleClick = async (): Promise<void> => {
     const shelf = data.mybookshelves.find((shelf) => shelf.title === selected);
-    addBook({
+    await addBook({
       variables: {
         googleBookId: book.googleBooksId,
         bookshelfId: shelf.id,
@@ -97,7 +102,11 @@ const AddToBookshelf = ({ book }: Props) => {
     });
 
     toast.success(`${book.title} added to ${shelf.title}!`);
-    toggle();
+    setSelected(null);
+
+    if (open) {
+      toggle();
+    }
   };
 
   const getElementWidth = (): number => {
@@ -110,16 +119,37 @@ const AddToBookshelf = ({ book }: Props) => {
     setOpen(!open);
   };
 
-  const select = (event: React.MouseEvent, index: number): void => {
+  const select = (
+    event: React.MouseEvent | React.KeyboardEvent,
+    index: number
+  ): void => {
     if (!event.currentTarget) return;
+
+    if (isSelected(event.currentTarget.id)) {
+      resetDefaults();
+      return;
+    }
+
     setSelected(event.currentTarget.id);
     setCursor(index);
+    toggle();
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent): void => {
+  const isSelected = (targetId: string): boolean => {
+    if (!targetId) return;
+    return targetId === selected;
+  };
+
+  const resetDefaults = (): void => {
+    setSelected(null);
+    setCursor(0);
+    toggle();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent, index: number): void => {
     const keyCode = event.keyCode;
     if (keyCode === 13) {
-      setSelected(event.currentTarget.id);
+      select(event, index);
     } else if (keyCode === 27) {
       setOpen(!open);
     } else if (keyCode === 40 || keyCode === 38) {
@@ -211,7 +241,7 @@ const AddToBookshelf = ({ book }: Props) => {
                   key={shelf.id}
                   id={shelf.title}
                   onClick={(e) => select(e, index)}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                   role="option"
                   aria-selected={shelf.title === selected && cursor === index}
                   tabIndex={0}

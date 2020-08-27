@@ -150,16 +150,24 @@ test("<AddToBookshelf /> renders when user present", async () => {
 
   userEvent.click(dropdownButton);
 
-  const menu = screen.getByRole("listbox");
+  let menu = screen.getByRole("listbox");
 
   expect(menu).toBeInTheDocument();
 
-  const options = screen.getAllByRole("option");
+  let options = screen.getAllByRole("option");
 
   expect(options[0]).toHaveTextContent(bookshelf.title);
   expect(options[1]).toHaveTextContent(bookshelf2.title);
 
   userEvent.click(options[1]);
+
+  // Dropdown should close after selection
+  expect(menu).not.toBeInTheDocument();
+
+  // click to reopen the menu and then query elements again
+  userEvent.click(dropdownButton);
+  options = screen.getAllByRole("option");
+  menu = screen.getByRole("listbox");
 
   expect(options[0]).toHaveAttribute("aria-selected", "false");
   expect(options[1]).toHaveAttribute("aria-selected", "true");
@@ -168,6 +176,10 @@ test("<AddToBookshelf /> renders when user present", async () => {
   expect(addButton).toHaveTextContent(`Add to ${bookshelf2.title}`);
 
   userEvent.click(options[0]);
+
+  userEvent.click(dropdownButton);
+  options = screen.getAllByRole("option");
+  menu = screen.getByRole("listbox");
 
   expect(options[0]).toHaveAttribute("aria-selected", "true");
   expect(options[1]).toHaveAttribute("aria-selected", "false");
@@ -187,6 +199,8 @@ test("<AddToBookshelf /> renders when user present", async () => {
       `${book.title} added to ${bookshelf.title}!`
     );
   });
+
+  expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
 });
 
 test("<AddtoBookshelf /> handles case when user has no bookshelves", async () => {
