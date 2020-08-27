@@ -1,6 +1,10 @@
+![Readingly Home Page](./assets/readinglyhome.jpg)
+
 # Readingly
 
 A reading tracker application using the Google Books API. It helps users meet their reading goals by providing personalized recommendations of how much time to invest in their book. It has a frontend built with NextJS, React, and Apollo, and a backend built with Apollo Server, Sequelize, and PostgreSQL.
+
+![Readingly Bookshelves](./assets/readinglybookshelves.jpg)
 
 ## Project Status
 

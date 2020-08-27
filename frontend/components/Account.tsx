@@ -50,13 +50,15 @@ type FormInputs = {
   username: string;
 };
 
-const Account = ({ me }: Props) => {
+const Account: React.FC<Props> = ({ me }) => {
+  const [edit, setEdit] = useState(false);
+
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
     onError: (error) => {
       toast.error(`Unable to update: ${error.message}`);
     },
   });
-  const [edit, setEdit] = useState(false);
+
   const { register, handleSubmit, errors, reset } = useForm<FormInputs>({
     defaultValues: {
       email: me.email,

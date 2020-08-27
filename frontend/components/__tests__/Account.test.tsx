@@ -85,7 +85,7 @@ test("<Account /> displays user information and renders a usable form", async ()
   });
 });
 
-test("<Account /> is accessible", async () => {
+test("<Account /> is accessible on load", async () => {
   const user = await buildUser();
 
   const { container } = render(
@@ -93,6 +93,13 @@ test("<Account /> is accessible", async () => {
       <Account me={user} />
     </MockedProvider>
   );
-  const results = await axe(container);
+  let results = await axe(container);
+  expect(results).toHaveNoViolations();
+
+  const editInfoButton = screen.getByRole("button");
+
+  userEvent.click(editInfoButton);
+
+  results = await axe(container);
   expect(results).toHaveNoViolations();
 });
