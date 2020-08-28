@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { useUser } from "../hooks/useUser";
 import Signout from "./Signout";
@@ -44,6 +45,14 @@ const StyledNav = styled.nav`
         transform: scaleX(1);
       }
     }
+
+    &.active {
+      color: ${(props) => props.theme.red};
+      &::before {
+        visibility: visible;
+        transform: scaleX(1);
+      }
+    }
   }
 
   @media (max-width: 1300px) {
@@ -60,19 +69,34 @@ type Props = {
 };
 
 const Menu = ({ onClick }: Props) => {
+  const router = useRouter();
   const me = useUser();
+  const path = router.pathname;
+
   return (
     <StyledNav>
       <Link href="/search">
-        <a onClick={onClick}>Search Books</a>
+        <a onClick={onClick} className={path === "/search" ? "active" : ""}>
+          Search Books
+        </a>
       </Link>
       {me && (
         <>
           <Link href="/mybookshelves">
-            <a onClick={onClick}>Bookshelves</a>
+            <a
+              onClick={onClick}
+              className={path === "/mybookshelves" ? "active" : ""}
+            >
+              Bookshelves
+            </a>
           </Link>
           <Link href="/myaccount">
-            <a onClick={onClick}>Account</a>
+            <a
+              onClick={onClick}
+              className={path === "/myaccount" ? "active" : ""}
+            >
+              Account
+            </a>
           </Link>
           <Signout onClick={onClick} />
         </>

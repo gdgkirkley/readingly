@@ -4,6 +4,7 @@ import { render, cleanup, screen, waitFor } from "@testing-library/react";
 import { CURRENT_USER_QUERY } from "../../graphql/user";
 import Menu from "../Menu";
 import { buildUser } from "../../test/generate";
+import MockRouter, { mockRouter } from "../../test/mockRouter";
 
 afterEach(() => {
   cleanup();
@@ -29,27 +30,31 @@ test("<Menu /> renders a header with user links when user present", async () => 
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Menu onClick={onClick} />
+      <MockRouter>
+        <Menu onClick={onClick} />
+      </MockRouter>
     </MockedProvider>
   );
 
+  let menuLinks;
+
   await waitFor(() => {
-    const menuLinks = screen.getAllByRole("link");
+    menuLinks = screen.getAllByRole("link");
 
     expect(menuLinks).toHaveLength(4);
-
-    expect(menuLinks[0]).toHaveTextContent(/search/i);
-    expect(menuLinks[0]).toHaveAttribute("href", "/search");
-
-    expect(menuLinks[1]).toHaveTextContent(/bookshelves/i);
-    expect(menuLinks[1]).toHaveAttribute("href", "/mybookshelves");
-
-    expect(menuLinks[2]).toHaveTextContent(/account/i);
-    expect(menuLinks[2]).toHaveAttribute("href", "/myaccount");
-
-    // See tests in Signout.test.tsx
-    expect(menuLinks[3]).toHaveTextContent(/sign out/i);
   });
+
+  expect(menuLinks[0]).toHaveTextContent(/search/i);
+  expect(menuLinks[0]).toHaveAttribute("href", "/search");
+
+  expect(menuLinks[1]).toHaveTextContent(/bookshelves/i);
+  expect(menuLinks[1]).toHaveAttribute("href", "/mybookshelves");
+
+  expect(menuLinks[2]).toHaveTextContent(/account/i);
+  expect(menuLinks[2]).toHaveAttribute("href", "/myaccount");
+
+  // See tests in Signout.test.tsx
+  expect(menuLinks[3]).toHaveTextContent(/sign out/i);
 });
 
 test("<Menu /> renders header without user links when no user", async () => {
@@ -69,7 +74,9 @@ test("<Menu /> renders header without user links when no user", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <Menu onClick={onClick} />
+      <MockRouter>
+        <Menu onClick={onClick} />
+      </MockRouter>
     </MockedProvider>
   );
 
