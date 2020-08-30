@@ -23,6 +23,7 @@ const StyledForm = styled.form`
     border-radius: 0.25rem;
     appearance: none;
     font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-size: 1.6rem;
     margin: 0;
 
     &:focus {

@@ -54,6 +54,7 @@ const Bar = styled.div`
 
   @media (max-width: 768px) {
     width: 335px;
+    height: 5rem;
 
     & input {
       width: 275px;
