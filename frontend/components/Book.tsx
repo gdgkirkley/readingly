@@ -17,6 +17,7 @@ import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
 import { GoalType } from "../graphql/goal";
 import UpdateGoal from "./UpdateGoal";
 import { useUser } from "../hooks/useUser";
+import GoalDisplay from "./Goal/GoalDisplay";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -259,18 +260,7 @@ const Book = ({ googleBooksId }: Props) => {
               />
             )}
           </MyActivityHeader>
-          {goal?.goalDate ? (
-            <p>
-              My goal is to read {title} by{" "}
-              <strong>{formatDate(goal.goalDate)}</strong>. That{" "}
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: getPeriodFromNow(goal.goalDate),
-                }}
-              />
-              .
-            </p>
-          ) : null}
+          {goal?.goalDate ? <GoalDisplay title={title} goal={goal} /> : null}
         </BookBlock>
       ) : null}
       {/* If it's added to a bookshelf, or user already has reading history*/}

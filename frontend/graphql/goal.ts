@@ -28,7 +28,17 @@ export type Goal = {
   goalableId: string;
   goalableType: GoalType;
   goalable: Book | BookShelf;
+  startDate: string;
+  endDate: string;
+  status: GoalStatus;
+  readingRecommendation: number;
 };
+
+export enum GoalStatus {
+  NotStarted = "NOTSTARTED",
+  InProgress = "INPROGRESS",
+  Complete = "COMPLETE"
+}
 
 export enum GoalType {
   Book = "BOOK",

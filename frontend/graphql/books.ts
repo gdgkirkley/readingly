@@ -50,6 +50,10 @@ export const GOOGLE_BOOK_QUERY = gql`
       goal {
         id
         goalDate
+        startDate
+        endDate
+        status
+        readingRecommendation
       }
     }
   }

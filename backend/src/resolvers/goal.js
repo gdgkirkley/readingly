@@ -100,7 +100,20 @@ export default {
       const daysUntilGoal = getDaysUntilDate(goal.goalDate)
 
       if (goal.goalableType === 'BOOK') {
-        return Math.round(goalable.pageCount / daysUntilGoal)
+        const progress = await models.Reading.findAll({
+          limit: 1,
+          where: {
+            userId: me.id,
+            bookGoogleBooksId: goalable.googleBooksId,
+          },
+          order: [['createdAt', 'DESC']],
+        })
+
+        const pagesToRead = progress.length
+          ? goalable.pageCount - progress[0].progress
+          : goalable.pageCount
+
+        return Math.round(pagesToRead / Math.ceil(daysUntilGoal))
       } else {
         const totalPages = await goalable.getTotalPagesOnShelf()
         return Math.round(totalPages / daysUntilGoal)
