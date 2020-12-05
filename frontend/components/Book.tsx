@@ -262,8 +262,8 @@ const Book = ({ googleBooksId }: Props) => {
           {goal?.goalDate ? (
             <p>
               My goal is to read {title} by{" "}
-              <strong>{formatDate(goal.goalDate)}</strong>. That's{" "}
-              <strong>{getPeriodFromNow(goal.goalDate)}</strong> from now.
+              <strong>{formatDate(goal.goalDate)}</strong>. That{" "}
+              <strong>{getPeriodFromNow(goal.goalDate)}</strong>.
             </p>
           ) : null}
         </BookBlock>

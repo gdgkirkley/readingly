@@ -44,14 +44,17 @@ export function round(value: number, precision: number): number {
 }
 
 export function getPeriodFromNow(date: Date | string): string {
-  let today = new Date();
+  let today: Date = new Date();
+  let dayCount: number;
+  let periodString: string;
 
   if (typeof date === "string") {
     date = new Date(date);
   }
 
-  return (
-    Math.ceil((date.getTime() - today.getTime()) / MILLISECONDS_IN_DAY) +
-    " days"
-  );
+  dayCount = Math.ceil((date.getTime() - today.getTime()) / MILLISECONDS_IN_DAY)
+
+  periodString = dayCount > 0 ? `is ${dayCount} days from now` : `was ${Math.abs(dayCount)} days ago`
+
+  return (periodString);
 }
