@@ -27,6 +27,19 @@ const goal = sequelize => {
       },
       goalableId: DataTypes.STRING,
       goalableType: DataTypes.ENUM('BOOK', 'BOOKSHELF'),
+      startDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      status: {
+        type: DataTypes.ENUM('NOTSTARTED', 'INPROGRESS', 'COMPLETE'),
+        defaultValue: 'NOTSTARTED',
+        allowNull: false,
+      },
     },
     {
       sequelize,

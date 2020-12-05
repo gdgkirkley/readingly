@@ -21,5 +21,8 @@ export default gql`
     goalableType: String!
     readingRecommendation: Int
     goalable: Goalable!
+    startDate: Date
+    endDate: Date
+    status: String!
   }
 `

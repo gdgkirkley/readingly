@@ -56,6 +56,7 @@ export default {
             'http',
             'https',
           )
+
           const book = {
             title: info.title,
             description: info.description,
@@ -64,7 +65,7 @@ export default {
             averageRating: info.averageRating,
             googleBooksId: result.id,
             thumbnail: info.imageLinks?.thumbnail ? thumbnailImage : null,
-            pageCount: info.pageCount,
+            pageCount: info.pageCount ? info.pageCount : 0,
           }
           return book
         }),
