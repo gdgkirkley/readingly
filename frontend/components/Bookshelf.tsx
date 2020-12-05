@@ -79,7 +79,12 @@ const Bookshelf = ({ title }: Props) => {
           <p>
             You want to read this list by{" "}
             <strong>{formatDate(shelf.goal.goalDate)}</strong>. That's{" "}
-            <strong>{getPeriodFromNow(shelf.goal.goalDate)}</strong> from now.
+            <span
+              dangerouslySetInnerHTML={{
+                __html: getPeriodFromNow(shelf.goal.goalDate),
+              }}
+            />
+            .
           </p>
         ) : null}
       </ShelfBlock>

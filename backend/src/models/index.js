@@ -31,6 +31,9 @@ if (process.env.NODE_ENV === 'production') {
     process.env.DATABASE_PASSWORD,
     {
       dialect: 'postgres',
+      dialectOptions: {
+        useUTC: true,
+      },
       logging: msg =>
         process.env.NODE_ENV === 'production' ? false : logger.debug(msg),
     },

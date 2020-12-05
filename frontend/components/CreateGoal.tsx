@@ -9,6 +9,7 @@ import { GoalType, CREATE_GOAL_MUTATION } from "../graphql/goal";
 import { GOOGLE_BOOK_QUERY } from "../graphql/books";
 import { MY_BOOKSHELF_QUERY } from "../graphql/bookshelves";
 import { toast } from "react-toastify";
+import { parseStringDateISO } from "../lib/formatDates";
 
 const CreateGoalForm = styled(FormStyles)`
   box-shadow: none;
@@ -18,7 +19,7 @@ const CreateGoalForm = styled(FormStyles)`
 `;
 
 type FormInputs = {
-  goalDate: Date;
+  goalDate: string;
 };
 
 type Props = {
@@ -53,7 +54,7 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
 
     await createGoal({
       variables: {
-        goalDate: data.goalDate,
+        goalDate: parseStringDateISO(data.goalDate),
         goalableId: goalableId,
       },
       refetchQueries: [refetchQuery],
@@ -69,7 +70,7 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
   return (
     <>
       <Button themeColor="red" onClick={toggle}>
-        Add a goal
+        Add Goal
       </Button>
       <Dialog
         role="dialog"

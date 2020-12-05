@@ -35,5 +35,7 @@ export default gql`
     startDate: Date
     endDate: Date
     status: String!
+    createdAt: Date!
+    updatedAt: Date!
   }
 `

@@ -263,7 +263,12 @@ const Book = ({ googleBooksId }: Props) => {
             <p>
               My goal is to read {title} by{" "}
               <strong>{formatDate(goal.goalDate)}</strong>. That{" "}
-              <strong>{getPeriodFromNow(goal.goalDate)}</strong>.
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: getPeriodFromNow(goal.goalDate),
+                }}
+              />
+              .
             </p>
           ) : null}
         </BookBlock>
