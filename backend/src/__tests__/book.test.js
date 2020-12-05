@@ -111,8 +111,6 @@ test('user can search and add book', async () => {
     login,
   )
 
-  console.log(data.searchBook)
-
   const {data: bookData} = await authRequest(
     `
       mutation(

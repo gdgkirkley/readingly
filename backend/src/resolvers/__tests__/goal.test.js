@@ -67,6 +67,7 @@ test('createGoal can create a goal for a book', async () => {
 
   expect(createdGoal.goalDate).toMatchInlineSnapshot(`2020-12-31T00:00:00.000Z`)
   expect(createdGoal.goalableType).toBe('BOOK')
+  expect(createdGoal.status).toBe('NOTSTARTED')
 })
 
 test('createGoal can create a goal for a bookshelf', async () => {
@@ -83,6 +84,32 @@ test('createGoal can create a goal for a bookshelf', async () => {
 
   expect(createdGoal.goalDate).toMatchInlineSnapshot(`2021-08-15T00:00:00.000Z`)
   expect(createdGoal.goalableType).toBe('BOOKSHELF')
+  expect(createdGoal.status).toBe('NOTSTARTED')
+})
+
+test('createGoal can create goal with start date and status', async () => {
+  const today = new Date()
+
+  // delete seed data just for this test
+  await goal.Mutation.deleteGoal(parent, {id: 2}, context)
+
+  const bookshelves = await bookshelf.Query.bookshelves(parent, {}, context)
+
+  const createdGoal = await goal.Mutation.createGoal(
+    parent,
+    {
+      goalDate: '2021-08-15',
+      startDate: today,
+      status: 'INPROGRESS',
+      goalableId: bookshelves[0].id,
+    },
+    context,
+  )
+
+  expect(createdGoal.goalDate).toMatchInlineSnapshot(`2021-08-15T00:00:00.000Z`)
+  expect(createdGoal.goalableType).toBe('BOOKSHELF')
+  expect(new Date(createdGoal.startDate)).toEqual(today)
+  expect(createdGoal.status).toBe('INPROGRESS')
 })
 
 test('createGoal returns an error for invalid ID', async () => {

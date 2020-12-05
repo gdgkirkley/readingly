@@ -15,9 +15,14 @@ export default {
   },
 
   Mutation: {
-    createGoal: async (parent, {goalDate, goalableId}, {me, models}) => {
+    createGoal: async (
+      parent,
+      {goalDate, goalableId, startDate, status},
+      {me, models},
+    ) => {
       let book, bookshelf
 
+      // If it's a UUID, then it must be a bookshelf. Google Books Ids are not UUIDs.
       if (isUUID(goalableId)) {
         bookshelf = await models.BookShelf.findByPk(goalableId)
       } else {
@@ -41,17 +46,36 @@ export default {
       let goal
 
       if (book) {
-        goal = await book.createGoal({goalDate, userId: me.id})
+        goal = await book.createGoal({
+          goalDate,
+          startDate,
+          status,
+          userId: me.id,
+        })
       } else {
-        goal = await bookshelf.createGoal({goalDate, userId: me.id})
+        goal = await bookshelf.createGoal({
+          goalDate,
+          startDate,
+          status,
+          userId: me.id,
+        })
       }
 
       return goal
     },
-    updateGoal: async (parent, {id, goalDate}, {me, models}) => {
+    updateGoal: async (
+      parent,
+      {id, goalDate, startDate, endDate, status},
+      {me, models},
+    ) => {
       const goal = await getGoalById(id, models)
 
       goal.goalDate = goalDate
+      goal.startDate = startDate
+      goal.endDate = endDate
+      if (status) {
+        goal.status = status
+      }
 
       await goal.save()
 

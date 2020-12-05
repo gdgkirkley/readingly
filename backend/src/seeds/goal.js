@@ -6,7 +6,12 @@ async function createGoals() {
   const bookshelfGoalDate = today.setDate(today.getDate() + 100)
 
   const book = await models.Book.findByPk('s1gVAAAAYAAJ')
-  await book.createGoal({goalDate: goalDate, userId: 1})
+  await book.createGoal({
+    goalDate: goalDate,
+    userId: 1,
+    startDate: today,
+    status: 'INPROGRESS',
+  })
 
   const bookshelves = await models.BookShelf.findAll({
     where: {
@@ -14,7 +19,12 @@ async function createGoals() {
     },
   })
 
-  await bookshelves[0].createGoal({goalDate: bookshelfGoalDate, userId: 1})
+  await bookshelves[0].createGoal({
+    goalDate: bookshelfGoalDate,
+    userId: 1,
+    startDate: today,
+    status: 'INPROGRESS',
+  })
 }
 
 export default createGoals

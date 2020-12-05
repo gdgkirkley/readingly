@@ -7,8 +7,19 @@ export default gql`
   }
 
   extend type Mutation {
-    createGoal(goalDate: String!, goalableId: ID!): Goal!
-    updateGoal(id: ID!, goalDate: String!): Goal!
+    createGoal(
+      goalDate: String!
+      goalableId: ID!
+      startDate: String
+      status: String
+    ): Goal!
+    updateGoal(
+      id: ID!
+      goalDate: String!
+      startDate: String
+      endDate: String
+      status: String
+    ): Goal!
     deleteGoal(id: ID!): Message
   }
 
