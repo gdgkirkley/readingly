@@ -3,8 +3,8 @@ import { Book } from "./books";
 import { BookShelf } from "./bookshelves";
 
 export const CREATE_GOAL_MUTATION = gql`
-  mutation($goalDate: String!, $goalableId: ID!) {
-    createGoal(goalDate: $goalDate, goalableId: $goalableId) {
+  mutation($goalDate: String!, $goalableId: ID!, $startDate: String, $status: String) {
+    createGoal(goalDate: $goalDate, goalableId: $goalableId, startDate: $startDate, status: $status) {
       id
       goalDate
       goalableType

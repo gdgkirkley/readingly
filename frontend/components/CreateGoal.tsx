@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
 import Dialog from "./Dialog";
 import Button from "./styles/ButtonStyles";
 import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
@@ -20,6 +21,8 @@ const CreateGoalForm = styled(FormStyles)`
 
 type FormInputs = {
   goalDate: string;
+  startDate: string;
+  status: { value: string; label: string };
 };
 
 type Props = {
@@ -28,9 +31,25 @@ type Props = {
   bookshelfTitle?: string;
 };
 
+const statusOptions = [
+  { value: "NOTSTARTED", label: "Not Started" },
+  { value: "INPROGRESS", label: "In Progress" },
+  { value: "COMPLETE", label: "Complete" },
+];
+
 const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
   const [open, setOpen] = useState(false);
-  const { register, handleSubmit } = useForm<FormInputs>();
+  const {
+    register,
+    handleSubmit,
+    errors,
+    control,
+    setValue,
+  } = useForm<FormInputs>({
+    defaultValues: {
+      status: statusOptions[0],
+    },
+  });
 
   const [createGoal, { loading, error }] = useMutation(CREATE_GOAL_MUTATION, {
     onError: (error) => {
@@ -39,6 +58,10 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
   });
 
   const toggle = () => setOpen(!open);
+
+  useEffect(() => {
+    setValue("status", statusOptions[0]);
+  }, []);
 
   const onSubmit = async (data: FormInputs) => {
     const refetchQuery =
@@ -56,6 +79,8 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
       variables: {
         goalDate: parseStringDateISO(data.goalDate),
         goalableId: goalableId,
+        startDate: parseStringDateISO(data.startDate),
+        status: data.status.value,
       },
       refetchQueries: [refetchQuery],
       awaitRefetchQueries: true,
@@ -66,6 +91,9 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
       setOpen(false);
     }
   };
+
+  const goalableTypeText =
+    goalableType === GoalType.Book ? "this book" : "books on this shelf";
 
   return (
     <>
@@ -82,15 +110,49 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
           <h1>Create a goal</h1>
           <CreateGoalForm role="form" onSubmit={handleSubmit(onSubmit)}>
             <InputGroup>
+              <label htmlFor="startDate">
+                When did you start reading {goalableTypeText}?
+              </label>
+              <input
+                id="startDate"
+                name="startDate"
+                type="date"
+                ref={register}
+                autoFocus
+              />
+            </InputGroup>
+            <InputGroup>
               <label htmlFor="goalDate">
-                When would you like to finish by?
+                When would you like to finish reading?
               </label>
               <input
                 id="goalDate"
                 name="goalDate"
                 type="date"
-                ref={register}
-                autoFocus
+                ref={register({ required: true })}
+              />
+              {errors.goalDate?.type === "required" && (
+                <p className="error-message" data-testid="validation-error">
+                  Goal date is required
+                </p>
+              )}
+            </InputGroup>
+            <InputGroup>
+              {/*
+                react-select renders a div which requires an aria-labelledby property
+                instead of using the native label htmlFor
+              */}
+              <label id="status">
+                What is the status of {goalableTypeText}?
+              </label>
+              <Controller
+                as={Select}
+                name="status"
+                aria-labelledby="status"
+                menuPlacement="top"
+                options={statusOptions}
+                defaultValue={""}
+                control={control}
               />
             </InputGroup>
             <ActionGroup justifyContent="center">
