@@ -79,6 +79,8 @@ const ReadingCard = ({ reading, totalPages, googleBooksId }: Props) => {
     }
   };
 
+  const readingTimeRemaining = getReadingTimeString(reading.timeRemainingInSeconds);
+
   return (
     <ReadingCardStyle>
       <RemoveButton
@@ -91,7 +93,9 @@ const ReadingCard = ({ reading, totalPages, googleBooksId }: Props) => {
         Page <strong>{reading.progress}</strong>
         {totalPages ? ` out of ${totalPages}` : null}
       </p>
-      <p>{getReadingTimeString(reading.timeRemainingInSeconds)} to go</p>
+      {readingTimeRemaining ? (
+        <p>{readingTimeRemaining} to go</p>
+      ) : null}
       <PercentageBar width={`${getPercentage(reading.progress, totalPages)}%`}>
         <strong>
           {totalPages

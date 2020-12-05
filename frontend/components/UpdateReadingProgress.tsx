@@ -87,7 +87,7 @@ const UpdateReadingProgress = ({ book }: Props) => {
                 ref={register({
                   required: true,
                   validate: (value) => {
-                    return value < book.pageCount;
+                    return value <= book.pageCount;
                   },
                 })}
                 autoFocus
