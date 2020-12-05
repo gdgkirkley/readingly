@@ -7,6 +7,7 @@ import CreateGoal from "../CreateGoal";
 import { CREATE_GOAL_MUTATION, GoalType } from "../../graphql/goal";
 import { GOOGLE_BOOK_QUERY } from "../../graphql/books";
 import { buildBook, buildGoal } from "../../test/generate";
+import { parseStringDateISO } from "../../lib/formatDates";
 
 jest.mock("react-toastify");
 
@@ -26,7 +27,10 @@ test("<CreateGoal /> renders", async () => {
     {
       request: {
         query: CREATE_GOAL_MUTATION,
-        variables: { goalDate: todayString, goalableId: book.googleBooksId },
+        variables: {
+          goalDate: parseStringDateISO(todayString),
+          goalableId: book.googleBooksId,
+        },
       },
       result: () => {
         createGoalMutationCalled = true;
@@ -107,6 +111,7 @@ test("<CreateGoal /> renders", async () => {
   userEvent.click(submitButton);
 
   await waitFor(() => {
+    expect(toast.error).not.toHaveBeenCalled();
     expect(createGoalMutationCalled).toBeTruthy();
     expect(toast.success).toHaveBeenCalledTimes(1);
     expect(toast.success).toHaveBeenCalledWith(`Goal created!`);

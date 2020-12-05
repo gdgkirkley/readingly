@@ -13,6 +13,8 @@ afterEach(() => {
 test("<Bookshelf /> renders a bookshelf", async () => {
   const bookshelf = await buildBookshelf({ bookCount: 3 });
 
+  console.log(bookshelf.createdAt);
+
   const mocks = [
     {
       request: {

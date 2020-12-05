@@ -24,7 +24,7 @@ const getWord = faker.lorem.word;
 const getSentence = faker.lorem.sentence;
 
 const getDateString = () => {
-  return getDate().toString();
+  return getDate().toISOString();
 };
 
 async function buildBook({ ...overrides } = {}): Promise<Book> {
@@ -68,7 +68,7 @@ async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
   return {
     id: getId().toString(),
     title: getWord(),
-    createdAt: getDate().toString(),
+    createdAt: getDateString(),
     bookCount: getNumber(),
     books: [book1, book2, book3],
     averageTimeToReadInSeconds: getNumber(),
