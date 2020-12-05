@@ -69,7 +69,7 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
   return (
     <>
       <Button themeColor="red" onClick={toggle}>
-        Create a goal
+        Add a goal
       </Button>
       <Dialog
         role="dialog"
