@@ -15,7 +15,7 @@ import {
 } from "../../../graphql/goal";
 import { GOOGLE_BOOK_QUERY } from "../../../graphql/books";
 import { MY_BOOKSHELF_QUERY } from "../../../graphql/bookshelves";
-import { formatDate } from "../../../lib/formatDates";
+import { formatDate, parseStringDateISO } from "../../../lib/formatDates";
 import { statusOptions } from "../utils/constants";
 
 const UpdateGoalForm = styled(FormStyles)`
@@ -74,10 +74,10 @@ const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
 
     await updateGoal({
       variables: {
-        startDate: data.startDate,
-        endDate: data.endDate,
+        startDate: parseStringDateISO(data.startDate),
+        endDate: parseStringDateISO(data.endDate),
         status: data.status.value,
-        goalDate: data.goalDate,
+        goalDate: parseStringDateISO(data.goalDate),
         id: goal.id,
       },
       refetchQueries: [refetchQuery],
