@@ -6,7 +6,7 @@ import BookGallery from "./BookGallery";
 import { formatDate } from "../lib/formatDates";
 import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
 import CreateGoal from "./CreateGoal";
-import UpdateGoal from "./UpdateGoal";
+import UpdateGoal from "./Goal/UpdateGoal";
 import { GoalType } from "../graphql/goal";
 
 const ShelfBlock = styled.div`
@@ -60,13 +60,7 @@ const Bookshelf = ({ title }: Props) => {
         <BlockHeader>
           <h2>Goal</h2>
           {shelf.goal ? (
-            <UpdateGoal
-              currentGoalDate={shelf.goal.goalDate}
-              goalId={shelf.goal.id}
-              goalableId={shelf.id}
-              goalableType={GoalType.BookShelf}
-              bookshelfTitle={shelf.title}
-            />
+            <UpdateGoal goal={shelf.goal} bookshelfTitle={shelf.title} />
           ) : (
             <CreateGoal
               goalableId={shelf.id}

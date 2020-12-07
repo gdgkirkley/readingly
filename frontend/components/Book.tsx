@@ -15,7 +15,7 @@ import { GOOGLE_BOOK_QUERY, BookData } from "../graphql/books";
 import { formatDate } from "../lib/formatDates";
 import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
 import { GoalType } from "../graphql/goal";
-import UpdateGoal from "./UpdateGoal";
+import UpdateGoal from "./Goal/UpdateGoal";
 import { useUser } from "../hooks/useUser";
 import GoalDisplay from "./Goal/GoalDisplay";
 
@@ -247,12 +247,7 @@ const Book = ({ googleBooksId }: Props) => {
           <MyActivityHeader>
             <h2>My Goal</h2>
             {goal?.goalDate ? (
-              <UpdateGoal
-                goalableId={googleBooksId}
-                goalableType={GoalType.Book}
-                goalId={goal.id}
-                currentGoalDate={goal.goalDate}
-              />
+              <UpdateGoal goal={goal} />
             ) : (
               <CreateGoal
                 goalableId={googleBooksId}

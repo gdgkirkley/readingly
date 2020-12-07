@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Dialog from "./Dialog";
-import Button from "./styles/ButtonStyles";
-import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
-import { GoalType, UPDATE_GOAL_MUTATION } from "../graphql/goal";
-import { GOOGLE_BOOK_QUERY } from "../graphql/books";
-import { MY_BOOKSHELF_QUERY } from "../graphql/bookshelves";
-import { formatDate } from "../lib/formatDates";
+import Dialog from "../../Dialog";
+import Button from "../../styles/ButtonStyles";
+import FormStyles, { InputGroup, ActionGroup } from "../../styles/FormStyles";
+import { Goal, GoalType, UPDATE_GOAL_MUTATION } from "../../../graphql/goal";
+import { GOOGLE_BOOK_QUERY } from "../../../graphql/books";
+import { MY_BOOKSHELF_QUERY } from "../../../graphql/bookshelves";
+import { formatDate } from "../../../lib/formatDates";
 
 const UpdateGoalForm = styled(FormStyles)`
   box-shadow: none;
@@ -23,24 +23,15 @@ type FormInputs = {
 };
 
 type Props = {
-  goalId: string;
-  goalableType: GoalType;
-  goalableId: string;
-  currentGoalDate: string;
+  goal: Goal;
   bookshelfTitle?: string;
 };
 
-const UpdateGoal = ({
-  goalableType,
-  goalableId,
-  bookshelfTitle,
-  goalId,
-  currentGoalDate,
-}: Props) => {
+const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
   const [open, setOpen] = useState(false);
   const { register, handleSubmit } = useForm<FormInputs>({
     defaultValues: {
-      goalDate: currentGoalDate,
+      goalDate: goal.goalDate,
     },
   });
 
@@ -56,10 +47,10 @@ const UpdateGoal = ({
     // This can be improved by inserting the response goal into the
     // cached data
     const refetchQuery =
-      goalableType === GoalType.Book
+      goal.goalableType === GoalType.Book
         ? {
             query: GOOGLE_BOOK_QUERY,
-            variables: { googleBooksId: goalableId },
+            variables: { googleBooksId: goal.goalableId },
           }
         : {
             query: MY_BOOKSHELF_QUERY,
@@ -69,7 +60,7 @@ const UpdateGoal = ({
     await updateGoal({
       variables: {
         goalDate: data.goalDate,
-        id: goalId,
+        id: goal.id,
       },
       refetchQueries: [refetchQuery],
       awaitRefetchQueries: true,
@@ -84,7 +75,7 @@ const UpdateGoal = ({
   return (
     <>
       <Button themeColor="red" onClick={toggle}>
-        Update goal
+        Change Goal
       </Button>
       <Dialog
         role="dialog"
