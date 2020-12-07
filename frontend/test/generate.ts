@@ -3,7 +3,7 @@ import { User } from "../graphql/user";
 import { Book } from "../graphql/books";
 import { BookShelf } from "../graphql/bookshelves";
 import { Reading } from "../graphql/reading";
-import { Goal, GoalType } from "../graphql/goal";
+import { Goal, GoalStatus, GoalType } from "../graphql/goal";
 
 const getEmail = faker.internet.email;
 const getAdmin = faker.random.boolean;
@@ -100,6 +100,10 @@ async function buildGoal({ ...overrides } = {}): Promise<Goal> {
     goalable: null,
     goalableId: getUUID(),
     goalableType: GoalType.Book,
+    startDate: getDateString(),
+    endDate: getDateString(),
+    status: GoalStatus.InProgress,
+    readingRecommendation: getNumber(),
     ...overrides,
   };
 }

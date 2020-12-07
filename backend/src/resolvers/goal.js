@@ -113,7 +113,9 @@ export default {
           ? goalable.pageCount - progress[0].progress
           : goalable.pageCount
 
-        return Math.round(pagesToRead / Math.ceil(daysUntilGoal))
+        return daysUntilGoal > 0
+          ? Math.round(pagesToRead / Math.ceil(daysUntilGoal))
+          : pagesToRead
       } else {
         const totalPages = await goalable.getTotalPagesOnShelf()
         return Math.round(totalPages / daysUntilGoal)
