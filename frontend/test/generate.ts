@@ -104,6 +104,7 @@ async function buildGoal({ ...overrides } = {}): Promise<Goal> {
     endDate: getDateString(),
     status: GoalStatus.InProgress,
     readingRecommendation: getNumber(),
+    readingRecommendationSeconds: getNumber(),
     ...overrides,
   };
 }

@@ -32,6 +32,7 @@ export type Goal = {
   endDate: string;
   status: GoalStatus;
   readingRecommendation: number;
+  readingRecommendationSeconds?: number
 };
 
 export enum GoalStatus {

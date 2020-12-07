@@ -33,6 +33,8 @@ test("<UpdateGoal /> renders", async () => {
       request: {
         query: UPDATE_GOAL_MUTATION,
         variables: {
+          startDate: todayString,
+          endDate: newDate,
           goalDate: newDate,
           id: goal.id,
         },
@@ -96,15 +98,22 @@ test("<UpdateGoal /> renders", async () => {
   let goalDateInput: HTMLElement;
   let startDateInput: HTMLElement;
   let statusSelect: HTMLElement;
+  let endDateInput: HTMLElement;
   let submitButton: HTMLElement;
 
   await waitFor(() => {
     form = screen.getByRole("form");
     goalDateInput = screen.getByLabelText(/finish/i);
+    startDateInput = screen.getByLabelText(/start/i);
+    statusSelect = screen.getByLabelText(/status/i);
+    endDateInput = screen.getByLabelText(/complete/i);
     submitButton = screen.getByRole("button", { name: /update/i });
 
     expect(form).toBeInTheDocument();
     expect(goalDateInput).toBeInTheDocument();
+    expect(startDateInput).toBeInTheDocument();
+    expect(statusSelect).toBeInTheDocument();
+    expect(endDateInput).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
   });
 
@@ -112,12 +121,19 @@ test("<UpdateGoal /> renders", async () => {
 
   expect(form).toHaveFormValues({
     goalDate: "",
+    startDate: "",
+    status: goal.status,
+    endDate: "",
   });
 
   userEvent.type(goalDateInput, newDate);
+  userEvent.type(startDateInput, todayString);
+  userEvent.type(endDateInput, newDate);
 
   expect(form).toHaveFormValues({
     goalDate: newDate,
+    startDate: newDate,
+    endDate: newDate,
   });
 
   userEvent.click(submitButton);

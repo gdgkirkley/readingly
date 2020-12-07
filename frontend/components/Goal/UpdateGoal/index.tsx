@@ -39,14 +39,13 @@ type Props = {
 
 const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
   const [open, setOpen] = useState(false);
-  const statusLabel = statusOptions.find((stat) => stat.value === goal.status)
-    .label;
+  const statusLabel = statusOptions.find((stat) => stat.value === goal.status);
   const { register, handleSubmit, control, getValues } = useForm<FormInputs>({
     defaultValues: {
       goalDate: goal.goalDate,
       startDate: goal.startDate,
       endDate: goal.endDate,
-      status: { value: goal.status, label: statusLabel },
+      status: { value: goal.status, label: statusLabel?.label },
     },
   });
 
@@ -134,7 +133,7 @@ const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
                 instead of using the native label htmlFor
               */}
               <label id="status">
-                What is the status of {goalableTypeText}?
+                My reading status for {goalableTypeText} is:
               </label>
               <Controller
                 as={Select}
@@ -148,7 +147,9 @@ const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
             </InputGroup>
 
             <InputGroup>
-              <label htmlFor="endDate">When did you finish reading?</label>
+              <label htmlFor="endDate">
+                When did you complete {goalableTypeText}?
+              </label>
               <input id="endDate" name="endDate" type="date" ref={register} />
             </InputGroup>
 
