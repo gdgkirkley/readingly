@@ -13,8 +13,8 @@ export const CREATE_GOAL_MUTATION = gql`
 `;
 
 export const UPDATE_GOAL_MUTATION = gql`
-  mutation($id: ID!, $goalDate: String!) {
-    updateGoal(id: $id, goalDate: $goalDate) {
+  mutation($id: ID!, $goalDate: String!, $startDate: String, $endDate: String, $status: String) {
+    updateGoal(id: $id, goalDate: $goalDate, , startDate: $startDate, endDate: $endDate, status: $status) {
       id
       goalDate
       goalableType

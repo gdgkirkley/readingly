@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
 import { toast } from "react-toastify";
 import Dialog from "../../Dialog";
 import Button from "../../styles/ButtonStyles";
 import FormStyles, { InputGroup, ActionGroup } from "../../styles/FormStyles";
-import { Goal, GoalType, UPDATE_GOAL_MUTATION } from "../../../graphql/goal";
+import {
+  Goal,
+  GoalStatus,
+  GoalType,
+  UPDATE_GOAL_MUTATION,
+} from "../../../graphql/goal";
 import { GOOGLE_BOOK_QUERY } from "../../../graphql/books";
 import { MY_BOOKSHELF_QUERY } from "../../../graphql/bookshelves";
 import { formatDate } from "../../../lib/formatDates";
+import { statusOptions } from "../utils/constants";
 
 const UpdateGoalForm = styled(FormStyles)`
   box-shadow: none;
@@ -20,6 +27,9 @@ const UpdateGoalForm = styled(FormStyles)`
 
 type FormInputs = {
   goalDate: string;
+  startDate: string;
+  endDate: string;
+  status: { value: string; label: string };
 };
 
 type Props = {
@@ -29,9 +39,14 @@ type Props = {
 
 const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
   const [open, setOpen] = useState(false);
-  const { register, handleSubmit } = useForm<FormInputs>({
+  const statusLabel = statusOptions.find((stat) => stat.value === goal.status)
+    .label;
+  const { register, handleSubmit, control, getValues } = useForm<FormInputs>({
     defaultValues: {
       goalDate: goal.goalDate,
+      startDate: goal.startDate,
+      endDate: goal.endDate,
+      status: { value: goal.status, label: statusLabel },
     },
   });
 
@@ -59,6 +74,9 @@ const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
 
     await updateGoal({
       variables: {
+        startDate: data.startDate,
+        endDate: data.endDate,
+        status: data.status.value,
         goalDate: data.goalDate,
         id: goal.id,
       },
@@ -71,6 +89,9 @@ const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
       setOpen(false);
     }
   };
+
+  const goalableTypeText =
+    goal.goalableType === GoalType.Book ? "this book" : "books on this shelf";
 
   return (
     <>
@@ -98,6 +119,39 @@ const UpdateGoal = ({ goal, bookshelfTitle }: Props) => {
                 autoFocus
               />
             </InputGroup>
+            <InputGroup>
+              <label htmlFor="startDate">When did you start reading?</label>
+              <input
+                id="startDate"
+                name="startDate"
+                type="date"
+                ref={register}
+              />
+            </InputGroup>
+            <InputGroup>
+              {/*
+                react-select renders a div which requires an aria-labelledby property
+                instead of using the native label htmlFor
+              */}
+              <label id="status">
+                What is the status of {goalableTypeText}?
+              </label>
+              <Controller
+                as={Select}
+                name="status"
+                aria-labelledby="status"
+                menuPlacement="top"
+                options={statusOptions}
+                defaultValue={""}
+                control={control}
+              />
+            </InputGroup>
+
+            <InputGroup>
+              <label htmlFor="endDate">When did you finish reading?</label>
+              <input id="endDate" name="endDate" type="date" ref={register} />
+            </InputGroup>
+
             <ActionGroup justifyContent="center">
               <Button themeColor="red" type="submit" name="update">
                 Update

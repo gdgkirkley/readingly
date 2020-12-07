@@ -54,6 +54,8 @@ export const GOOGLE_BOOK_QUERY = gql`
         endDate
         status
         readingRecommendation
+        goalableType
+        goalableId
       }
     }
   }

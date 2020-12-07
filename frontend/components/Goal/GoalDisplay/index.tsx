@@ -1,13 +1,19 @@
 import React from "react";
 import { GoalStatus } from "../../../graphql/goal";
 import { formatDate } from "../../../lib/formatDates";
-import { getPeriodFromNow } from "../../../lib/time";
+import {
+  getDateDiffInDays,
+  getPeriodFromNow,
+  humanReadableTimeDiff,
+} from "../../../lib/time";
 
 const GoalDisplay = ({ title, goal }) => {
+  const complete = goal.status === GoalStatus.Complete;
+
   return (
     <>
       <p data-testid="goalDate">
-        My goal is to read {title} by{" "}
+        My goal {complete ? "was" : "is"} to read {title} by{" "}
         <strong>{formatDate(goal.goalDate)}</strong>. That{" "}
         <span
           dangerouslySetInnerHTML={{
@@ -31,7 +37,20 @@ const GoalDisplay = ({ title, goal }) => {
               __html: getPeriodFromNow(goal.startDate),
             }}
           />
-          .
+          .{" "}
+        </p>
+      ) : null}
+      {goal.endDate ? (
+        <p>
+          I finished reading on <strong>{formatDate(goal.endDate)}</strong>. It
+          took me{" "}
+          <strong>
+            {humanReadableTimeDiff(
+              new Date(goal.startDate),
+              new Date(goal.endDate)
+            )}
+          </strong>{" "}
+          to read.
         </p>
       ) : null}
     </>

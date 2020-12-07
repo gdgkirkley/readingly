@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { toast } from "react-toastify";
 import UpdateGoal from "./index";
 import { buildBook, buildGoal } from "../../../test/generate";
-import { formatDate, parseStringDateISO } from "../../../lib/formatDates";
+import { formatDate } from "../../../lib/formatDates";
 import { GoalType, UPDATE_GOAL_MUTATION } from "../../../graphql/goal";
 import { GOOGLE_BOOK_QUERY } from "../../../graphql/books";
 

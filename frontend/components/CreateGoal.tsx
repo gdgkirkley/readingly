@@ -10,7 +10,12 @@ import { GoalType, CREATE_GOAL_MUTATION } from "../graphql/goal";
 import { GOOGLE_BOOK_QUERY } from "../graphql/books";
 import { MY_BOOKSHELF_QUERY } from "../graphql/bookshelves";
 import { toast } from "react-toastify";
-import { parseStringDateISO } from "../lib/formatDates";
+import {
+  formatDate,
+  formatDateForInput,
+  parseStringDateISO,
+} from "../lib/formatDates";
+import { statusOptions } from "./Goal/utils/constants";
 
 const CreateGoalForm = styled(FormStyles)`
   box-shadow: none;
@@ -31,12 +36,6 @@ type Props = {
   bookshelfTitle?: string;
 };
 
-const statusOptions = [
-  { value: "NOTSTARTED", label: "Not Started" },
-  { value: "INPROGRESS", label: "In Progress" },
-  { value: "COMPLETE", label: "Complete" },
-];
-
 const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
   const [open, setOpen] = useState(false);
   const {
@@ -47,6 +46,7 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
     setValue,
   } = useForm<FormInputs>({
     defaultValues: {
+      startDate: formatDateForInput(new Date()),
       status: statusOptions[0],
     },
   });
@@ -117,6 +117,7 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
                 id="startDate"
                 name="startDate"
                 type="date"
+                defaultValue={formatDateForInput(new Date())}
                 ref={register}
                 autoFocus
               />
