@@ -31,6 +31,7 @@ export default gql`
     goalableId: ID!
     goalableType: String!
     readingRecommendation: Int
+    readingRecommendationSeconds: Int
     goalable: Goalable!
     startDate: Date
     endDate: Date

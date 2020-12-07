@@ -1,3 +1,8 @@
+import {
+  AVERAGE_READING_WORDS_PER_MINUTE,
+  AVERAGE_WORDS_PER_PAGE,
+} from '../utils/constants'
+
 const ONE_DAY = 1000 * 60 * 60 * 24
 
 export default {
@@ -96,30 +101,23 @@ export default {
     },
 
     readingRecommendation: async (goal, args, {me, models}) => {
-      const goalable = await goal.getGoalable()
-      const daysUntilGoal = getDaysUntilDate(goal.goalDate)
+      return getReadingRecommdation(goal, models, me)
+    },
 
-      if (goal.goalableType === 'BOOK') {
-        const progress = await models.Reading.findAll({
-          limit: 1,
-          where: {
-            userId: me.id,
-            bookGoogleBooksId: goalable.googleBooksId,
-          },
-          order: [['createdAt', 'DESC']],
-        })
+    readingRecommendationSeconds: async (goal, args, {me, models}) => {
+      const readingRecommendation = await getReadingRecommdation(
+        goal,
+        models,
+        me,
+      )
+      if (!readingRecommendation) return null
 
-        const pagesToRead = progress.length
-          ? goalable.pageCount - progress[0].progress
-          : goalable.pageCount
+      const estimatedWords = readingRecommendation * AVERAGE_WORDS_PER_PAGE
 
-        return daysUntilGoal > 0
-          ? Math.round(pagesToRead / Math.ceil(daysUntilGoal))
-          : pagesToRead
-      } else {
-        const totalPages = await goalable.getTotalPagesOnShelf()
-        return Math.round(totalPages / daysUntilGoal)
-      }
+      const totalReadingTimeSeconds =
+        estimatedWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
+
+      return totalReadingTimeSeconds
     },
   },
 
@@ -136,6 +134,33 @@ export default {
       return null
     },
   },
+}
+
+async function getReadingRecommdation(goal, models, me) {
+  const goalable = await goal.getGoalable()
+  const daysUntilGoal = getDaysUntilDate(goal.goalDate)
+
+  if (goal.goalableType === 'BOOK') {
+    const progress = await models.Reading.findAll({
+      limit: 1,
+      where: {
+        userId: me.id,
+        bookGoogleBooksId: goalable.googleBooksId,
+      },
+      order: [['createdAt', 'DESC']],
+    })
+
+    const pagesToRead = progress.length
+      ? goalable.pageCount - progress[0].progress
+      : goalable.pageCount
+
+    return daysUntilGoal > 0
+      ? Math.round(pagesToRead / Math.ceil(daysUntilGoal))
+      : pagesToRead
+  } else {
+    const totalPages = await goalable.getTotalPagesOnShelf()
+    return Math.round(totalPages / daysUntilGoal)
+  }
 }
 
 async function getGoalById(id, models) {
