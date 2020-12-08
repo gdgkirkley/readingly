@@ -18,6 +18,12 @@ const GoalStyles = styled.div`
   & svg {
     width: 3rem;
   }
+
+  @media (max-width: 768px) {
+    & svg {
+      width: 4rem;
+    }
+  }
 `;
 
 const RowStyle = styled.div`
@@ -27,10 +33,14 @@ const RowStyle = styled.div`
 
 const RowText = styled.div`
   margin-left: 2rem;
+  font-size: 1.6rem;
+  color: rgb(113, 113, 113);
 `;
 
 const RowHeader = styled.div`
   font-weight: 600;
+  font-size: 1.8rem;
+  color: ${(props) => props.theme.black};
 `;
 
 const GoalDisplay = ({ title, goal }) => {

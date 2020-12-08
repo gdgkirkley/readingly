@@ -8,7 +8,7 @@ export const Hourglass = () => (
     data-icon="hourglass-start"
     role="img"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 384 512"
+    viewBox="0 0 512 512"
   >
     <path
       fill="currentColor"
@@ -25,7 +25,7 @@ export const HourglassEnd = () => (
     data-icon="hourglass-end"
     role="img"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 384 512"
+    viewBox="0 0 512 512"
   >
     <path
       fill="currentColor"
