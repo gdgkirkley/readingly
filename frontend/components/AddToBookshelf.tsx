@@ -24,7 +24,6 @@ const AddToBookshelfButton = styled(Button)`
   &:disabled {
     background: #fff;
     color: ${(props) => props.theme.black};
-    opacity: 0.5;
   }
 `;
 
@@ -211,7 +210,7 @@ const AddToBookshelf = ({ book }: Props) => {
     <ButtonGroupRoot ref={outer}>
       <ButtonGroup>
         <AddToBookshelfButton
-          themeColor="yellow"
+          themeColor="black"
           onClick={handleClick}
           disabled={!selected}
         >
@@ -222,7 +221,7 @@ const AddToBookshelf = ({ book }: Props) => {
             : "Choose a bookshelf:"}
         </AddToBookshelfButton>
         <DropButton
-          themeColor="yellow"
+          themeColor="black"
           onClick={toggle}
           aria-haspopup="listbox"
           aria-expanded={open}

@@ -109,6 +109,7 @@ export const ButtonGroupDropdownContainer = styled.div<Props>`
   overflow-y: auto;
   will-change: transform;
   box-shadow: 0 4px 4px -2px #919191;
+  border: 1px solid ${(props) => props.theme.black};
 `;
 
 export const ButtonGroupDropdown = styled.div`

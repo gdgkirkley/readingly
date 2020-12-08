@@ -20,6 +20,7 @@ const Card = styled.a`
 
 const ImageContainer = styled.div<ContainerProps>`
   width: ${(props) => props.width}px;
+  min-width: ${(props) => props.width}px;
   height: auto;
   display: flex;
   justify-content: center;
