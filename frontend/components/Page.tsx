@@ -8,7 +8,7 @@ import Footer from "./Footer";
 import HomeBanner from "./HomeBanner";
 
 export const theme = {
-  black: "#393939",
+  black: "#222222",
   yellow: "#f4b52e",
   purple: "#8242F6",
   red: "#E75248",

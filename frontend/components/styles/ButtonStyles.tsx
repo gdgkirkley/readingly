@@ -4,32 +4,37 @@ type ButtonProps = {
   color?: string;
   themeColor: string;
   invert?: boolean;
+  primary?: boolean;
   iconButton?: boolean;
 };
 
 const Button = styled.button<ButtonProps>`
   color: ${(props) =>
     props.invert
-      ? props.themeColor
-        ? props.theme[props.themeColor]
-        : props.color
-      : "#fff"};
-  opacity: 0.8;
-  background: ${(props) =>
-    props.invert
       ? "none"
       : props.themeColor
       ? props.theme[props.themeColor]
       : props.color};
+  opacity: 0.8;
+  background: #fff;
+  border: 1px solid
+    ${(props) =>
+      props.invert
+        ? "none"
+        : props.themeColor
+        ? props.theme[props.themeColor]
+        : props.color};
   padding: 1rem 2rem;
   font-size: 1.7rem;
   font-weight: 600;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   line-height: inherit;
   transition: opacity 0.1s ease-in-out;
-  box-shadow: ${(props) => (props.invert ? "" : "0 4px 4px -2px #919191")};
+  /* box-shadow: ${(props) =>
+    props.invert ? "" : "0 4px 4px -2px #919191"}; */
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
 
   & .hidden-text {
     clip: rect(0 0 0 0);
@@ -43,7 +48,6 @@ const Button = styled.button<ButtonProps>`
   &:hover,
   :focus {
     opacity: 1;
-    background: ${(props) => props.color};
   }
 
   &:focus {

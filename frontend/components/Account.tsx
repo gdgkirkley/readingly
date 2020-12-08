@@ -100,7 +100,7 @@ const Account: React.FC<Props> = ({ me }) => {
             <InfoHeader>Username</InfoHeader>
             <div>{me.username}</div>
           </InfoBox>
-          <Button themeColor="yellow" onClick={toggleEdit}>
+          <Button themeColor="black" onClick={toggleEdit}>
             Edit Your Info
           </Button>
         </InformationContainer>

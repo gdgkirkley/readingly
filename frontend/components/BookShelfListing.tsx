@@ -71,7 +71,6 @@ const Links = styled.div`
   margin-top: 40px;
 
   & a {
-    color: #fff;
     padding: 1rem 2rem;
     border-radius: 0.25rem;
 

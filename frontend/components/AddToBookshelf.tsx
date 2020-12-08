@@ -21,10 +21,10 @@ import CaretDown from "./icons/CaretDown";
 
 const AddToBookshelfButton = styled(Button)`
   /* margin: 2rem 0 3rem; */
-
   &:disabled {
-    background-color: #ececec;
+    background: #fff;
     color: ${(props) => props.theme.black};
+    opacity: 0.5;
   }
 `;
 

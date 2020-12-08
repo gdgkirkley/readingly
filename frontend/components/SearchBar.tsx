@@ -101,7 +101,7 @@ const SearchBar = ({ handleSearch, defaultValue }: Props) => {
         />
       </Bar>
       <SearchButton>
-        <Button themeColor="yellow" type="submit">
+        <Button themeColor="black" type="submit">
           Search
         </Button>
       </SearchButton>
