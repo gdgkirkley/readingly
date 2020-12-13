@@ -21,6 +21,10 @@ export const formatDate = (date: string | Date): string => {
   });
 };
 
+export const formatTimeFromDate = (date: string | Date): string => {
+  return new Date(date).toLocaleTimeString("en-US", { hour12: true, hour: 'numeric', minute: '2-digit' })
+}
+
 export function formatDateForInput(date: Date): string {
   return `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + date.getDate()).slice(-2)}`
 }

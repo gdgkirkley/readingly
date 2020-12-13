@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { Reading, DELETE_READING_PROGRESS_MUTATION } from "../graphql/reading";
-import { formatDate } from "../lib/formatDates";
+import { formatDate, formatTimeFromDate } from "../lib/formatDates";
 import Card from "./Card";
 import { getReadingTimeString } from "../lib/time";
 import OpenBook from "./icons/Book";
@@ -79,7 +79,9 @@ const ReadingCard = ({ reading, totalPages, googleBooksId }: Props) => {
     }
   };
 
-  const readingTimeRemaining = getReadingTimeString(reading.timeRemainingInSeconds);
+  const readingTimeRemaining = getReadingTimeString(
+    reading.timeRemainingInSeconds
+  );
 
   return (
     <ReadingCardStyle>
@@ -88,14 +90,13 @@ const ReadingCard = ({ reading, totalPages, googleBooksId }: Props) => {
         itemToRemove={`reading from ${formatDate(reading.createdAt)}`}
       />
       <OpenBook />
-      <h4>{formatDate(reading.createdAt)}</h4>
-      <p>
-        Page <strong>{reading.progress}</strong>
+      <h4>
+        On page {reading.progress}
         {totalPages ? ` out of ${totalPages}` : null}
-      </p>
-      {readingTimeRemaining ? (
-        <p>{readingTimeRemaining} to go</p>
-      ) : null}
+      </h4>
+      <p>Added at {formatTimeFromDate(reading.createdAt)}</p>
+      <p>{formatDate(reading.createdAt)}</p>
+      {readingTimeRemaining ? <p>{readingTimeRemaining} to go</p> : null}
       <PercentageBar width={`${getPercentage(reading.progress, totalPages)}%`}>
         <strong>
           {totalPages
