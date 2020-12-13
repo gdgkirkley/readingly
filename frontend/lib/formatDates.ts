@@ -2,7 +2,13 @@ export const formatDate = (date: string | Date): string => {
   let parsedDate: Date
 
   if(typeof date === 'string') {
-    parsedDate = parseStringDateISO(date);
+    // Some Google Books dates do not come through as full YYYY-MM-DD dates.
+    // If that is the case, then just return the string.
+    if(checkIfFullDate(date)) {
+      parsedDate = parseStringDateISO(date);
+    } else {
+      return date;
+    }
   } else {
     parsedDate = date
   }
@@ -19,8 +25,14 @@ export function formatDateForInput(date: Date): string {
   return `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + date.getDate()).slice(-2)}`
 }
 
-export function parseStringDateISO (date: string): Date {
+function checkIfFullDate(date: string): boolean {
   let [y, m, d] = date.split(/\D/)
+  if(!y || !m || !d) return false;
+  return true;
+}
+
+export function parseStringDateISO (date: string): Date {
+  let [y, m, d] = date.split(/\D/);
   let month = parseInt(m);
   let year = parseInt(y);
   let day = parseInt(d);
