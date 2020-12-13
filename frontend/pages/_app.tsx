@@ -28,11 +28,14 @@ class Readingly extends App<AppPropsWithApollo> {
     const { Component, apollo, pageProps } = this.props;
 
     return (
-      <ApolloProvider client={apollo}>
-        <Page>
-          <Component {...pageProps} />
-        </Page>
-      </ApolloProvider>
+      <>
+        <ApolloProvider client={apollo}>
+          <Page>
+            <Component {...pageProps} />
+          </Page>
+        </ApolloProvider>
+        <div id="modal-root"></div>
+      </>
     );
   }
 }
