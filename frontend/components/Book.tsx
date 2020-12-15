@@ -100,9 +100,9 @@ const BannerContent = styled.div`
 `;
 
 const BannerTitle = styled.h1`
-  font-size: 5rem;
+  font-size: 5.5rem;
   margin: 0;
-  line-height: 1;
+  line-height: 1.1;
   position: relative;
   margin-bottom: 20px;
   max-width: 70%;
@@ -215,49 +215,51 @@ const Book = ({ googleBooksId }: Props) => {
           {thumbnail && <img src={thumbnail} alt={title} />}
         </BannerContent>
       </Banner>
-      <TwoColContent>
-        <Description>
-          <Description
-            dangerouslySetInnerHTML={{ __html: smallDescription }}
-            data-testid="book-description"
-          />
-          <Button
-            themeColor="red"
-            className="no-left-margin"
-            invert={true}
-            onClick={toggle}
-          >
-            Read {readMoreToggled ? "less" : "more"}
-          </Button>
-        </Description>
-        <div>
-          <Card position="sticky">
-            {me ? (
-              <>
-                <AddToBookshelf book={data.googleBook} />
-                {bookshelves?.length ? (
-                  <div>
-                    On My Shelves:{" "}
-                    {bookshelves.map((shelf, index) => (
-                      <p key={shelf.id}>
-                        <Link href={`/shelf/${encodeURI(shelf.title)}`}>
-                          {shelf.title}
-                        </Link>
-                      </p>
-                    ))}
-                  </div>
-                ) : null}
-              </>
-            ) : (
-              <Link href="/signin" passHref={true}>
-                <Button as="a" themeColor="yellow">
-                  Sign in to add this book!
-                </Button>
-              </Link>
-            )}
-          </Card>
-        </div>
-      </TwoColContent>
+      <BookBlock>
+        <TwoColContent>
+          <Description>
+            <Description
+              dangerouslySetInnerHTML={{ __html: smallDescription }}
+              data-testid="book-description"
+            />
+            <Button
+              themeColor="red"
+              className="no-left-margin"
+              invert={true}
+              onClick={toggle}
+            >
+              Read {readMoreToggled ? "less" : "more"}
+            </Button>
+          </Description>
+          <div>
+            <Card position="sticky">
+              {me ? (
+                <>
+                  <AddToBookshelf book={data.googleBook} />
+                  {bookshelves?.length ? (
+                    <div>
+                      On My Shelves:{" "}
+                      {bookshelves.map((shelf, index) => (
+                        <p key={shelf.id}>
+                          <Link href={`/shelf/${encodeURI(shelf.title)}`}>
+                            {shelf.title}
+                          </Link>
+                        </p>
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <Link href="/signin" passHref={true}>
+                  <Button as="a" themeColor="yellow">
+                    Sign in to add this book!
+                  </Button>
+                </Link>
+              )}
+            </Card>
+          </div>
+        </TwoColContent>
+      </BookBlock>
       {bookshelves?.length || goal?.goalDate ? (
         <BookBlock>
           <MyActivityHeader>
@@ -296,15 +298,22 @@ const Book = ({ googleBooksId }: Props) => {
           ) : null}
         </BookBlock>
       ) : null}
+
       <MobileDescription>
         <MobileDescription
           dangerouslySetInnerHTML={{ __html: smallDescription }}
           data-testid="book-description"
         />
-        <Button themeColor="red" className="no-left-margin" onClick={toggle}>
+        <Button
+          themeColor="red"
+          invert={true}
+          className="no-left-margin"
+          onClick={toggle}
+        >
           Read {readMoreToggled ? "less" : "more"}
         </Button>
       </MobileDescription>
+
       <div>
         <h2>Check These Out</h2>
         {authors && <BookCategorySearch searchTerm={authors[0]} />}
