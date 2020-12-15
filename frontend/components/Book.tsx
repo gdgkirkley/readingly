@@ -18,6 +18,7 @@ import { GoalType } from "../graphql/goal";
 import UpdateGoal from "./Goal/UpdateGoal";
 import { useUser } from "../hooks/useUser";
 import GoalDisplay from "./Goal/GoalDisplay";
+import { useReadMore } from "../hooks/useReadMore";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -159,6 +160,11 @@ const Book = ({ googleBooksId }: Props) => {
     variables: { googleBooksId: googleBooksId },
   });
 
+  const [smallDescription, toggle, readMoreToggled] = useReadMore(
+    data?.googleBook.description,
+    500
+  );
+
   if (loading) return <p>Loading....</p>;
 
   if (error) return <p>Uh oh! {error.message}</p>;
@@ -210,10 +216,20 @@ const Book = ({ googleBooksId }: Props) => {
         </BannerContent>
       </Banner>
       <TwoColContent>
-        <Description
-          dangerouslySetInnerHTML={{ __html: description }}
-          data-testid="book-description"
-        />
+        <Description>
+          <Description
+            dangerouslySetInnerHTML={{ __html: smallDescription }}
+            data-testid="book-description"
+          />
+          <Button
+            themeColor="red"
+            className="no-left-margin"
+            invert={true}
+            onClick={toggle}
+          >
+            Read {readMoreToggled ? "less" : "more"}
+          </Button>
+        </Description>
         <div>
           <Card position="sticky">
             {me ? (
@@ -280,10 +296,15 @@ const Book = ({ googleBooksId }: Props) => {
           ) : null}
         </BookBlock>
       ) : null}
-      <MobileDescription
-        dangerouslySetInnerHTML={{ __html: description }}
-        data-testid="book-description"
-      />
+      <MobileDescription>
+        <MobileDescription
+          dangerouslySetInnerHTML={{ __html: smallDescription }}
+          data-testid="book-description"
+        />
+        <Button themeColor="red" className="no-left-margin" onClick={toggle}>
+          Read {readMoreToggled ? "less" : "more"}
+        </Button>
+      </MobileDescription>
       <div>
         <h2>Check These Out</h2>
         {authors && <BookCategorySearch searchTerm={authors[0]} />}

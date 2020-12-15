@@ -45,6 +45,11 @@ const Button = styled.button<ButtonProps>`
     width: 1px;
   }
 
+  &.no-left-margin {
+    margin-left: 0px;
+    padding-left: 0;
+  }
+
   &:hover,
   :focus {
     opacity: 1;

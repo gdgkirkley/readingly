@@ -218,7 +218,7 @@ const AddToBookshelf = ({ book }: Props) => {
             ? `Add to ${
                 selected.length > 18 ? `${selected.substr(0, 15)}...` : selected
               }`
-            : "Choose a bookshelf:"}
+            : "Add to a bookshelf:"}
         </AddToBookshelfButton>
         <DropButton
           themeColor="black"
