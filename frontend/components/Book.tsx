@@ -19,6 +19,7 @@ import UpdateGoal from "./Goal/UpdateGoal";
 import { useUser } from "../hooks/useUser";
 import GoalDisplay from "./Goal/GoalDisplay";
 import { useReadMore } from "../hooks/useReadMore";
+import { getAuthorString } from "../lib/book";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -325,11 +326,5 @@ const Book = ({ googleBooksId }: Props) => {
     </BookPage>
   );
 };
-
-function getAuthorString(authors: string[]) {
-  return authors.map((author, i) =>
-    i === authors.length - 1 ? author : author + ", "
-  );
-}
 
 export default Book;

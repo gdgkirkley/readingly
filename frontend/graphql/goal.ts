@@ -22,6 +22,31 @@ export const UPDATE_GOAL_MUTATION = gql`
   }
 `;
 
+export const GOALS_QUERY = gql`
+  query($status: String, $type: String) {
+    goals(status: $status, type: $type) {
+      id
+      startDate
+      endDate
+      goalDate
+      status
+      goalable {
+        __typename
+        ... on Book {
+          googleBooksId
+          title
+          authors
+          pageCount
+        	thumbnail
+          reading {
+            progress
+          }
+        }
+      }
+    }
+  }
+`
+
 export type Goal = {
   id: string;
   goalDate: string;
