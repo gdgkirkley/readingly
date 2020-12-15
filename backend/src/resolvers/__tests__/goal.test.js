@@ -22,6 +22,25 @@ test('goals returns a list of goals', async () => {
   )
 })
 
+test('goals returns a list of goals if filtered', async () => {
+  const goals = await goal.Query.goals(parent, {status: 'INPROGRESS'}, context)
+
+  expect(goals).toHaveLength(2)
+  expect(goals).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({goalableType: 'BOOK', status: 'INPROGRESS'}),
+    ]),
+  )
+  expect(goals).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        goalableType: 'BOOKSHELF',
+        status: 'INPROGRESS',
+      }),
+    ]),
+  )
+})
+
 test('goal returns a goal', async () => {
   const goals = await goal.Query.goals(parent, {}, context)
 
