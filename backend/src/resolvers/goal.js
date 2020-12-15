@@ -7,15 +7,18 @@ const ONE_DAY = 1000 * 60 * 60 * 24
 
 export default {
   Query: {
-    goals: async (parent, {status}, {models, me}) => {
-      const where = status
-        ? {
-            status,
-            userId: me.id,
-          }
-        : {
-            userId: me.id,
-          }
+    goals: async (parent, {status, type}, {models, me}) => {
+      const where = {
+        userId: me.id,
+      }
+
+      if (status) {
+        where.status = status
+      }
+
+      if (type) {
+        where.goalableType = type
+      }
 
       return await models.Goal.findAll({
         where,

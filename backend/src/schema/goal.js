@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-express'
 
 export default gql`
   extend type Query {
-    goals(status: String): [Goal]
+    goals(status: String, type: String): [Goal]
     goal(id: ID!): Goal
   }
 
