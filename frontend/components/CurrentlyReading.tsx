@@ -4,12 +4,29 @@ import { Goal, GoalStatus, GOALS_QUERY, GoalType } from "../graphql/goal";
 import Card from "./Card";
 import { Book } from "../graphql/books";
 import { getAuthorString } from "../lib/book";
+import GoalDisplay from "./Goal/GoalDisplay";
 
 const GoalReadingStyle = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 10fr;
-  justify-content: flex-start;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const GoalContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    margin: 0 1rem;
+  }
 `;
 
 const CurrentlyReading = () => {
@@ -21,8 +38,6 @@ const CurrentlyReading = () => {
 
   if (error) return <p>Uh oh! {error.message}</p>;
 
-  console.log(data);
-
   const goals = data.goals;
 
   return (
@@ -32,21 +47,25 @@ const CurrentlyReading = () => {
         ? goals.map((goal: Goal) => {
             // We know it's a book because of the type query above
             let goalable: Book = goal.goalable as Book;
-
             return (
               <Card key={goal.id}>
                 <GoalReadingStyle>
-                  <div>
+                  <GoalContent>
                     {goalable.thumbnail && (
                       <img src={goalable.thumbnail} alt={goalable.title} />
                     )}
-                  </div>
-                  <div>
+                  </GoalContent>
+                  <GoalContent>
                     <h2>{goalable.title}</h2>
                     {goalable.authors?.length && (
                       <p>By {getAuthorString(goalable.authors)}</p>
                     )}
-                  </div>
+                    <GoalDisplay
+                      title={goalable.title}
+                      goal={goal}
+                      short={true}
+                    />
+                  </GoalContent>
                 </GoalReadingStyle>
               </Card>
             );

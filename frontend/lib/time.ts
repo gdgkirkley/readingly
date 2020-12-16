@@ -59,8 +59,8 @@ export function getPeriodFromNow(date: Date | string): string {
   dayCount = Math.ceil((date.getTime() - today.getTime()) / MILLISECONDS_IN_DAY)
 
   periodString = dayCount > 0 ?
-    `is <strong>${dayCount} day${dayCount === 1 ? "" : "s"}</strong> from now` :
-    dayCount === 0 ? `is <strong>today</strong>` : `was <strong>${Math.abs(dayCount)} day${dayCount === -1 ? "" : "s"}</strong> ago`
+    `${dayCount} day${dayCount === 1 ? "" : "s"} from now` :
+    dayCount === 0 ? `is today` : `was ${Math.abs(dayCount)} day${dayCount === -1 ? "" : "s"} ago`
 
   return (periodString);
 }

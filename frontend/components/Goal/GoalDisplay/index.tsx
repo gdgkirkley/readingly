@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { GoalStatus } from "../../../graphql/goal";
+import { Goal, GoalStatus } from "../../../graphql/goal";
 import { formatDate } from "../../../lib/formatDates";
 import {
   getDateDiffInDays,
@@ -43,82 +43,61 @@ const RowHeader = styled.div`
   color: ${(props) => props.theme.black};
 `;
 
-const GoalDisplay = ({ title, goal }) => {
-  const complete = goal.status === GoalStatus.Complete;
+type Props = {
+  title: string;
+  goal: Goal;
+  short?: boolean;
+};
+
+const DisplayProperties = [
+  {
+    key: "goalDate",
+    text: "Reading Goal",
+    icon: GoalIcon,
+    function: formatDate,
+    mustHaveStatus: null,
+  },
+  {
+    key: "readingRecommendationSeconds",
+    text: "Today's Reading Time Recommendation",
+    icon: BookReader,
+    function: getReadingTimeString,
+    mustHaveStatus: GoalStatus.InProgress,
+  },
+  {
+    key: "startDate",
+    text: "Start Date",
+    icon: Hourglass,
+    function: formatDate,
+    mustHaveStatus: null,
+  },
+  {
+    key: "endDate",
+    text: "End Date",
+    icon: HourglassEnd,
+    function: formatDate,
+    mustHaveStatus: GoalStatus.Complete,
+  },
+];
+
+const GoalDisplay = ({ title, goal, short }: Props) => {
+  function hasStatus(mustHaveStatus: GoalStatus): boolean {
+    return mustHaveStatus ? mustHaveStatus === goal.status : true;
+  }
 
   return (
     <GoalStyles>
-      <RowStyle>
-        <GoalIcon />
-        <RowText data-testid="goalDate">
-          <RowHeader>Goal</RowHeader>
-          <div>
-            My goal {complete ? "was" : "is"} to read {title} by{" "}
-            <strong>{formatDate(goal.goalDate)}</strong>. That{" "}
-            <span
-              dangerouslySetInnerHTML={{
-                __html: getPeriodFromNow(goal.goalDate),
-              }}
-            />
-            .
-          </div>
-        </RowText>
-      </RowStyle>
-      {goal.status === GoalStatus.InProgress && goal.readingRecommendation ? (
-        <RowStyle>
-          <BookReader />
-          <RowText data-testid="readingRecommendation">
-            <RowHeader>Recommendation</RowHeader>
-            <div>
-              To reach my goal, readingly recommends{" "}
-              <strong>reading {goal.readingRecommendation} pages today</strong>
-              {goal.readingRecommendationSeconds ? (
-                <span>
-                  , which will take about{" "}
-                  <strong>
-                    {getReadingTimeString(goal.readingRecommendationSeconds)}
-                  </strong>
-                </span>
-              ) : null}
-              !
-            </div>
-          </RowText>
-        </RowStyle>
-      ) : null}
-      {goal.startDate ? (
-        <RowStyle>
-          <Hourglass />
-          <RowText data-testid="startDate">
-            <RowHeader>Start Date</RowHeader>I started reading on{" "}
-            <strong>{formatDate(goal.startDate)}</strong>. That{" "}
-            <span
-              dangerouslySetInnerHTML={{
-                __html: getPeriodFromNow(goal.startDate),
-              }}
-            />
-            .{" "}
-          </RowText>
-        </RowStyle>
-      ) : null}
-      {goal.endDate ? (
-        <RowStyle>
-          <HourglassEnd />
-          <RowText>
-            <RowHeader>End Date</RowHeader>
-            <div>
-              I finished reading on <strong>{formatDate(goal.endDate)}</strong>.
-              It took me{" "}
-              <strong>
-                {humanReadableTimeDiff(
-                  new Date(goal.startDate),
-                  new Date(goal.endDate)
-                )}
-              </strong>{" "}
-              to read.
-            </div>
-          </RowText>
-        </RowStyle>
-      ) : null}
+      {DisplayProperties.map((property) => {
+        return goal[property.key] && hasStatus(property.mustHaveStatus) ? (
+          <RowStyle key={property.key}>
+            <property.icon />
+            <RowText data-testid={property.key}>
+              {property.text}:{" "}
+              <strong>{property.function(goal[property.key])}</strong>
+            </RowText>
+          </RowStyle>
+        ) : null;
+      })}
     </GoalStyles>
   );
 };

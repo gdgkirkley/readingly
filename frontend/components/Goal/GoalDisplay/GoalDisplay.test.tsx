@@ -15,7 +15,9 @@ test("<GoalDisplay /> renders", async () => {
   render(<GoalDisplay goal={goal} title={book.title} />);
 
   expect(screen.getByTestId("goalDate")).toBeInTheDocument();
-  expect(screen.getByTestId("readingRecommendation")).toBeInTheDocument();
+  expect(
+    screen.getByTestId("readingRecommendationSeconds")
+  ).toBeInTheDocument();
   expect(screen.getByTestId("startDate")).toBeInTheDocument();
 });
 
@@ -26,17 +28,24 @@ test("<GoalDisplay /> doesn't display reading recommendation if status is not in
   render(<GoalDisplay goal={goal} title={book.title} />);
 
   expect(screen.getByTestId("goalDate")).toBeInTheDocument();
-  expect(screen.queryByTestId("readingRecommendation")).not.toBeInTheDocument();
+  expect(
+    screen.queryByTestId("readingRecommendationSeconds")
+  ).not.toBeInTheDocument();
   expect(screen.getByTestId("startDate")).toBeInTheDocument();
 });
 
 test("<GoalDisplay /> doesn't display start date if none", async () => {
-  const goal = await buildGoal({ startDate: null });
+  const goal = await buildGoal({
+    startDate: null,
+    status: GoalStatus.InProgress,
+  });
   const book = await buildBook();
 
   render(<GoalDisplay goal={goal} title={book.title} />);
 
   expect(screen.getByTestId("goalDate")).toBeInTheDocument();
-  expect(screen.queryByTestId("readingRecommendation")).toBeInTheDocument();
+  expect(
+    screen.queryByTestId("readingRecommendationSeconds")
+  ).toBeInTheDocument();
   expect(screen.queryByTestId("startDate")).not.toBeInTheDocument();
 });

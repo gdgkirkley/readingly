@@ -59,8 +59,9 @@ test("<ReadingCard /> renders", async () => {
 
   const removeButton = screen.getByRole("button");
 
-  expect(screen.getByRole("heading")).toHaveTextContent(formatDate(today));
-  expect(screen.getByText(reading.progress.toString())).toBeInTheDocument();
+  expect(screen.getByRole("heading")).toHaveTextContent(
+    `On page ${reading.progress}`
+  );
   expect(screen.getByText("1 hour to go")).toBeInTheDocument();
   expect(removeButton).toBeInTheDocument();
 
