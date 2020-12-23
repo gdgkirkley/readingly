@@ -19,6 +19,7 @@ import UpdateGoal from "./Goal/UpdateGoal";
 import { useUser } from "../hooks/useUser";
 import GoalDisplay from "./Goal/GoalDisplay";
 import { useReadMore } from "../hooks/useReadMore";
+import { CreateNote } from "./Note";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -296,6 +297,15 @@ const Book = ({ googleBooksId }: Props) => {
               ))}
             </Cards>
           ) : null}
+        </BookBlock>
+      ) : null}
+
+      {bookshelves.length || reading?.length ? (
+        <BookBlock>
+          <MyActivityHeader>
+            <h2>My Notes</h2>
+            <CreateNote googleBooksId={googleBooksId} />
+          </MyActivityHeader>
         </BookBlock>
       ) : null}
 

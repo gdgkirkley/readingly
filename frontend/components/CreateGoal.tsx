@@ -119,7 +119,6 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
                 type="date"
                 defaultValue={formatDateForInput(new Date())}
                 ref={register}
-                autoFocus
               />
             </InputGroup>
             <InputGroup>
@@ -131,6 +130,7 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
                 name="goalDate"
                 type="date"
                 ref={register({ required: true })}
+                autoFocus
               />
               {errors.goalDate?.type === "required" && (
                 <p className="error-message" data-testid="validation-error">
