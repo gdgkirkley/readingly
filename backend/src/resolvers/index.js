@@ -6,6 +6,7 @@ import bookshelfResolvers from './bookshelf'
 import authorResolvers from './author'
 import readingResolvers from './reading'
 import goalResolvers from './goal'
+import noteResolvers from './note'
 
 const rootResolver = {
   Date: DateResolver,
@@ -20,4 +21,5 @@ export default [
   authorResolvers,
   readingResolvers,
   goalResolvers,
+  noteResolvers,
 ]

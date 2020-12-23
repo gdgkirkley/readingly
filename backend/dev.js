@@ -8,6 +8,7 @@
     createBookshelves,
     createGoals,
     createReadings,
+    createNotes,
   } = require('./src/seeds')
 
   const seed = process.env.NODE_ENV !== 'test'
@@ -23,6 +24,7 @@
     await createBookshelves()
     await createGoals()
     await createReadings()
+    await createNotes()
   }
   require('./src')
 })()
