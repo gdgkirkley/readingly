@@ -22,7 +22,7 @@ const NoteTextArea = styled.textarea`
 
 type FormInputs = {
   note: string;
-  page?: number;
+  page?: string;
 };
 
 type Props = {
@@ -43,7 +43,8 @@ const CreateNote = ({ googleBooksId }: Props) => {
   const onSubmit = async (data: FormInputs) => {
     await createNote({
       variables: {
-        ...data,
+        note: data.note,
+        page: parseInt(data.page),
         googleBooksId,
       },
     });
@@ -81,7 +82,12 @@ const CreateNote = ({ googleBooksId }: Props) => {
               <label htmlFor="page">
                 Enter a page number to remember where you were:
               </label>
-              <input type="number" name="page" ref={register({ min: 0 })} />
+              <input
+                type="number"
+                name="page"
+                defaultValue={0}
+                ref={register({ min: 0 })}
+              />
               {errors?.page?.type === "min" && (
                 <p className="error-message" data-testid="validation-error">
                   Page cannot be less than 0

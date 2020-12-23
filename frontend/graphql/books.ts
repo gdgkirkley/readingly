@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 import { BookShelf } from "./bookshelves";
 import { Reading } from "./reading";
 import { Goal } from "./goal";
+import { Note } from "./notes";
 
 const BOOK_QUERY = gql`
   query {
@@ -43,6 +44,12 @@ export const GOOGLE_BOOK_QUERY = gql`
         timeRemainingInSeconds
         createdAt
       }
+      notes {
+        id
+        note
+        page
+        createdAt
+      }
       bookshelves {
         id
         title
@@ -74,6 +81,7 @@ export interface Book {
   description: string;
   authors: string[];
   reading: Reading[];
+  notes?: Note[];
   bookshelves: BookShelf[];
   goal: Goal;
   thumbnail: string;
