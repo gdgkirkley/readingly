@@ -14,7 +14,8 @@ const StyledForm = styled.form`
     margin-bottom: 0.5rem;
   }
 
-  & input {
+  & input,
+  textarea {
     width: 100%;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     padding: 1rem 1.75rem;
@@ -59,6 +60,19 @@ export const ActionGroup = styled.div<ActionGroupProps>`
   justify-content: ${(props) =>
     props.justifyContent ? props.justifyContent : "space-between"};
   margin-top: 1rem;
+`;
+
+export const ModalForm = styled(StyledForm)`
+  box-shadow: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+`;
+
+export const TextArea = styled.textarea`
+  min-height: 10rem;
+  font-size: 1.6rem;
+  resize: vertical;
 `;
 
 export default StyledForm;
