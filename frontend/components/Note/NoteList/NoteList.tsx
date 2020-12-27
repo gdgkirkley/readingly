@@ -1,16 +1,26 @@
+import { useQuery } from "@apollo/client";
 import React from "react";
-import { Note } from "../../../graphql/notes";
+import { Note, NOTES_QUERY } from "../../../graphql/notes";
 import NoteContainer from "../Note";
 
 type Props = {
-  notes: Note[];
+  notes?: Note[];
+  googleBooksId?: string;
 };
 
-const NoteList = ({ notes }: Props) => {
+interface NoteData {
+  notes: Note[];
+}
+
+const NoteList = ({ notes, googleBooksId }: Props) => {
+  const { data, loading, error } = useQuery<NoteData>(NOTES_QUERY, {
+    variables: { googleBooksId: googleBooksId },
+  });
+
   return (
     <div>
-      {notes?.length
-        ? notes.map((note) => <NoteContainer key={note.id} note={note} />)
+      {data?.notes?.length
+        ? data.notes.map((note) => <NoteContainer key={note.id} note={note} />)
         : null}
     </div>
   );

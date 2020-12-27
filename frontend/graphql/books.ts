@@ -44,12 +44,6 @@ export const GOOGLE_BOOK_QUERY = gql`
         timeRemainingInSeconds
         createdAt
       }
-      notes {
-        id
-        note
-        page
-        createdAt
-      }
       bookshelves {
         id
         title

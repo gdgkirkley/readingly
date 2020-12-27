@@ -3,7 +3,7 @@ import { Book } from "./books";
 import { User } from "./user";
 
 export const NOTES_QUERY = gql`
-  query($googleBooksId: googleBooksId) {
+  query($googleBooksId: ID!) {
     notes(googleBooksId: $googleBooksId) {
       id
       note

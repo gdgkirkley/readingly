@@ -181,7 +181,6 @@ const Book = ({ googleBooksId }: Props) => {
     publisher,
     bookshelves,
     reading,
-    notes,
     averageTimeToReadInSeconds,
     goal,
   } = data.googleBook;
@@ -307,7 +306,7 @@ const Book = ({ googleBooksId }: Props) => {
             <h2>My Notes</h2>
             <CreateNote googleBooksId={googleBooksId} />
           </MyActivityHeader>
-          {notes?.length ? <NoteList notes={notes} /> : null}
+          <NoteList googleBooksId={googleBooksId} />
         </BookBlock>
       ) : null}
 
