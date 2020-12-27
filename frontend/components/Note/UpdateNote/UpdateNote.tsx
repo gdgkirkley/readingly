@@ -55,8 +55,8 @@ const UpdateNote = ({ note }: Props) => {
 
   return (
     <>
-      <Button themeColor="purple" onClick={toggleModal} invert={true}>
-        Edit
+      <Button themeColor="purple" onClick={toggleModal}>
+        ✎
       </Button>
       <Dialog
         role="dialog"

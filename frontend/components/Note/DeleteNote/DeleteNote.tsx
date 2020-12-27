@@ -57,8 +57,8 @@ const DeleteNote = ({ noteId }: Props) => {
 
   return (
     <>
-      <Button themeColor="red" invert={true} onClick={toggleModal}>
-        Delete
+      <Button themeColor="red" onClick={toggleModal}>
+        X
       </Button>
       <Dialog
         role="dialog"
