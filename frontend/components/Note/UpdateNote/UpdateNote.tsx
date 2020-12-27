@@ -1,78 +1,75 @@
+import { useMutation } from "@apollo/client";
 import React from "react";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { Note, UPDATE_NOTE_MUTATION } from "../../../graphql/notes";
 import useToggle from "../../../hooks/useToggle";
 import Dialog from "../../Dialog";
 import Button from "../../styles/ButtonStyles";
-import FormStyles, { InputGroup, ActionGroup } from "../../styles/FormStyles";
-import { useMutation } from "@apollo/client";
-import { CREATE_NOTE_MUTATION, NOTES_QUERY } from "../../../graphql/notes";
-import { toast } from "react-toastify";
-import BOOK_QUERY from "../../../graphql/books";
-
-const CreateNoteForm = styled(FormStyles)`
-  box-shadow: none;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-`;
-
-const NoteTextArea = styled.textarea`
-  min-height: 10rem;
-`;
+import {
+  ModalForm,
+  InputGroup,
+  ActionGroup,
+  TextArea,
+} from "../../styles/FormStyles";
 
 type FormInputs = {
   note: string;
-  page?: string;
+  page: string;
 };
 
 type Props = {
-  googleBooksId: string;
+  note: Note;
 };
 
-const CreateNote = ({ googleBooksId }: Props) => {
-  const [isModalOpen, toggleModal] = useToggle(false);
+const UpdateNote = ({ note }: Props) => {
+  const [open, toggleModal] = useToggle(false);
 
-  const { register, handleSubmit, errors } = useForm<FormInputs>();
+  const { register, handleSubmit, errors } = useForm<FormInputs>({
+    defaultValues: {
+      note: note.note,
+      page: note.page.toString(),
+    },
+  });
 
-  const [createNote, { loading, error }] = useMutation(CREATE_NOTE_MUTATION, {
+  const [updateNote, { loading, error }] = useMutation(UPDATE_NOTE_MUTATION, {
     onError: (error) => {
-      toast.error(`There was an error creating note: ${error.message}`);
+      toast.error(`There was an error updating note: ${error.message}`);
     },
   });
 
   const onSubmit = async (data: FormInputs) => {
-    await createNote({
+    await updateNote({
       variables: {
         note: data.note,
         page: parseInt(data.page),
-        googleBooksId,
+        id: note.id,
       },
     });
 
     if (!error && !loading) {
-      toast.success("Note created!");
+      toast.success(`Note updated!`);
       toggleModal();
     }
   };
 
   return (
     <>
-      <Button themeColor="red" onClick={toggleModal}>
-        Create Note
+      <Button themeColor="purple" onClick={toggleModal} invert={true}>
+        Edit
       </Button>
       <Dialog
         role="dialog"
-        accessibilityLabel="Create a note"
+        accessibilityLabel="Update a note"
         toggleModal={toggleModal}
-        open={isModalOpen}
+        open={open}
       >
         <div>
-          <h1>Create a reading note</h1>
-          <CreateNoteForm role="form" onSubmit={handleSubmit(onSubmit)}>
+          <h1>Edit note</h1>
+          <ModalForm role="form" onSubmit={handleSubmit(onSubmit)}>
             <InputGroup>
               <label htmlFor="note">What would you like to remember?</label>
-              <NoteTextArea name="note" ref={register({ required: true })} />
+              <TextArea name="note" ref={register({ required: true })} />
               {errors?.note?.type === "required" && (
                 <p className="error-message" data-testid="validation-error">
                   Note is required
@@ -95,14 +92,14 @@ const CreateNote = ({ googleBooksId }: Props) => {
             </InputGroup>
             <ActionGroup justifyContent="center">
               <Button themeColor="red" type="submit">
-                Create Note
+                Edit Note
               </Button>
             </ActionGroup>
-          </CreateNoteForm>
+          </ModalForm>
         </div>
       </Dialog>
     </>
   );
 };
 
-export default CreateNote;
+export default UpdateNote;

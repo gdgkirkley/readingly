@@ -2,14 +2,34 @@ import React from "react";
 import styled from "styled-components";
 import { Note } from "../../../graphql/notes";
 import { formatDate } from "../../../lib/formatDates";
+import UpdateNote from "../UpdateNote";
 
 const NoteContainerStyle = styled.div`
   margin: 2rem 0;
 `;
 
-const NoteDateHeader = styled.p`
+const NoteDateHeader = styled.div`
   color: #9c9c9c;
   margin: 0;
+
+  & span {
+    & :nth-child(1n) {
+      & :after {
+        content: "|";
+        margin: 0 1rem;
+      }
+    }
+    & :last-of-type {
+      & :after {
+        content: "";
+        margin: 0;
+      }
+    }
+  }
+
+  & button {
+    padding: 0;
+  }
 `;
 
 type Props = {
@@ -20,8 +40,11 @@ const NoteContainer = ({ note }: Props) => {
   return (
     <NoteContainerStyle>
       <NoteDateHeader>
-        {formatDate(note.createdAt)}{" "}
-        {note.page ? <>| Page {note.page}</> : null}
+        <span>{formatDate(note.createdAt)}</span>
+        {note.page ? <span>Page {note.page}</span> : null}
+        <span>
+          <UpdateNote note={note} />
+        </span>
       </NoteDateHeader>
       <p>{note.note}</p>
     </NoteContainerStyle>

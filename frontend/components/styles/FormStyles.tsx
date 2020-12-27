@@ -62,4 +62,17 @@ export const ActionGroup = styled.div<ActionGroupProps>`
   margin-top: 1rem;
 `;
 
+export const ModalForm = styled(StyledForm)`
+  box-shadow: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+`;
+
+export const TextArea = styled.textarea`
+  min-height: 10rem;
+  font-size: 1.6rem;
+  resize: vertical;
+`;
+
 export default StyledForm;

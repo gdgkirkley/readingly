@@ -24,7 +24,11 @@ export const CREATE_NOTE_MUTATION = gql`
 
 export const UPDATE_NOTE_MUTATION = gql`
   mutation($id: ID!, $note: String!, $page: Int) {
-    id
+    updateNote(id: $id, note: $note, page: $page){
+      id
+      note
+      page
+    }
   }
 `;
 
