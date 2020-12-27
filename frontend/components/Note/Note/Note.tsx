@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Note } from "../../../graphql/notes";
 import { formatDate } from "../../../lib/formatDates";
+import DeleteNote from "../DeleteNote";
 import UpdateNote from "../UpdateNote";
 
 const NoteContainerStyle = styled.div`
@@ -44,6 +45,9 @@ const NoteContainer = ({ note }: Props) => {
         {note.page ? <span>Page {note.page}</span> : null}
         <span>
           <UpdateNote note={note} />
+        </span>
+        <span>
+          <DeleteNote noteId={note.id} />
         </span>
       </NoteDateHeader>
       <p>{note.note}</p>

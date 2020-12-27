@@ -57,7 +57,7 @@ const DeleteBookshelf = ({ bookshelfId, title }: Props) => {
       </Button>
       <Dialog
         role="dialog"
-        accessibilityLabel="Create a bookshelf"
+        accessibilityLabel="Delete a bookshelf"
         toggleModal={toggleModal}
         open={open}
       >
