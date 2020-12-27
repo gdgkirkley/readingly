@@ -133,13 +133,23 @@ export default {
     },
 
     reading: async (book, args, {me, models}) => {
-      if (!me) {
-        return null
-      }
+      if (!me) return null
 
       if (!book.googleBooksId) return null
 
       return await models.Reading.findAll({
+        where: {
+          userId: me.id,
+          bookGoogleBooksId: book.googleBooksId,
+        },
+        order: [['createdAt', 'DESC']],
+      })
+    },
+
+    notes: async (book, args, {me, models}) => {
+      if (!me) return null
+
+      return await models.Note.findAll({
         where: {
           userId: me.id,
           bookGoogleBooksId: book.googleBooksId,

@@ -46,6 +46,12 @@ const isAccessingOwnGoal = rule()(async (parent, {id}, {me, models}) => {
   return me.id.toString() === g?.userId.toString()
 })
 
+const isAccessingOwnNote = rule()(async (parent, {id}, {me, models}) => {
+  const n = await models.Note.findByPk(id)
+
+  return me.id.toString() === n?.userId.toString()
+})
+
 // Run in debug mode when not in production to receive more accurate errors
 const permissions = shield(
   {
@@ -63,6 +69,9 @@ const permissions = shield(
 
       goals: isAuthenticated,
       goal: and(isAuthenticated, isAccessingOwnGoal),
+
+      notes: isAuthenticated,
+      note: and(isAuthenticated, isAccessingOwnNote),
     },
     Mutation: {
       createAuthor: canReadAllData,
@@ -79,6 +88,10 @@ const permissions = shield(
       createGoal: isAuthenticated,
       updateGoal: and(isAuthenticated, isAccessingOwnGoal),
       deleteGoal: and(isAuthenticated, isAccessingOwnGoal),
+
+      createNote: isAuthenticated,
+      updateNote: and(isAuthenticated, isAccessingOwnNote),
+      deleteNote: and(isAuthenticated, isAccessingOwnNote),
     },
   },
   {
@@ -95,4 +108,5 @@ export {
   isReadingOwnBookshelf,
   isAccessingOwnGoal,
   isAccessingOwnReading,
+  isAccessingOwnNote,
 }
