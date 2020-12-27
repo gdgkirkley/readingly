@@ -48,21 +48,14 @@ const CreateNote = ({ googleBooksId }: Props) => {
       toast.error(`There was an error creating note: ${error.message}`);
     },
     update(cache, { data: { createNote } }) {
-      cache.modify({
-        fields: {
-          notes(existingNotes = []) {
-            const newNoteRef = cache.writeFragment({
-              data: createNote,
-              fragment: gql`
-                fragment NewNote on Note {
-                  id
-                  type
-                }
-              `,
-            });
-            return [...existingNotes, newNoteRef];
-          },
-        },
+      const currentNotes = cache.readQuery<NotesQueryResult>({
+        query: NOTES_QUERY,
+        variables: { googleBooksId },
+      });
+      cache.writeQuery({
+        query: NOTES_QUERY,
+        variables: { googleBooksId },
+        data: { notes: [...currentNotes.notes, createNote] },
       });
     },
   });
