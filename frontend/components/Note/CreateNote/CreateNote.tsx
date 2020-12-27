@@ -5,8 +5,12 @@ import useToggle from "../../../hooks/useToggle";
 import Dialog from "../../Dialog";
 import Button from "../../styles/ButtonStyles";
 import FormStyles, { InputGroup, ActionGroup } from "../../styles/FormStyles";
-import { useMutation } from "@apollo/client";
-import { CREATE_NOTE_MUTATION, NOTES_QUERY } from "../../../graphql/notes";
+import { gql, useMutation } from "@apollo/client";
+import {
+  CREATE_NOTE_MUTATION,
+  Note,
+  NOTES_QUERY,
+} from "../../../graphql/notes";
 import { toast } from "react-toastify";
 import BOOK_QUERY from "../../../graphql/books";
 
@@ -30,6 +34,10 @@ type Props = {
   googleBooksId: string;
 };
 
+interface NotesQueryResult {
+  notes: Note[];
+}
+
 const CreateNote = ({ googleBooksId }: Props) => {
   const [isModalOpen, toggleModal] = useToggle(false);
 
@@ -38,6 +46,24 @@ const CreateNote = ({ googleBooksId }: Props) => {
   const [createNote, { loading, error }] = useMutation(CREATE_NOTE_MUTATION, {
     onError: (error) => {
       toast.error(`There was an error creating note: ${error.message}`);
+    },
+    update(cache, { data: { createNote } }) {
+      cache.modify({
+        fields: {
+          notes(existingNotes = []) {
+            const newNoteRef = cache.writeFragment({
+              data: createNote,
+              fragment: gql`
+                fragment NewNote on Note {
+                  id
+                  type
+                }
+              `,
+            });
+            return [...existingNotes, newNoteRef];
+          },
+        },
+      });
     },
   });
 

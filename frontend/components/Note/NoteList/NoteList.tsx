@@ -1,5 +1,5 @@
-import { useQuery } from "@apollo/client";
 import React from "react";
+import { useQuery } from "@apollo/client";
 import { Note, NOTES_QUERY } from "../../../graphql/notes";
 import NoteContainer from "../Note";
 

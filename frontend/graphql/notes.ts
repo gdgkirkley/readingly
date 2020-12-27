@@ -18,6 +18,10 @@ export const CREATE_NOTE_MUTATION = gql`
   mutation($note: String!, $page: Int, $googleBooksId: ID!) {
     createNote(note: $note, page: $page, googleBooksId: $googleBooksId) {
       id
+      note
+      page
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -28,6 +32,8 @@ export const UPDATE_NOTE_MUTATION = gql`
       id
       note
       page
+      createdAt
+      updatedAt
     }
   }
 `;
