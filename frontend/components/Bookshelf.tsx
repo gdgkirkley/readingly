@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import Select from "react-select";
+import { matchSorter } from "match-sorter";
 import { MY_BOOKSHELF_QUERY, BookShelfData } from "../graphql/bookshelves";
 import BookGallery from "./BookGallery";
 import { formatDate } from "../lib/formatDates";
@@ -9,6 +10,7 @@ import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
 import CreateGoal from "./CreateGoal";
 import UpdateGoal from "./Goal/UpdateGoal";
 import { GoalType } from "../graphql/goal";
+import SearchBar from "./SearchBar";
 
 const PageStyle = styled.div`
   display: flex;
@@ -30,37 +32,78 @@ const BlockHeader = styled.div`
 `;
 
 const SortByBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
   margin: 2rem 0;
+  border: 1px dashed #ececec;
+  padding: 1rem;
+
+  @media (min-width: 1300px) {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 4rem;
+  }
 `;
 
 const SortByContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
 
-  @media (min-width: 1300px) {
-    width: 30%;
+  & label {
+    align-self: center;
   }
 `;
+
+const customSelectStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    border: "1px solid #e2e8f0",
+    borderRadius: "1rem",
+    marginBottom: "1rem",
+  }),
+};
 
 type Props = {
   title: string;
 };
 
 const Bookshelf = ({ title }: Props) => {
+  const [books, setBooks] = useState([]);
+  const [cachedBooks, setCachedBooks] = useState([]);
   const { error, loading, data, refetch } = useQuery<BookShelfData>(
     MY_BOOKSHELF_QUERY,
     {
       variables: {
         title,
-        orderBy: "publishDate",
       },
     }
   );
 
+  useEffect(() => {
+    if (!data?.mybookshelf?.books?.length) return;
+
+    setBooks(data.mybookshelf.books);
+    setCachedBooks(data.mybookshelf.books);
+  }, [data]);
+
   const onSort = (option) => {
     refetch({ orderBy: option.value });
+  };
+
+  const handleShelfSearch = ({ search }) => {
+    if (search === "" || !search) {
+      return setBooks(cachedBooks);
+    }
+
+    const matches = matchSorter(books, search, { keys: ["title"] });
+
+    setBooks(matches);
+  };
+
+  const handleSearchClear = () => {
+    setBooks(cachedBooks);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -86,10 +129,20 @@ const Bookshelf = ({ title }: Props) => {
       ) : null}
       <SortByBlock>
         <SortByContainer>
-          <label htmlFor="sort">Sort By</label>
+          <label htmlFor="search">Search This Bookshelf:</label>
+          <SearchBar
+            handleSearch={handleShelfSearch}
+            displayButton={false}
+            onClear={handleSearchClear}
+          />
+        </SortByContainer>
+        <SortByContainer>
+          <label htmlFor="sort">Sort Books By:</label>
           <Select
             name="sort"
             onChange={onSort}
+            placeholder={"Sort Books By..."}
+            styles={customSelectStyles}
             options={[
               { value: "publishDate", label: "Publish Date" },
               { value: "title", label: "Title" },
@@ -99,7 +152,7 @@ const Bookshelf = ({ title }: Props) => {
           />
         </SortByContainer>
       </SortByBlock>
-      <BookGallery books={shelf.books} displayRemove={true} bookshelf={shelf} />
+      <BookGallery books={books} displayRemove={true} bookshelf={shelf} />
       <ShelfBlock>
         <BlockHeader>
           <h2>Goal</h2>

@@ -33,6 +33,7 @@ export const MY_BOOKSHELF_QUERY = gql`
         googleBooksId
         title
         thumbnail
+        authors
       }
     }
   }

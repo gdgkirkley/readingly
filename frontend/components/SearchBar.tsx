@@ -62,17 +62,37 @@ const Bar = styled.div`
   }
 `;
 
+const ClearButton = styled.button`
+  background: none;
+`;
+
 export type SearchInputs = {
   search: string;
 };
 
 type Props = {
   handleSearch(data: SearchInputs): void;
+  onClear?: () => void;
   defaultValue?: string;
+  displayButton?: boolean;
 };
 
-const SearchBar = ({ handleSearch, defaultValue }: Props) => {
-  const { register, handleSubmit, errors, reset } = useForm<SearchInputs>();
+const SearchBar: React.FC<Props> = ({
+  handleSearch,
+  onClear = () => {},
+  defaultValue,
+  displayButton = true,
+}: Props) => {
+  const {
+    register,
+    handleSubmit,
+    errors,
+    reset,
+    watch,
+    setValue,
+  } = useForm<SearchInputs>();
+
+  const watchSearch = watch("search");
 
   useEffect(() => {
     if (!defaultValue) return;
@@ -84,6 +104,12 @@ const SearchBar = ({ handleSearch, defaultValue }: Props) => {
 
   const onSubmit = (data: SearchInputs) => {
     handleSearch(data);
+  };
+
+  const handleClear = () => {
+    setValue("search", "");
+
+    onClear();
   };
 
   return (
@@ -99,12 +125,19 @@ const SearchBar = ({ handleSearch, defaultValue }: Props) => {
           ref={register}
           autoComplete="off"
         />
+        {watchSearch ? (
+          <ClearButton type="button" onClick={handleClear}>
+            Clear
+          </ClearButton>
+        ) : null}
       </Bar>
-      <SearchButton>
-        <Button themeColor="black" type="submit">
-          Search
-        </Button>
-      </SearchButton>
+      {displayButton ? (
+        <SearchButton>
+          <Button themeColor="black" type="submit">
+            Search
+          </Button>
+        </SearchButton>
+      ) : null}
     </SearchFormStyles>
   );
 };
