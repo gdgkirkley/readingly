@@ -51,7 +51,7 @@ const Card: React.FC<Props> = ({
   return (
     <Container color={color} position={position} className={className}>
       {title ? <h2>{title}</h2> : null}
-      <div>{children}</div>
+      {children}
     </Container>
   );
 };

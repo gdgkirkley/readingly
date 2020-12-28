@@ -8,7 +8,7 @@ export const MY_BOOKSHELVES_QUERY = gql`
       id
       title
       bookCount
-      books(limit: 10) {
+      books(limit: 9) {
         googleBooksId
         title
         thumbnail
