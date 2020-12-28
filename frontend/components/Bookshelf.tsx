@@ -94,6 +94,7 @@ const Bookshelf = ({ title }: Props) => {
               { value: "publishDate", label: "Publish Date" },
               { value: "title", label: "Title" },
               { value: "pageCount", label: "Total Pages" },
+              { value: "averageRating", label: "Average Rating" },
             ]}
           />
         </SortByContainer>

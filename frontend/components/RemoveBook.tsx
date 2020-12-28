@@ -11,6 +11,7 @@ import {
 } from "../graphql/bookshelves";
 import Dialog, { InnerDialogContent } from "./Dialog";
 import { Book } from "../graphql/books";
+import useToggle from "../hooks/useToggle";
 
 const RemoveButton = styled(Button)`
   position: absolute;
@@ -33,14 +34,12 @@ type Props = {
 };
 
 const RemoveBook = ({ book, bookshelf }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [open, toggle] = useToggle(false);
   const [removeBook, { loading, error }] = useMutation(REMOVE_BOOK_MUTATION, {
     onError: () => {
       toast.error(`There was an error removing ${book.title}`);
     },
   });
-
-  const toggle = () => setOpen(!open);
 
   const handleConfirm = async (e: React.MouseEvent): Promise<void> => {
     e.stopPropagation();
@@ -63,6 +62,7 @@ const RemoveBook = ({ book, bookshelf }: Props) => {
 
     if (!loading && !error) {
       toast.success(`${book.title} removed from ${bookshelf.title}!`);
+      toggle();
     }
   };
 
