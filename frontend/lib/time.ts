@@ -54,8 +54,6 @@ export function getPeriodFromNow(date: Date | string): string {
     date = parseStringDateISO(date);
   }
 
-  console.log(date)
-
   dayCount = Math.ceil((date.getTime() - today.getTime()) / MILLISECONDS_IN_DAY)
 
   periodString = dayCount > 0 ?

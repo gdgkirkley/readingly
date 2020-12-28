@@ -21,7 +21,7 @@ export default gql`
     id: ID!
     title: String!
     user: User!
-    books(limit: Int, offset: Int): [Book!]
+    books(limit: Int, offset: Int, orderBy: String): [Book!]
     bookCount: Int!
     averageTimeToReadInSeconds: Int!
     goal: Goal

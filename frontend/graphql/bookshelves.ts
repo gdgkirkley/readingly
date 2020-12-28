@@ -18,7 +18,7 @@ export const MY_BOOKSHELVES_QUERY = gql`
 `;
 
 export const MY_BOOKSHELF_QUERY = gql`
-  query($title: String!) {
+  query($title: String!, $orderBy: String) {
     mybookshelf(title: $title) {
       id
       title
@@ -29,7 +29,7 @@ export const MY_BOOKSHELF_QUERY = gql`
         id
         goalDate
       }
-      books {
+      books(orderBy: $orderBy) {
         googleBooksId
         title
         thumbnail

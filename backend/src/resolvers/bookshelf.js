@@ -140,11 +140,17 @@ export default {
       return await models.User.findByPk(bookshelf.userId)
     },
 
-    books: async (bookshelf, {limit, offset}, {models}) => {
-      return await bookshelf.getBooks({
+    books: async (bookshelf, {limit, offset, orderBy}, {models}) => {
+      const params = {
         limit: limit ? limit : 50,
         offset: offset ? offset : 0,
-      })
+      }
+
+      if (orderBy) {
+        params.order = [orderBy]
+      }
+
+      return await bookshelf.getBooks(params)
     },
 
     bookCount: async (bookshelf, args, {models}) => {
