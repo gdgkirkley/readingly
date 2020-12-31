@@ -21,11 +21,6 @@ const RemoveButton = styled(Button)`
   font-size: 1rem;
   line-height: 1;
   padding: 0.8rem 1rem;
-
-  @media (max-width: 768px) {
-    right: 0.5rem;
-    padding: 1.3rem 1.5rem;
-  }
 `;
 
 type Props = {

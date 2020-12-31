@@ -22,11 +22,9 @@ const BookCards = styled.div`
 const BookCardContainer = styled.div`
   position: relative;
   margin: 0 2rem;
-  margin-left: 0;
 
   @media (max-width: 1300px) {
     margin: 2rem;
-    margin-left: 0;
   }
 `;
 
@@ -34,6 +32,11 @@ const RemoveBookButton = styled(RemoveBook)`
   position: absolute;
   top: 0px;
   right: 0px;
+
+  @media (max-width: 768px) {
+    right: 0px;
+    padding: inherit;
+  }
 `;
 
 type Props = {
