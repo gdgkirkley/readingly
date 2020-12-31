@@ -7,7 +7,7 @@ import { MY_BOOKSHELF_QUERY, BookShelfData } from "../graphql/bookshelves";
 import BookGallery from "./BookGallery";
 import { formatDate } from "../lib/formatDates";
 import { getReadingTimeString, getPeriodFromNow } from "../lib/time";
-import CreateGoal from "./CreateGoal";
+import CreateGoal from "./Goal/CreateGoal";
 import UpdateGoal from "./Goal/UpdateGoal";
 import { GoalType } from "../graphql/goal";
 import SearchBar from "./SearchBar";

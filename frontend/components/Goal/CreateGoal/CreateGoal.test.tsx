@@ -3,11 +3,11 @@ import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { toast } from "react-toastify";
-import CreateGoal from "../CreateGoal";
-import { CREATE_GOAL_MUTATION, GoalType } from "../../graphql/goal";
-import { GOOGLE_BOOK_QUERY } from "../../graphql/books";
-import { buildBook, buildGoal } from "../../test/generate";
-import { parseStringDateISO } from "../../lib/formatDates";
+import CreateGoal from ".";
+import { CREATE_GOAL_MUTATION, GoalType } from "../../../graphql/goal";
+import { GOOGLE_BOOK_QUERY } from "../../../graphql/books";
+import { buildBook, buildGoal } from "../../../test/generate";
+import { parseStringDateISO } from "../../../lib/formatDates";
 
 jest.mock("react-toastify");
 
@@ -43,32 +43,6 @@ test("<CreateGoal /> renders", async () => {
             },
           },
         };
-      },
-    },
-    {
-      request: {
-        query: GOOGLE_BOOK_QUERY,
-        variables: {
-          googleBooksId: book.googleBooksId,
-        },
-      },
-      result: {
-        data: {
-          googleBook: {
-            title: book.title,
-            thumbnail: book.thumbnail,
-            description: book.description,
-            authors: book.authors,
-            pageCount: book.pageCount,
-            publishDate: book.publishDate,
-            categories: book.categories,
-            averageRating: book.averageRating,
-            publisher: book.publisher,
-            bookshelves: book.bookshelves,
-            reading: book.reading,
-            googleBooksId: book.googleBooksId,
-          },
-        },
       },
     },
   ];

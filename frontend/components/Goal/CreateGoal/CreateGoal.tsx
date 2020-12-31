@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
-import Dialog from "./Dialog";
-import Button from "./styles/ButtonStyles";
-import FormStyles, { InputGroup, ActionGroup } from "./styles/FormStyles";
-import { GoalType, CREATE_GOAL_MUTATION } from "../graphql/goal";
-import { GOOGLE_BOOK_QUERY } from "../graphql/books";
-import { MY_BOOKSHELF_QUERY } from "../graphql/bookshelves";
+import Dialog from "../../Dialog";
+import Button from "../../styles/ButtonStyles";
+import FormStyles, { InputGroup, ActionGroup } from "../../styles/FormStyles";
+import { GoalType, CREATE_GOAL_MUTATION } from "../../../graphql/goal";
+import { Book, GOOGLE_BOOK_QUERY } from "../../../graphql/books";
+import {
+  BookShelfData,
+  MY_BOOKSHELF_QUERY,
+} from "../../../graphql/bookshelves";
 import { toast } from "react-toastify";
 import {
-  formatDate,
   formatDateForInput,
   parseStringDateISO,
-} from "../lib/formatDates";
-import { statusOptions } from "./Goal/utils/constants";
+} from "../../../lib/formatDates";
+import { statusOptions } from "../utils/constants";
+import useToggle from "../../../hooks/useToggle";
 
 const CreateGoalForm = styled(FormStyles)`
   box-shadow: none;
@@ -36,8 +39,12 @@ type Props = {
   bookshelfTitle?: string;
 };
 
+interface BooksQueryResult {
+  googleBook: Book;
+}
+
 const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [isModalOpen, toggleModal] = useToggle(false);
   const {
     register,
     handleSubmit,
@@ -55,26 +62,38 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
     onError: (error) => {
       toast.error(`There was an error creating goal: ${error.message}`);
     },
-  });
+    update(cache, { data: { createGoal } }) {
+      if (goalableType === GoalType.Book) {
+        const { googleBook } = cache.readQuery<BooksQueryResult>({
+          query: GOOGLE_BOOK_QUERY,
+          variables: { googleBooksId: goalableId },
+        });
 
-  const toggle = () => setOpen(!open);
+        cache.writeQuery({
+          query: GOOGLE_BOOK_QUERY,
+          variables: { googleBooksId: goalableId },
+          data: { googleBook: { ...googleBook, goal: createGoal } },
+        });
+      } else {
+        const { mybookshelf } = cache.readQuery<BookShelfData>({
+          query: MY_BOOKSHELF_QUERY,
+          variables: { title: bookshelfTitle },
+        });
+
+        cache.writeQuery({
+          query: MY_BOOKSHELF_QUERY,
+          variables: { title: bookshelfTitle },
+          data: { mybookshelf: { ...mybookshelf, goal: createGoal } },
+        });
+      }
+    },
+  });
 
   useEffect(() => {
     setValue("status", statusOptions[0]);
   }, []);
 
   const onSubmit = async (data: FormInputs) => {
-    const refetchQuery =
-      goalableType === GoalType.Book
-        ? {
-            query: GOOGLE_BOOK_QUERY,
-            variables: { googleBooksId: goalableId },
-          }
-        : {
-            query: MY_BOOKSHELF_QUERY,
-            variables: { title: bookshelfTitle },
-          };
-
     await createGoal({
       variables: {
         goalDate: parseStringDateISO(data.goalDate),
@@ -82,13 +101,11 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
         startDate: parseStringDateISO(data.startDate),
         status: data.status.value,
       },
-      refetchQueries: [refetchQuery],
-      awaitRefetchQueries: true,
     });
 
     if (!error && !loading) {
       toast.success("Goal created!");
-      setOpen(false);
+      toggleModal();
     }
   };
 
@@ -97,14 +114,14 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
 
   return (
     <>
-      <Button themeColor="red" onClick={toggle}>
+      <Button themeColor="red" onClick={toggleModal}>
         Add Goal
       </Button>
       <Dialog
         role="dialog"
         accessibilityLabel="Create a goal"
-        toggleModal={toggle}
-        open={open}
+        toggleModal={toggleModal}
+        open={isModalOpen}
       >
         <div>
           <h1>Create a goal</h1>
@@ -123,14 +140,13 @@ const CreateGoal = ({ goalableType, goalableId, bookshelfTitle }: Props) => {
             </InputGroup>
             <InputGroup>
               <label htmlFor="goalDate">
-                When would you like to finish reading?
+                What is your goal date to finish reading?
               </label>
               <input
                 id="goalDate"
                 name="goalDate"
                 type="date"
                 ref={register({ required: true })}
-                autoFocus
               />
               {errors.goalDate?.type === "required" && (
                 <p className="error-message" data-testid="validation-error">

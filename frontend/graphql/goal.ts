@@ -3,21 +3,55 @@ import { Book } from "./books";
 import { BookShelf } from "./bookshelves";
 
 export const CREATE_GOAL_MUTATION = gql`
-  mutation($goalDate: String!, $goalableId: ID!, $startDate: String, $status: String) {
-    createGoal(goalDate: $goalDate, goalableId: $goalableId, startDate: $startDate, status: $status) {
+  mutation(
+    $goalDate: String!
+    $goalableId: ID!
+    $startDate: String
+    $status: String
+  ) {
+    createGoal(
+      goalDate: $goalDate
+      goalableId: $goalableId
+      startDate: $startDate
+      status: $status
+    ) {
       id
       goalDate
+      endDate
+      goalableId
       goalableType
+      readingRecommendation
+      readingRecommendationSeconds
+      startDate
+      status
     }
   }
 `;
 
 export const UPDATE_GOAL_MUTATION = gql`
-  mutation($id: ID!, $goalDate: String!, $startDate: String, $endDate: String, $status: String) {
-    updateGoal(id: $id, goalDate: $goalDate, , startDate: $startDate, endDate: $endDate, status: $status) {
+  mutation(
+    $id: ID!
+    $goalDate: String!
+    $startDate: String
+    $endDate: String
+    $status: String
+  ) {
+    updateGoal(
+      id: $id
+      goalDate: $goalDate
+      startDate: $startDate
+      endDate: $endDate
+      status: $status
+    ) {
       id
       goalDate
+      endDate
+      goalableId
       goalableType
+      readingRecommendation
+      readingRecommendationSeconds
+      startDate
+      status
     }
   }
 `;
@@ -32,13 +66,13 @@ export type Goal = {
   endDate: string;
   status: GoalStatus;
   readingRecommendation: number;
-  readingRecommendationSeconds?: number
+  readingRecommendationSeconds?: number;
 };
 
 export enum GoalStatus {
   NotStarted = "NOTSTARTED",
   InProgress = "INPROGRESS",
-  Complete = "COMPLETE"
+  Complete = "COMPLETE",
 }
 
 export enum GoalType {

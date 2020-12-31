@@ -7,7 +7,7 @@ import ReadingCard from "./ReadingCard";
 import Card from "./Card";
 import BookCategorySearch from "./BookCategorySearch";
 import AddToBookshelf from "./AddToBookshelf";
-import CreateGoal from "./CreateGoal";
+import CreateGoal from "./Goal/CreateGoal";
 import UpdateReadingProgress from "./UpdateReadingProgress";
 import { Cards } from "./styles/LayoutStyles";
 import Button from "./styles/ButtonStyles";
