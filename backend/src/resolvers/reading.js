@@ -1,3 +1,4 @@
+import {sequelize} from '../models'
 import {
   AVERAGE_READING_WORDS_PER_MINUTE,
   AVERAGE_WORDS_PER_PAGE,
@@ -92,6 +93,18 @@ export default {
         estimatedRemainingWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
 
       return totalRemainingTimeSeconds
+    },
+
+    privacyLevel: async (reading, args, ctx) => {
+      const [
+        results,
+        metadata,
+      ] = await sequelize.query(
+        `SELECT "privacyLevel" FROM privacy WHERE id = ${reading.privacyId}`,
+        {raw: false, type: sequelize.QueryTypes.SELECT},
+      )
+
+      return results?.privacyLevel
     },
   },
 }

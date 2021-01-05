@@ -1,5 +1,4 @@
 import logger from 'loglevel'
-import {QueryTypes} from 'sequelize'
 import {sequelize} from '../models'
 import {getGoogleBook} from '../utils/googleBooks'
 import {
@@ -165,7 +164,7 @@ export default {
         LEFT JOIN bookshelfbook on books."googleBooksId" = bookshelfbook."bookGoogleBooksId"
         WHERE bookshelfbook."bookshelfId" = '${bookshelf.id}'
       `,
-        {type: QueryTypes.SELECT},
+        {type: sequelize.QueryTypes.SELECT},
       )
 
       if (!count.totalpagecount) {
@@ -191,6 +190,18 @@ export default {
           userId: me.id,
         },
       })
+    },
+
+    privacyLevel: async (bookshelf, args, ctx) => {
+      const [
+        results,
+        metadata,
+      ] = await sequelize.query(
+        `SELECT "privacyLevel" FROM privacy WHERE id = ${bookshelf.privacyId}`,
+        {raw: false, type: sequelize.QueryTypes.SELECT},
+      )
+
+      return results?.privacyLevel
     },
   },
 }

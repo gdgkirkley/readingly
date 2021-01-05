@@ -1,3 +1,5 @@
+import {sequelize} from '../models'
+
 export default {
   Query: {
     notes: async (parent, {googleBooksId}, {me, models}) => {
@@ -62,6 +64,18 @@ export default {
 
     user: async (note, args, ctx) => {
       return await note.getUser()
+    },
+
+    privacyLevel: async (note, args, ctx) => {
+      const [
+        results,
+        metadata,
+      ] = await sequelize.query(
+        `SELECT "privacyLevel" FROM privacy WHERE id = ${note.privacyId}`,
+        {raw: false, type: sequelize.QueryTypes.SELECT},
+      )
+
+      return results?.privacyLevel
     },
   },
 }

@@ -40,6 +40,17 @@ const goal = sequelize => {
         defaultValue: 'NOTSTARTED',
         allowNull: false,
       },
+      privacyId: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'privacy',
+          },
+          key: 'id',
+        },
+      },
     },
     {
       sequelize,

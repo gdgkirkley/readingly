@@ -36,6 +36,8 @@ export default gql`
     startDate: Date
     endDate: Date
     status: String!
+    privacyId: Int!
+    privacyLevel: String
     createdAt: Date!
     updatedAt: Date!
   }

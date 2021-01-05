@@ -20,6 +20,8 @@ export default gql`
     timeRemainingInSeconds: Int!
     user: User!
     book: Book!
+    privacyId: Int!
+    privacyLevel: String
     createdAt: DateTime
     updatedAt: DateTime
   }

@@ -18,6 +18,8 @@ export default gql`
     page: Int
     book: Book
     user: User
+    privacyId: Int!
+    privacyLevel: String
     createdAt: Date!
     updatedAt: Date!
   }

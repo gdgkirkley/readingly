@@ -25,6 +25,8 @@ export default gql`
     bookCount: Int!
     averageTimeToReadInSeconds: Int!
     goal: Goal
+    privacyId: Int!
+    privacyLevel: String
     createdAt: DateTime!
     updatedAt: DateTime!
   }
