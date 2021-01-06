@@ -22,18 +22,23 @@ export default {
   },
 
   Mutation: {
-    createNote: async (parent, {note, page, googleBooksId}, {me, models}) => {
+    createNote: async (
+      parent,
+      {note, page, googleBooksId, privacyId},
+      {me, models},
+    ) => {
       await checkPage(models, googleBooksId, page)
 
       return await models.Note.create({
         note,
         page,
         bookGoogleBooksId: googleBooksId,
+        privacyId,
         userId: me.id,
       })
     },
 
-    updateNote: async (parent, {id, note, page}, {me, models}) => {
+    updateNote: async (parent, {id, note, page, privacyId}, {me, models}) => {
       const noteToUpdate = await getNoteById(id, models)
 
       if (page) {
@@ -42,6 +47,10 @@ export default {
       }
 
       noteToUpdate.note = note
+
+      if (privacyId) {
+        noteToUpdate.privacyId = privacyId
+      }
 
       await noteToUpdate.save()
 

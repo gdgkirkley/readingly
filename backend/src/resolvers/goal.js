@@ -30,7 +30,7 @@ export default {
   Mutation: {
     createGoal: async (
       parent,
-      {goalDate, goalableId, startDate, status},
+      {goalDate, goalableId, startDate, status, privacyId},
       {me, models},
     ) => {
       let book, bookshelf
@@ -63,6 +63,7 @@ export default {
           goalDate,
           startDate,
           status,
+          privacyId,
           userId: me.id,
         })
       } else {
@@ -70,6 +71,7 @@ export default {
           goalDate,
           startDate,
           status,
+          privacyId,
           userId: me.id,
         })
       }
@@ -78,7 +80,7 @@ export default {
     },
     updateGoal: async (
       parent,
-      {id, goalDate, startDate, endDate, status},
+      {id, goalDate, startDate, endDate, status, privacyId},
       {me, models},
     ) => {
       const goal = await getGoalById(id, models)
@@ -88,6 +90,9 @@ export default {
       goal.endDate = endDate
       if (status) {
         goal.status = status
+      }
+      if (privacyId) {
+        goal.privacyId = privacyId
       }
 
       await goal.save()

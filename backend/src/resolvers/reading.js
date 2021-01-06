@@ -35,7 +35,11 @@ export default {
   },
 
   Mutation: {
-    createReading: async (parent, {progress, googleBooksId}, {me, models}) => {
+    createReading: async (
+      parent,
+      {progress, googleBooksId, privacyId},
+      {me, models},
+    ) => {
       checkProgress(progress)
 
       const book = await models.Book.findByPk(googleBooksId)
@@ -46,17 +50,22 @@ export default {
 
       return await models.Reading.create({
         progress,
+        privacyId,
         bookGoogleBooksId: googleBooksId,
         userId: me.id,
       })
     },
 
-    updateReading: async (parent, {id, progress}, {models}) => {
+    updateReading: async (parent, {id, progress, privacyId}, {models}) => {
       const reading = await getReadingByID(id, models)
 
       checkProgress(progress)
 
       reading.progress = progress
+
+      if (privacyId) {
+        reading.privacyId = privacyId
+      }
 
       await reading.save()
 

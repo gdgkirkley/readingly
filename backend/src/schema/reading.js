@@ -9,8 +9,12 @@ export default gql`
   }
 
   extend type Mutation {
-    createReading(progress: Float!, googleBooksId: ID!): Reading!
-    updateReading(id: ID!, progress: Float!): Reading!
+    createReading(
+      progress: Float!
+      googleBooksId: ID!
+      privacyId: Int
+    ): Reading!
+    updateReading(id: ID!, progress: Float!, privacyId: Int): Reading!
     deleteReading(id: ID!): Message!
   }
 
