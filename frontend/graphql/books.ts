@@ -42,6 +42,7 @@ export const GOOGLE_BOOK_QUERY = gql`
         id
         progress
         timeRemainingInSeconds
+        privacyLevel
         createdAt
       }
       bookshelves {

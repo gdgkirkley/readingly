@@ -14,6 +14,7 @@ export const theme = {
   red: "#E75248",
   lightgrey: "rgb(250, 250, 250)",
   maxWidth: "1200px",
+  borderRadius: "0.5rem",
 };
 
 const GlobalStyles = createGlobalStyle`

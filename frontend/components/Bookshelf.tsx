@@ -11,6 +11,7 @@ import CreateGoal from "./Goal/CreateGoal";
 import UpdateGoal from "./Goal/UpdateGoal";
 import { GoalType } from "../graphql/goal";
 import SearchBar from "./SearchBar";
+import PrivacyIndicator from "./Privacy";
 
 const PageStyle = styled.div`
   display: flex;
@@ -53,6 +54,23 @@ const SortByContainer = styled.div`
 
   & label {
     align-self: center;
+  }
+`;
+
+const TopBlock = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+`;
+
+const Info = styled.div`
+  display: grid;
+`;
+
+const Title = styled.div`
+  display: flex;
+  & h1 {
+    margin: 0;
   }
 `;
 
@@ -113,7 +131,14 @@ const Bookshelf = ({ title }: Props) => {
 
   return (
     <PageStyle>
-      <h1>{shelf.title}</h1>
+      <TopBlock>
+        <Title>
+          <h1>{shelf.title}</h1>
+        </Title>
+        <Info>
+          <PrivacyIndicator privacyLevel={shelf.privacyLevel} />
+        </Info>
+      </TopBlock>
       <p data-testid="bookshelf-count">
         There {shelf.bookCount == 1 ? "is" : "are"} {shelf.bookCount} book
         {shelf.bookCount == 1 ? null : "s"} on this list.
@@ -179,7 +204,7 @@ const Bookshelf = ({ title }: Props) => {
           </p>
         ) : null}
       </ShelfBlock>
-      <p>You created this list on {formatDate(shelf.createdAt)}.</p>
+      <p>Created: {formatDate(shelf.createdAt)}.</p>
     </PageStyle>
   );
 };

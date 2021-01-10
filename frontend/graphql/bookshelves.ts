@@ -8,6 +8,8 @@ export const MY_BOOKSHELVES_QUERY = gql`
       id
       title
       bookCount
+      privacyLevel
+      createdAt
       books(limit: 9) {
         googleBooksId
         title
@@ -25,6 +27,7 @@ export const MY_BOOKSHELF_QUERY = gql`
       createdAt
       bookCount
       averageTimeToReadInSeconds
+      privacyLevel
       goal {
         id
         goalDate
@@ -93,6 +96,8 @@ export type BookShelf = {
   books?: Book[];
   averageTimeToReadInSeconds: number;
   goal: Goal;
+  privacyId: number;
+  privacyLevel: string;
   createdAt?: string;
   updatedAt?: string;
 };

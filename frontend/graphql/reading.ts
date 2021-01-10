@@ -36,6 +36,8 @@ export type Reading = {
   timeRemainingInSeconds: number;
   book: Book;
   user: User;
+  privacyId: number;
+  privacyLevel: string;
   createdAt: string;
   updatedAt: string;
 };
