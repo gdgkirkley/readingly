@@ -18,6 +18,7 @@ const PrivacyStyle = styled.div<StyleProps>`
   background: #c3e9ff;
   color: #074468;
   font-weight: 600;
+  font-size: 1.5rem;
   min-width: 9.5rem;
   border-radius: 1000px;
   justify-self: ${(props) =>

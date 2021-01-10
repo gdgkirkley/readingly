@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Note } from "../../../graphql/notes";
 import { formatDate } from "../../../lib/formatDates";
+import PrivacyIndicator from "../../Privacy";
 import DeleteNote from "../DeleteNote";
 import UpdateNote from "../UpdateNote";
 
@@ -48,6 +49,11 @@ const NoteHeaderButtons = styled.div`
   }
 `;
 
+const NoteTags = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
 type Props = {
   note: Note;
 };
@@ -70,6 +76,9 @@ const NoteContainer = ({ note }: Props) => {
         </NoteHeaderButtons>
       </NoteDateHeader>
       <p>{note.note}</p>
+      <NoteTags>
+        <PrivacyIndicator privacyLevel={note.privacyLevel} />
+      </NoteTags>
     </NoteContainerStyle>
   );
 };
