@@ -21,6 +21,7 @@ import GoalDisplay from "./Goal/GoalDisplay";
 import { useReadMore } from "../hooks/useReadMore";
 import { CreateNote, NoteList } from "./Note";
 import PrivacyIndicator from "./Privacy";
+import { ReadingList } from "./Reading";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -309,18 +310,11 @@ const Book = ({ googleBooksId }: Props) => {
             <UpdateReadingProgress book={data.googleBook} />
           </MyActivityHeader>
 
-          {reading?.length ? (
-            <Cards>
-              {reading.map((read) => (
-                <ReadingCard
-                  key={read.id}
-                  reading={read}
-                  totalPages={pageCount}
-                  googleBooksId={googleBooksId}
-                />
-              ))}
-            </Cards>
-          ) : null}
+          <ReadingList
+            reading={reading}
+            totalPages={pageCount}
+            googleBooksId={googleBooksId}
+          />
         </BookBlock>
       ) : null}
 

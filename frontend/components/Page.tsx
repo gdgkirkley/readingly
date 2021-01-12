@@ -15,6 +15,21 @@ export const theme = {
   lightgrey: "rgb(250, 250, 250)",
   maxWidth: "1200px",
   borderRadius: "0.5rem",
+  grey1: "#222222",
+  grey2: "#3B3B3B",
+  grey3: "#535353",
+  grey4: "#6E6E6E",
+  grey5: "#878787",
+  grey6: "#A1A1A1",
+  grey7: "#BABABA",
+  grey8: "#D4D4D4",
+  grey9: "#EDEDED",
+  grey10: "#F6F6F6",
+  warning1: "#610509",
+  warning2: "#BD0F16",
+  warning3: "#EC131B",
+  warning4: "#F47176",
+  warning5: "#F9B8BB",
 };
 
 const GlobalStyles = createGlobalStyle`
