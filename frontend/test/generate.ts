@@ -109,6 +109,8 @@ async function buildGoal({ ...overrides } = {}): Promise<Goal> {
     status: GoalStatus.InProgress,
     readingRecommendation: getNumber(),
     readingRecommendationSeconds: getNumber(),
+    privacyId: 1,
+    privacyLevel: "Private",
     ...overrides,
   };
 }
