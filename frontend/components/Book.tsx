@@ -20,6 +20,7 @@ import { useUser } from "../hooks/useUser";
 import GoalDisplay from "./Goal/GoalDisplay";
 import { useReadMore } from "../hooks/useReadMore";
 import { CreateNote, NoteList } from "./Note";
+import PrivacyIndicator from "./Privacy";
 
 const BookPage = styled.div`
   font-size: 1.7rem;
@@ -132,6 +133,24 @@ const MyActivityHeader = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
+  }
+`;
+
+const MyActivityTitle = styled.div`
+  display: flex;
+  gap: 0;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  & h2 {
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    gap: max(calc(6vw - 60px), 16px);
+    flex-direction: row;
+    margin-bottom: 0;
   }
 `;
 
@@ -264,7 +283,12 @@ const Book = ({ googleBooksId }: Props) => {
       {bookshelves?.length || goal?.goalDate ? (
         <BookBlock>
           <MyActivityHeader>
-            <h2>My Goal</h2>
+            <MyActivityTitle>
+              <h2>My Goal</h2>
+              <div>
+                <PrivacyIndicator privacyLevel={goal?.privacyLevel} />
+              </div>
+            </MyActivityTitle>
             {goal?.goalDate ? (
               <UpdateGoal goal={goal} />
             ) : (

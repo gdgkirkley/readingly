@@ -59,6 +59,7 @@ export const GOOGLE_BOOK_QUERY = gql`
         readingRecommendationSeconds
         goalableType
         goalableId
+        privacyLevel
       }
     }
   }
