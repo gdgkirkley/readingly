@@ -27,7 +27,7 @@ test("<CreateBookshelf /> renders", async () => {
     {
       request: {
         query: CREATE_BOOKSHELF_MUTATION,
-        variables: { title },
+        variables: { title, privacyId: newShelf.privacyId },
       },
       result: () => {
         createBookshelfMutationCalled = true;
@@ -39,17 +39,6 @@ test("<CreateBookshelf /> renders", async () => {
             },
           },
         };
-      },
-    },
-    {
-      request: {
-        query: MY_BOOKSHELVES_QUERY,
-        variables: {},
-      },
-      result: {
-        data: {
-          mybookshelves: [bookshelf, newShelf],
-        },
       },
     },
   ];
@@ -72,7 +61,7 @@ test("<CreateBookshelf /> renders", async () => {
 
   await waitFor(() => {
     form = screen.getByRole("form");
-    titleInput = screen.getByLabelText(/title/i);
+    titleInput = screen.getByLabelText(/called/i);
     submitButton = screen.getByRole("button", { name: /create/i });
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(form).toBeInTheDocument();
@@ -89,9 +78,9 @@ test("<CreateBookshelf /> renders", async () => {
   userEvent.click(submitButton);
 
   await waitFor(() => {
-    expect(createBookshelfMutationCalled).toBeTruthy();
     expect(toast.success).toHaveBeenCalledTimes(1);
     expect(toast.success).toHaveBeenCalledWith(`${title} has been created!`);
+    expect(createBookshelfMutationCalled).toBeTruthy();
   });
 });
 
@@ -132,7 +121,7 @@ test("<CreateBookshelf /> handles create error", async () => {
 
   await waitFor(() => {
     form = screen.getByRole("form");
-    titleInput = screen.getByLabelText(/title/i);
+    titleInput = screen.getByLabelText(/called/i);
     submitButton = screen.getByRole("button", { name: /create/i });
   });
 

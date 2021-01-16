@@ -19,7 +19,7 @@ test("<BookShelfListing /> renders a bookshelf", async () => {
 
   expect(screen.getByRole("heading")).toHaveTextContent(bookshelf.title);
   expect(screen.getByTestId("bookshelf-count")).toHaveTextContent(
-    `There are ${bookshelf.bookCount} books on this list`
+    `There are ${bookshelf.bookCount} books on this list.`
   );
   expect(screen.getByTestId("bookshelf-books").childNodes).toHaveLength(
     bookshelf.books.length
@@ -38,5 +38,5 @@ test("<BookShelfListing /> renders a placeholder if no books", async () => {
   expect(screen.getByTestId("book-image-placeholder")).toBeInTheDocument();
   expect(
     screen.getByTestId("bookshelf-count").textContent
-  ).toMatchInlineSnapshot(`"There are 0 books on this list"`);
+  ).toMatchInlineSnapshot(`"There are 0 books on this list."`);
 });

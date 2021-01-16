@@ -1,5 +1,5 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import Dialog from "../../Dialog";
 import Button from "../../styles/ButtonStyles";
@@ -17,6 +17,36 @@ const CreateBookShelf = () => {
       onError: () => {
         toast.error("There was an error creating bookshelf");
       },
+      update(cache, { data: { createBookshelf } }) {
+        cache.modify({
+          fields: {
+            mybookshelves(existingBookshelfRefs = [], { readField }) {
+              const newBookshelfRef = cache.writeFragment({
+                data: createBookshelf,
+                fragment: gql`
+                  fragment NewBookshelf on BookShelf {
+                    id
+                    title
+                    privacyId
+                  }
+                `,
+              });
+
+              // If the new bookshelf is already present in the cahce,
+              // we don't need to add again
+              if (
+                existingBookshelfRefs.some(
+                  (ref) => readField("id", ref) === createBookshelf.id
+                )
+              ) {
+                return existingBookshelfRefs;
+              }
+
+              return [...existingBookshelfRefs, newBookshelfRef];
+            },
+          },
+        });
+      },
     }
   );
   const [open, toggleModal] = useToggle(false);
@@ -27,7 +57,6 @@ const CreateBookShelf = () => {
         title: data.title,
         privacyId: data.privacy.value,
       },
-      refetchQueries: [{ query: MY_BOOKSHELVES_QUERY }],
     });
 
     if (!error && !loading) {
