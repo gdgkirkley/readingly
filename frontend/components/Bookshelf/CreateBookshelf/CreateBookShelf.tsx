@@ -3,10 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import Dialog from "../../Dialog";
 import Button from "../../styles/ButtonStyles";
-import {
-  CREATE_BOOKSHELF_MUTATION,
-  MY_BOOKSHELVES_QUERY,
-} from "../../../graphql/bookshelves";
+import { CREATE_BOOKSHELF_MUTATION } from "../../../graphql/bookshelves";
 import useToggle from "../../../hooks/useToggle";
 import BookshelfForm, { BookshelfFormInputs } from "../BookshelfForm";
 

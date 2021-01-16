@@ -3,10 +3,7 @@ import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import Dialog from "../../Dialog";
 import Button from "../../styles/ButtonStyles";
-import {
-  UPDATE_BOOKSHELF_MUTATION,
-  MY_BOOKSHELVES_QUERY,
-} from "../../../graphql/bookshelves";
+import { UPDATE_BOOKSHELF_MUTATION } from "../../../graphql/bookshelves";
 import useToggle from "../../../hooks/useToggle";
 import BookshelfForm, { BookshelfFormInputs } from "../BookshelfForm";
 
@@ -37,7 +34,6 @@ const UpdateBookshelf = ({ bookshelfId, title, privacy }: Props) => {
         title: data.title,
         privacyId: data.privacy.value,
       },
-      refetchQueries: [{ query: MY_BOOKSHELVES_QUERY }],
     });
 
     if (!error && !loading) {
