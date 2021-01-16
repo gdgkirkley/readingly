@@ -5,10 +5,9 @@ import BookImagePlaceholder from "./BookImagePlaceholder";
 import BookCard from "./BookCard";
 import Link from "next/link";
 import Button from "./styles/ButtonStyles";
-import UpdateBookshelf from "./UpdateBookShelf";
+import { UpdateBookShelf } from "./Bookshelf/";
 import DeleteBookshelf from "./DeleteBookShelf";
 import PrivacyIndicator from "./Privacy";
-import { formatDate } from "../lib/formatDates";
 
 const BookShelfView = styled.div`
   display: grid;
@@ -146,7 +145,14 @@ const BookShelfListing = ({ bookshelf }: Props) => {
               View all
             </Button>
           </Link>
-          <UpdateBookshelf title={bookshelf.title} bookshelfId={bookshelf.id} />
+          <UpdateBookShelf
+            title={bookshelf.title}
+            privacy={{
+              value: bookshelf.privacyId,
+              label: bookshelf.privacyLevel,
+            }}
+            bookshelfId={bookshelf.id}
+          />
           <DeleteBookshelf title={bookshelf.title} bookshelfId={bookshelf.id} />
         </Links>
       </div>

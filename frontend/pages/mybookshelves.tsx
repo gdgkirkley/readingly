@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import { MY_BOOKSHELVES_QUERY, BookShelfData } from "../graphql/bookshelves";
 import BookShelfView from "../components/BookShelfListing";
-import Button from "../components/styles/ButtonStyles";
-import CreateBookShelf from "../components/CreateBookShelf";
+import { CreateBookShelf } from "../components/Bookshelf/";
 
 const BookShelfPage = styled.div`
   width: 100%;

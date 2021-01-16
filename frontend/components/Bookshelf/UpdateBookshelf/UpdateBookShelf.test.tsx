@@ -1,13 +1,13 @@
 import React from "react";
 import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, waitFor } from "@testing-library/react";
-import UpdateBookShelf from "../UpdateBookShelf";
+import UpdateBookShelf from "./UpdateBookShelf";
 import userEvent from "@testing-library/user-event";
 import {
   UPDATE_BOOKSHELF_MUTATION,
   MY_BOOKSHELVES_QUERY,
-} from "../../graphql/bookshelves";
-import { buildBookshelf } from "../../test/generate";
+} from "../../../graphql/bookshelves";
+import { buildBookshelf } from "../../../test/generate";
 import { toast } from "react-toastify";
 
 jest.mock("react-toastify");
@@ -20,6 +20,7 @@ test("<UpdateBookshelf /> renders", async () => {
   const bookshelf = await buildBookshelf();
   const newTitle = "My Favourites";
   let updateBookshelfMutationCalled = false;
+  const privacy = { value: bookshelf.privacyId, label: bookshelf.privacyLevel };
 
   const mocks = [
     {
@@ -55,7 +56,11 @@ test("<UpdateBookshelf /> renders", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <UpdateBookShelf bookshelfId={bookshelf.id} title={bookshelf.title} />
+      <UpdateBookShelf
+        bookshelfId={bookshelf.id}
+        title={bookshelf.title}
+        privacy={privacy}
+      />
     </MockedProvider>
   );
 
@@ -102,6 +107,7 @@ test("<UpdateBookshelf /> renders", async () => {
 test("<UpdateBookshelf /> handles update error", async () => {
   const bookshelf = await buildBookshelf();
   const newTitle = "My Favourites";
+  const privacy = { value: bookshelf.privacyId, label: bookshelf.privacyLevel };
 
   const mocks = [
     {
@@ -115,7 +121,11 @@ test("<UpdateBookshelf /> handles update error", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <UpdateBookShelf bookshelfId={bookshelf.id} title={bookshelf.title} />
+      <UpdateBookShelf
+        bookshelfId={bookshelf.id}
+        title={bookshelf.title}
+        privacy={privacy}
+      />
     </MockedProvider>
   );
 

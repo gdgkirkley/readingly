@@ -3,12 +3,12 @@ import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { toast } from "react-toastify";
-import CreateBookshelf from "../CreateBookShelf";
+import CreateBookshelf from "./CreateBookShelf";
 import {
   CREATE_BOOKSHELF_MUTATION,
   MY_BOOKSHELVES_QUERY,
-} from "../../graphql/bookshelves";
-import { getUUID, buildBookshelf } from "../../test/generate";
+} from "../../../graphql/bookshelves";
+import { getUUID, buildBookshelf } from "../../../test/generate";
 
 jest.mock("react-toastify");
 

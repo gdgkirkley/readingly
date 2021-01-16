@@ -8,6 +8,7 @@ export const MY_BOOKSHELVES_QUERY = gql`
       id
       title
       bookCount
+      privacyId
       privacyLevel
       createdAt
       books(limit: 9) {
@@ -27,6 +28,7 @@ export const MY_BOOKSHELF_QUERY = gql`
       createdAt
       bookCount
       averageTimeToReadInSeconds
+      privacyId
       privacyLevel
       goal {
         id
@@ -59,19 +61,25 @@ export const REMOVE_BOOK_MUTATION = gql`
 `;
 
 export const CREATE_BOOKSHELF_MUTATION = gql`
-  mutation($title: String!) {
-    createBookshelf(title: $title) {
+  mutation($title: String!, $privacyId: Int!) {
+    createBookshelf(title: $title, privacyId: $privacyId) {
       id
       title
+      privacyId
     }
   }
 `;
 
 export const UPDATE_BOOKSHELF_MUTATION = gql`
-  mutation($bookshelfId: ID!, $title: String!) {
-    updateBookshelf(bookshelfId: $bookshelfId, title: $title) {
+  mutation($bookshelfId: ID!, $title: String!, $privacyId: Int!) {
+    updateBookshelf(
+      bookshelfId: $bookshelfId
+      title: $title
+      privacyId: $privacyId
+    ) {
       id
       title
+      privacyId
     }
   }
 `;
