@@ -1,18 +1,16 @@
 import React from "react";
 import { MockedProvider } from "@apollo/client/testing";
 import { render, cleanup, screen, waitFor } from "@testing-library/react";
-import UpdateBookShelf from "../UpdateBookShelf";
+import UpdateBookShelf from "./UpdateBookShelf";
 import userEvent from "@testing-library/user-event";
-import {
-  UPDATE_BOOKSHELF_MUTATION,
-  MY_BOOKSHELVES_QUERY,
-} from "../../graphql/bookshelves";
-import { buildBookshelf } from "../../test/generate";
+import { UPDATE_BOOKSHELF_MUTATION } from "../../../graphql/bookshelves";
+import { buildBookshelf } from "../../../test/generate";
 import { toast } from "react-toastify";
 
 jest.mock("react-toastify");
 
 afterEach(() => {
+  jest.clearAllMocks();
   cleanup();
 });
 
@@ -20,12 +18,17 @@ test("<UpdateBookshelf /> renders", async () => {
   const bookshelf = await buildBookshelf();
   const newTitle = "My Favourites";
   let updateBookshelfMutationCalled = false;
+  const privacy = { value: bookshelf.privacyId, label: bookshelf.privacyLevel };
 
   const mocks = [
     {
       request: {
         query: UPDATE_BOOKSHELF_MUTATION,
-        variables: { bookshelfId: bookshelf.id, title: newTitle },
+        variables: {
+          bookshelfId: bookshelf.id,
+          title: newTitle,
+          privacyId: bookshelf.privacyId,
+        },
       },
       result: () => {
         updateBookshelfMutationCalled = true;
@@ -35,27 +38,21 @@ test("<UpdateBookshelf /> renders", async () => {
             updateBookshelf: {
               id: bookshelf.id,
               title: bookshelf.title,
+              privacyId: bookshelf.privacyId,
             },
           },
         };
-      },
-    },
-    {
-      request: {
-        query: MY_BOOKSHELVES_QUERY,
-        variables: {},
-      },
-      result: {
-        data: {
-          mybookshelves: [bookshelf],
-        },
       },
     },
   ];
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <UpdateBookShelf bookshelfId={bookshelf.id} title={bookshelf.title} />
+      <UpdateBookShelf
+        bookshelfId={bookshelf.id}
+        title={bookshelf.title}
+        privacy={privacy}
+      />
     </MockedProvider>
   );
 
@@ -71,8 +68,8 @@ test("<UpdateBookshelf /> renders", async () => {
 
   await waitFor(() => {
     form = screen.getByRole("form");
-    titleInput = screen.getByLabelText(/title/i);
-    submitButton = screen.getByTestId("update-button");
+    titleInput = screen.getByLabelText(/called/i);
+    submitButton = screen.getByRole("button", { name: /update/i });
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(form).toBeInTheDocument();
     expect(titleInput).toBeInTheDocument();
@@ -102,6 +99,7 @@ test("<UpdateBookshelf /> renders", async () => {
 test("<UpdateBookshelf /> handles update error", async () => {
   const bookshelf = await buildBookshelf();
   const newTitle = "My Favourites";
+  const privacy = { value: bookshelf.privacyId, label: bookshelf.privacyLevel };
 
   const mocks = [
     {
@@ -115,7 +113,11 @@ test("<UpdateBookshelf /> handles update error", async () => {
 
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <UpdateBookShelf bookshelfId={bookshelf.id} title={bookshelf.title} />
+      <UpdateBookShelf
+        bookshelfId={bookshelf.id}
+        title={bookshelf.title}
+        privacy={privacy}
+      />
     </MockedProvider>
   );
 
@@ -131,8 +133,8 @@ test("<UpdateBookshelf /> handles update error", async () => {
 
   await waitFor(() => {
     form = screen.getByRole("form");
-    titleInput = screen.getByLabelText(/title/i);
-    submitButton = screen.getByTestId("update-button");
+    titleInput = screen.getByLabelText(/called/i);
+    submitButton = screen.getByRole("button", { name: /update/i });
   });
 
   userEvent.clear(titleInput);

@@ -27,7 +27,7 @@
     "@apollo/gateway": "^0.18.0",
     "apollo-server": "^2.16.0",
     "apollo-server-express": "^2.16.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/plugin-proposal-class-properties": "^7.10.4",

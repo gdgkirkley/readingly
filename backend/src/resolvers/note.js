@@ -1,3 +1,5 @@
+import {sequelize} from '../models'
+
 export default {
   Query: {
     notes: async (parent, {googleBooksId}, {me, models}) => {
@@ -20,18 +22,23 @@ export default {
   },
 
   Mutation: {
-    createNote: async (parent, {note, page, googleBooksId}, {me, models}) => {
+    createNote: async (
+      parent,
+      {note, page, googleBooksId, privacyId},
+      {me, models},
+    ) => {
       await checkPage(models, googleBooksId, page)
 
       return await models.Note.create({
         note,
         page,
         bookGoogleBooksId: googleBooksId,
+        privacyId,
         userId: me.id,
       })
     },
 
-    updateNote: async (parent, {id, note, page}, {me, models}) => {
+    updateNote: async (parent, {id, note, page, privacyId}, {me, models}) => {
       const noteToUpdate = await getNoteById(id, models)
 
       if (page) {
@@ -40,6 +47,10 @@ export default {
       }
 
       noteToUpdate.note = note
+
+      if (privacyId) {
+        noteToUpdate.privacyId = privacyId
+      }
 
       await noteToUpdate.save()
 
@@ -62,6 +73,18 @@ export default {
 
     user: async (note, args, ctx) => {
       return await note.getUser()
+    },
+
+    privacyLevel: async (note, args, ctx) => {
+      const [
+        results,
+        metadata,
+      ] = await sequelize.query(
+        `SELECT "privacyLevel" FROM privacy WHERE id = ${note.privacyId}`,
+        {raw: false, type: sequelize.QueryTypes.SELECT},
+      )
+
+      return results?.privacyLevel
     },
   },
 }

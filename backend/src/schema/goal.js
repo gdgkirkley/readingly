@@ -12,6 +12,7 @@ export default gql`
       goalableId: ID!
       startDate: String
       status: String
+      privacyId: Int
     ): Goal!
     updateGoal(
       id: ID!
@@ -19,6 +20,7 @@ export default gql`
       startDate: String
       endDate: String
       status: String
+      privacyId: Int
     ): Goal!
     deleteGoal(id: ID!): Message
   }
@@ -36,6 +38,8 @@ export default gql`
     startDate: Date
     endDate: Date
     status: String!
+    privacyId: Int!
+    privacyLevel: String
     createdAt: Date!
     updatedAt: Date!
   }

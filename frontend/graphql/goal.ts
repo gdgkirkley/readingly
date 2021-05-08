@@ -67,6 +67,8 @@ export type Goal = {
   status: GoalStatus;
   readingRecommendation: number;
   readingRecommendationSeconds?: number;
+  privacyId: number;
+  privacyLevel: string;
 };
 
 export enum GoalStatus {

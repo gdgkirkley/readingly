@@ -2,6 +2,7 @@ import {
   AVERAGE_READING_WORDS_PER_MINUTE,
   AVERAGE_WORDS_PER_PAGE,
 } from '../utils/constants'
+import {sequelize} from '../models'
 
 const ONE_DAY = 1000 * 60 * 60 * 24
 
@@ -29,7 +30,7 @@ export default {
   Mutation: {
     createGoal: async (
       parent,
-      {goalDate, goalableId, startDate, status},
+      {goalDate, goalableId, startDate, status, privacyId},
       {me, models},
     ) => {
       let book, bookshelf
@@ -62,6 +63,7 @@ export default {
           goalDate,
           startDate,
           status,
+          privacyId,
           userId: me.id,
         })
       } else {
@@ -69,6 +71,7 @@ export default {
           goalDate,
           startDate,
           status,
+          privacyId,
           userId: me.id,
         })
       }
@@ -77,7 +80,7 @@ export default {
     },
     updateGoal: async (
       parent,
-      {id, goalDate, startDate, endDate, status},
+      {id, goalDate, startDate, endDate, status, privacyId},
       {me, models},
     ) => {
       const goal = await getGoalById(id, models)
@@ -87,6 +90,9 @@ export default {
       goal.endDate = endDate
       if (status) {
         goal.status = status
+      }
+      if (privacyId) {
+        goal.privacyId = privacyId
       }
 
       await goal.save()
@@ -125,6 +131,18 @@ export default {
         estimatedWords / (AVERAGE_READING_WORDS_PER_MINUTE / 60)
 
       return totalReadingTimeSeconds
+    },
+
+    privacyLevel: async (goal, args, ctx) => {
+      const [
+        results,
+        metadata,
+      ] = await sequelize.query(
+        `SELECT "privacyLevel" FROM privacy WHERE id = ${goal.privacyId}`,
+        {raw: false, type: sequelize.QueryTypes.SELECT},
+      )
+
+      return results?.privacyLevel
     },
   },
 

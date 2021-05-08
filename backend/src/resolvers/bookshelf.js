@@ -1,5 +1,4 @@
 import logger from 'loglevel'
-import {QueryTypes} from 'sequelize'
 import {sequelize} from '../models'
 import {getGoogleBook} from '../utils/googleBooks'
 import {
@@ -33,18 +32,27 @@ export default {
   },
 
   Mutation: {
-    createBookshelf: async (parent, {title}, {me, models}) => {
-      return await models.BookShelf.create({title, userId: me.id})
+    createBookshelf: async (parent, {title, privacyId}, {me, models}) => {
+      return await models.BookShelf.create({title, privacyId, userId: me.id})
     },
-    updateBookshelf: async (parent, {bookshelfId, title}, {models}) => {
-      await models.BookShelf.update(
-        {title},
-        {
-          where: {
-            id: bookshelfId,
-          },
-        },
-      )
+    updateBookshelf: async (
+      parent,
+      {bookshelfId, title, privacyId},
+      {models},
+    ) => {
+      const bookshelf = await models.BookShelf.findByPk(bookshelfId)
+
+      if (!bookshelf) {
+        throw new Error(`No bookshelf with ID ${bookshelfId}`)
+      }
+
+      bookshelf.title = title
+
+      if (privacyId) {
+        bookshelf.privacyId = privacyId
+      }
+
+      await bookshelf.save()
 
       return await models.BookShelf.findByPk(bookshelfId)
     },
@@ -165,7 +173,7 @@ export default {
         LEFT JOIN bookshelfbook on books."googleBooksId" = bookshelfbook."bookGoogleBooksId"
         WHERE bookshelfbook."bookshelfId" = '${bookshelf.id}'
       `,
-        {type: QueryTypes.SELECT},
+        {type: sequelize.QueryTypes.SELECT},
       )
 
       if (!count.totalpagecount) {
@@ -191,6 +199,18 @@ export default {
           userId: me.id,
         },
       })
+    },
+
+    privacyLevel: async (bookshelf, args, ctx) => {
+      const [
+        results,
+        metadata,
+      ] = await sequelize.query(
+        `SELECT "privacyLevel" FROM privacy WHERE id = ${bookshelf.privacyId}`,
+        {raw: false, type: sequelize.QueryTypes.SELECT},
+      )
+
+      return results?.privacyLevel
     },
   },
 }

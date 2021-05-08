@@ -5,8 +5,9 @@ import BookImagePlaceholder from "./BookImagePlaceholder";
 import BookCard from "./BookCard";
 import Link from "next/link";
 import Button from "./styles/ButtonStyles";
-import UpdateBookshelf from "./UpdateBookShelf";
+import { UpdateBookShelf } from "./Bookshelf/";
 import DeleteBookshelf from "./DeleteBookShelf";
+import PrivacyIndicator from "./Privacy";
 
 const BookShelfView = styled.div`
   display: grid;
@@ -82,6 +83,22 @@ const Links = styled.div`
   }
 `;
 
+const Info = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
+`;
+
+const Title = styled.div`
+  display: flex;
+  margin-right: 2rem;
+`;
+
 type Props = {
   bookshelf: BookShelf;
 };
@@ -100,11 +117,16 @@ const BookShelfListing = ({ bookshelf }: Props) => {
         )}
       </ImageContainer>
       <div>
-        <h2>{bookshelf.title}</h2>
+        <Info>
+          <Title>
+            <h2>{bookshelf.title}</h2>
+          </Title>
+          <PrivacyIndicator privacyLevel={bookshelf.privacyLevel} />
+        </Info>
         <p data-testid="bookshelf-count">
           There {bookshelf.bookCount == 1 ? "is" : "are"} {bookshelf.bookCount}{" "}
           book
-          {bookshelf.bookCount == 1 ? null : "s"} on this list
+          {bookshelf.bookCount == 1 ? null : "s"} on this list.
         </p>
         {bookshelf.books?.length ? (
           <BooksDisplay data-testid="bookshelf-books">
@@ -123,7 +145,14 @@ const BookShelfListing = ({ bookshelf }: Props) => {
               View all
             </Button>
           </Link>
-          <UpdateBookshelf title={bookshelf.title} bookshelfId={bookshelf.id} />
+          <UpdateBookShelf
+            title={bookshelf.title}
+            privacy={{
+              value: bookshelf.privacyId,
+              label: bookshelf.privacyLevel,
+            }}
+            bookshelfId={bookshelf.id}
+          />
           <DeleteBookshelf title={bookshelf.title} bookshelfId={bookshelf.id} />
         </Links>
       </div>

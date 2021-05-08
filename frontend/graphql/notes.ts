@@ -8,6 +8,7 @@ export const NOTES_QUERY = gql`
       id
       note
       page
+      privacyLevel
       createdAt
       updatedAt
     }
@@ -52,6 +53,7 @@ export type Note = {
   page?: number;
   book?: Book;
   user?: User;
+  privacyLevel?: string;
   createdAt: string;
   updatedAt: string;
 };

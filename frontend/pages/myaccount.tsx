@@ -44,14 +44,18 @@ const TabButton = styled.button`
     transition: all 0.3s ease-in-out 0s;
   }
 
-  &:hover,
-  :focus {
+  &:hover {
     outline: none;
     color: ${(props) => props.theme.purple};
     &::before {
       visibility: visible;
       transform: scaleX(1);
     }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
   }
 
   &.active {

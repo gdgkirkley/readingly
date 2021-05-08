@@ -73,6 +73,8 @@ async function buildBookshelf({ ...overrides } = {}): Promise<BookShelf> {
     books: [book1, book2, book3],
     averageTimeToReadInSeconds: getNumber(),
     goal: goal,
+    privacyId: 1,
+    privacyLevel: "Private",
     ...overrides,
   };
 }
@@ -88,6 +90,8 @@ async function buildReading({ ...overrides } = {}): Promise<Reading> {
     user,
     createdAt: getDateString(),
     updatedAt: getDateString(),
+    privacyId: 1,
+    privacyLevel: "Private",
     ...overrides,
   };
 }
@@ -105,6 +109,8 @@ async function buildGoal({ ...overrides } = {}): Promise<Goal> {
     status: GoalStatus.InProgress,
     readingRecommendation: getNumber(),
     readingRecommendationSeconds: getNumber(),
+    privacyId: 1,
+    privacyLevel: "Private",
     ...overrides,
   };
 }

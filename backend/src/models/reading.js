@@ -20,6 +20,17 @@ const reading = sequelize => {
           min: 0,
         },
       },
+      privacyId: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'privacy',
+          },
+          key: 'id',
+        },
+      },
     },
     {
       sequelize,

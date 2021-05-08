@@ -11,6 +11,7 @@ async function createGoals() {
     userId: 1,
     startDate: today,
     status: 'INPROGRESS',
+    privacyLevel: 2,
   })
 
   const bookshelves = await models.BookShelf.findAll({

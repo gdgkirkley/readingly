@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, PropsWithChildren } from "react";
 import styled from "styled-components";
 import Button from "./styles/ButtonStyles";
 import Dialog, { InnerDialogContent } from "./Dialog";
@@ -22,13 +22,17 @@ type Props = {
   onConfirm(): void;
   itemToRemove: string;
   collectionRemovedFrom?: string;
+  asAbolute?: boolean;
+  buttonText?: string;
 };
 
 const RemoveButton = ({
   onConfirm,
   itemToRemove,
   collectionRemovedFrom,
-}: Props) => {
+  asAbolute = true,
+  buttonText = "x",
+}: PropsWithChildren<Props>) => {
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen(!open);
 
@@ -36,13 +40,21 @@ const RemoveButton = ({
     e.stopPropagation();
 
     onConfirm();
+    toggle();
   };
 
   return (
     <>
-      <RemoveCornerButton themeColor="red" onClick={toggle}>
-        x<span className="hidden-text">Remove from bookshelf</span>
-      </RemoveCornerButton>
+      {asAbolute ? (
+        <RemoveCornerButton themeColor="red" onClick={toggle}>
+          x<span className="hidden-text">Remove</span>
+        </RemoveCornerButton>
+      ) : (
+        <Button themeColor="red" onClick={toggle}>
+          {buttonText}
+          <span className="hidden-text">Remove</span>
+        </Button>
+      )}
 
       <Dialog
         open={open}

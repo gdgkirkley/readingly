@@ -7,8 +7,13 @@ export default gql`
   }
 
   extend type Mutation {
-    createNote(note: String!, page: Int, googleBooksId: ID!): Note!
-    updateNote(id: ID!, note: String!, page: Int): Note!
+    createNote(
+      note: String!
+      page: Int
+      googleBooksId: ID!
+      privacyId: Int
+    ): Note!
+    updateNote(id: ID!, note: String!, page: Int, privacyId: Int): Note!
     deleteNote(id: ID!): Message
   }
 
@@ -18,6 +23,8 @@ export default gql`
     page: Int
     book: Book
     user: User
+    privacyId: Int!
+    privacyLevel: String
     createdAt: Date!
     updatedAt: Date!
   }

@@ -9,10 +9,11 @@ import OpenBook from "./icons/Book";
 import RemoveButton from "./RemoveButton";
 import { toast } from "react-toastify";
 import { GOOGLE_BOOK_QUERY } from "../graphql/books";
+import PrivacyIndicator from "./Privacy";
 
 const ReadingCardStyle = styled(Card)`
   position: relative;
-  & svg {
+  & .top-icon {
     width: 8rem;
     color: ${(props) => props.theme.purple};
   }
@@ -89,7 +90,7 @@ const ReadingCard = ({ reading, totalPages, googleBooksId }: Props) => {
         onConfirm={handleRemove}
         itemToRemove={`reading from ${formatDate(reading.createdAt)}`}
       />
-      <OpenBook />
+      <OpenBook className="top-icon" />
       <h4>
         On page {reading.progress}
         {totalPages ? ` out of ${totalPages}` : null}
